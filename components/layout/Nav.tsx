@@ -7,7 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 
 const leftLinks = [
-  { label: "About", href: "/about" },
+  { label: "My Story", href: "/about" },
   { label: "Work With Me", href: "/work-with-me" },
   { label: "Events & Retreats", href: "/events" },
 ];
@@ -18,7 +18,7 @@ const rightLinks = [
 ];
 
 const mobileMenuLinks = [
-  { label: "About", href: "/about" },
+  { label: "My Story", href: "/about" },
   { label: "Work With Me", href: "/work-with-me" },
   { label: "Events & Retreats", href: "/events" },
   { label: "Journal", href: "/blog" },
