@@ -33,7 +33,7 @@ export function CTASection({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="font-serif text-3xl md:text-5xl mb-4"
+            className="font-serif text-3xl md:text-5xl font-semibold mb-4"
           >
             {heading}
           </motion.h2>

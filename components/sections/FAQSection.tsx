@@ -35,7 +35,7 @@ export function FAQSection({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="font-serif text-4xl md:text-5xl text-center mb-12"
+              className="font-serif text-4xl md:text-5xl font-semibold text-center mb-12"
             >
               {heading}
             </motion.h2>

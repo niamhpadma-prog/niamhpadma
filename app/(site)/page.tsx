@@ -58,7 +58,7 @@ export default function HomePage() {
               <p className="font-sans text-sm uppercase tracking-widest text-sage mb-4">
                 Meet Niamh
               </p>
-              <h2 className="font-serif text-4xl md:text-5xl leading-tight mb-6">
+              <h2 className="font-serif text-4xl md:text-5xl font-semibold leading-[1.1] mb-6">
                 A Journey of Healing & Transformation
               </h2>
               <p className="font-sans text-base leading-relaxed text-espresso/70 mb-8">
@@ -94,7 +94,7 @@ export default function HomePage() {
             <p className="font-sans text-xs uppercase tracking-widest text-cream/40 mb-4">
               Upcoming
             </p>
-            <h2 className="font-serif text-4xl md:text-5xl text-cream mb-4">
+            <h2 className="font-serif text-4xl md:text-5xl font-semibold text-cream mb-4">
               Next Retreat Coming Soon
             </h2>
             <p className="font-sans text-base text-cream/60 mb-8">
@@ -123,7 +123,7 @@ export default function HomePage() {
       <Section background="cream">
         <Container>
           <div className="text-center mb-12">
-            <h2 className="font-serif text-4xl md:text-5xl mb-4">From the Journal</h2>
+            <h2 className="font-serif text-4xl md:text-5xl font-semibold mb-4">From the Journal</h2>
             <p className="font-sans text-base text-espresso/60">
               Insights on breathwork, yoga, somatic practices and holistic living.
             </p>

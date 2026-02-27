@@ -33,7 +33,7 @@ export function ImageTextSection({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
     >
-      <h2 className="font-serif text-4xl md:text-5xl leading-tight mb-6">
+      <h2 className="font-serif text-4xl md:text-5xl font-semibold leading-[1.1] mb-6">
         {heading}
       </h2>
       {body && (

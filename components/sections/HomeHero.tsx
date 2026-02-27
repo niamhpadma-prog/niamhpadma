@@ -91,7 +91,7 @@ export function HomeHero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-          className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-light leading-[1.1] mb-6 text-cream"
+          className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.1] mb-6 text-cream"
         >
           Come Home to Yourself
         </motion.h1>

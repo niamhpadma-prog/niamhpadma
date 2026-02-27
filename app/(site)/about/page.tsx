@@ -52,7 +52,7 @@ export default function AboutPage() {
 
       <HeroSection
         headline="My Story"
-        subheadline="From wandering to rooted. A path through ancient wisdom and modern healing."
+        subheadline={"From wandering to rooted.\nA path through ancient wisdom and modern healing."}
       />
 
       <ImageTextSection

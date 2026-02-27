@@ -49,8 +49,8 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-subtle: var(--subtle);
-  --font-serif: var(--font-cormorant);
-  --font-sans: var(--font-jakarta);
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
 * {

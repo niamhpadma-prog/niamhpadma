@@ -66,7 +66,7 @@ export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, s
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
-          className={`font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-light leading-[1.1] mb-6 ${
+          className={`font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.1] mb-6 ${
             imageSrc ? "text-cream" : "text-espresso"
           }`}
         >
@@ -78,7 +78,7 @@ export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, s
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className={`font-sans text-lg md:text-xl max-w-2xl mx-auto mb-10 ${
+            className={`font-sans text-lg md:text-xl max-w-2xl mx-auto mb-10 whitespace-pre-line ${
               imageSrc ? "text-cream/80" : "text-espresso/60"
             }`}
           >
