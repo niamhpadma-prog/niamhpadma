@@ -211,9 +211,11 @@ export function QuestionnaireForm({
               {field.type === "radio" && field.options && (
                 <div className="space-y-2">
                   {field.options.map((opt) => (
-                    <label
+                    <button
+                      type="button"
                       key={opt}
-                      className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl border cursor-pointer transition-all duration-200 ${
+                      onClick={() => updateField(field.name, opt)}
+                      className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl border cursor-pointer transition-all duration-200 w-full text-left ${
                         formData[field.name] === opt
                           ? "border-sage bg-sage/5"
                           : "border-sand/40 bg-white hover:border-sand"
@@ -231,7 +233,7 @@ export function QuestionnaireForm({
                         )}
                       </div>
                       <span className="font-sans text-sm text-espresso">{opt}</span>
-                    </label>
+                    </button>
                   ))}
                 </div>
               )}
@@ -241,9 +243,11 @@ export function QuestionnaireForm({
                   {field.options.map((opt) => {
                     const checked = ((formData[field.name] as string[]) || []).includes(opt);
                     return (
-                      <label
+                      <button
+                        type="button"
                         key={opt}
-                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl border cursor-pointer transition-all duration-200 ${
+                        onClick={() => toggleCheckbox(field.name, opt)}
+                        className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl border cursor-pointer transition-all duration-200 w-full text-left ${
                           checked
                             ? "border-sage bg-sage/5"
                             : "border-sand/40 bg-white hover:border-sand"
@@ -259,7 +263,7 @@ export function QuestionnaireForm({
                           )}
                         </div>
                         <span className="font-sans text-sm text-espresso">{opt}</span>
-                      </label>
+                      </button>
                     );
                   })}
                 </div>

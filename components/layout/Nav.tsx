@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Container } from "@/components/ui/Container";
+import { Logo } from "@/components/ui/Logo";
 
 const navLinks = [
   { label: "About", href: "/about" },
@@ -45,9 +46,15 @@ export function Nav() {
         <nav className="flex items-center justify-between py-4 md:py-5">
           <Link
             href="/"
-            className="font-serif text-2xl font-semibold text-espresso tracking-wide"
+            className="group flex items-center gap-2.5"
           >
-            Niamh Padma
+            <Logo size={26} color="espresso" className="group-hover:scale-105 transition-transform duration-300" />
+            <span className="font-serif text-2xl md:text-[1.7rem] font-semibold text-espresso tracking-[0.06em] uppercase">
+              Niamh
+            </span>
+            <span className="font-serif text-2xl md:text-[1.7rem] font-light text-espresso tracking-[0.06em] uppercase">
+              Padma
+            </span>
           </Link>
 
           {/* Desktop */}
@@ -108,7 +115,7 @@ export function Nav() {
             animate={{ opacity: 1, height: "100dvh" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
-            className="lg:hidden bg-cream fixed inset-0 top-[60px] overflow-hidden flex flex-col"
+            className="lg:hidden bg-cream fixed inset-0 top-[56px] md:top-[64px] overflow-hidden flex flex-col"
           >
             <Container className="flex-1 flex flex-col justify-center">
               <ul className="flex flex-col gap-2">

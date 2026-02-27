@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
+import { Logo } from "@/components/ui/Logo";
 
 const footerLinks = {
   explore: [
@@ -27,8 +28,14 @@ export function Footer() {
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div>
-            <Link href="/" className="font-serif text-2xl font-semibold text-cream">
-              Niamh Padma
+            <Link href="/" className="flex items-center gap-2.5">
+              <Logo size={26} color="cream" />
+              <span className="font-serif text-2xl font-semibold text-cream tracking-[0.06em] uppercase">
+                Niamh
+              </span>
+              <span className="font-serif text-2xl font-light text-cream tracking-[0.06em] uppercase">
+                Padma
+              </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-cream/60">
               Yoga, breathwork, somatic therapy & holistic nutrition in Lisbon.

@@ -10,7 +10,7 @@ export function SiteWrapper({ children }: { children: ReactNode }) {
     <>
       <SmoothScroll />
       <Nav />
-      <main className="pt-[72px]">{children}</main>
+      <main className="pt-[56px] md:pt-[64px]">{children}</main>
       <Footer />
     </>
   );

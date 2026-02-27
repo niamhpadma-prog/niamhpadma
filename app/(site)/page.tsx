@@ -59,7 +59,7 @@ export default function HomePage() {
       {/* About teaser */}
       <Section background="white">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
             <div className="aspect-[3/4] bg-sand/30 rounded-3xl" />
             <div>
               <p className="font-sans text-sm uppercase tracking-widest text-sage mb-4">
