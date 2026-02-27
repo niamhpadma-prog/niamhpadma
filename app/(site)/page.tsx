@@ -1,7 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
-import { HeroSection } from "@/components/sections/HeroSection";
+import { HomeHero } from "@/components/sections/HomeHero";
 import { StatsStrip } from "@/components/sections/StatsStrip";
 import { OfferingsGrid } from "@/components/sections/OfferingsGrid";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
@@ -38,14 +38,7 @@ export default function HomePage() {
         }}
       />
 
-      <HeroSection
-        headline="Come Home to Yourself"
-        subheadline="Yoga, breathwork & somatic wellness in Lisbon. Retreats across Europe."
-        ctas={[
-          { label: "Explore Services", href: "/work-with-me", style: "primary" as const },
-          { label: "Book a Session", href: "/questionnaires/coaching", style: "secondary" as const },
-        ]}
-      />
+      <HomeHero />
 
       <StatsStrip
         items={[
