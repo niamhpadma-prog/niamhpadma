@@ -23,8 +23,8 @@
   --subtle: var(--sage);
 
   /* Typography */
-  --font-serif: var(--font-cormorant);
-  --font-sans: var(--font-jakarta);
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
 
   /* Spacing */
   --section-padding: clamp(4rem, 8vw, 8rem);
