@@ -53,8 +53,9 @@ export default function AboutPage() {
       <HeroSection
         headline="My Story"
         subheadline={"From wandering to rooted.\nA path through ancient wisdom and modern healing."}
-        imageSrc="/images/my-story.jpg"
-        imageAlt="Niamh smiling"
+        imageSrc="/images/niamh-my-story.avif"
+        imageAlt="Niamh Padma"
+        imagePosition="top"
       />
 
       <ImageTextSection
@@ -67,6 +68,8 @@ export default function AboutPage() {
       <ImageTextSection
         heading="Rooted in Lisbon"
         body="Today I call Lisbon home, where I facilitate 1-1 coaching sessions, group classes, workshops, and retreats across Europe. My approach weaves together yoga, breathwork, somatic practices, and holistic nutrition — because true wellness lives at the intersection of body, breath, and being."
+        imageSrc="/images/my-story.jpg"
+        imageAlt="Niamh in Lisbon"
         imagePosition="right"
         background="cream"
       />

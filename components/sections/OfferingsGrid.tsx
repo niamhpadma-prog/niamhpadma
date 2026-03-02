@@ -11,7 +11,7 @@ interface Offering {
   title: string;
   type?: string;
   description?: string;
-  image?: { asset?: { url?: string }; alt?: string };
+  image?: { asset?: { url?: string }; alt?: string; position?: string };
   pricing?: string;
   bookingUrl?: string;
 }
@@ -75,7 +75,7 @@ export function OfferingsGrid({
                     src={item.image.asset.url}
                     alt={item.image.alt || item.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className={`object-cover transition-transform duration-700 group-hover:scale-105 ${item.image?.position || ""}`}
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 )}

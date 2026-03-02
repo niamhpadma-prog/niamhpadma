@@ -17,10 +17,11 @@ interface HeroSectionProps {
   ctas?: HeroCTA[];
   imageSrc?: string;
   imageAlt?: string;
+  imagePosition?: "center" | "top";
   sticky?: boolean;
 }
 
-export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, sticky = false }: HeroSectionProps) {
+export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, imagePosition = "center", sticky = false }: HeroSectionProps) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -48,7 +49,7 @@ export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, s
             src={imageSrc}
             alt={imageAlt || ""}
             fill
-            className="object-cover"
+            className={`object-cover ${imagePosition === "top" ? "object-top" : ""}`}
             sizes="100vw"
             priority
           />
