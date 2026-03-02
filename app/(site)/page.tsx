@@ -53,7 +53,13 @@ export default function HomePage() {
       <Section background="white">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-            <div className="aspect-[3/4] bg-sand/30 rounded-3xl" />
+            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden">
+              <img
+                src="/images/my-story.jpg"
+                alt="Niamh Padma"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
             <div>
               <p className="font-sans text-sm uppercase tracking-widest text-sage mb-4">
                 Meet Niamh
@@ -79,10 +85,10 @@ export default function HomePage() {
         heading="How We Can Work Together"
         subheading="From private sessions to group experiences — find the practice that fits your life."
         items={[
-          { _id: "h1", title: "1-1 Coaching", type: "Private", description: "Personalised yoga, breathwork & somatic sessions tailored to your unique needs.", pricing: "From €80" },
-          { _id: "h2", title: "Group Classes", type: "Weekly", description: "Community yoga and breathwork classes in Lisbon. All levels welcome.", pricing: "€15/class" },
-          { _id: "h3", title: "Workshops", type: "Deep Dive", description: "Half-day and full-day immersions into breathwork, somatic release, and more.", pricing: "From €45" },
-          { _id: "h4", title: "Retreats", type: "Multi-day", description: "Transformative retreat experiences across Portugal and Europe.", pricing: "From €350" },
+          { _id: "h1", title: "1-1 Coaching", type: "Private", description: "Personalised yoga, breathwork & somatic sessions tailored to your unique needs.", pricing: "From €80", image: { asset: { url: "/images/rest.jpg" }, alt: "One-on-one coaching session" } },
+          { _id: "h2", title: "Group Classes", type: "Weekly", description: "Community yoga and breathwork classes in Lisbon. All levels welcome.", pricing: "€15/class", image: { asset: { url: "/images/group-classes.jpeg" }, alt: "Group yoga class" } },
+          { _id: "h3", title: "Workshops", type: "Deep Dive", description: "Half-day and full-day immersions into breathwork, somatic release, and more.", pricing: "From €45", image: { asset: { url: "/images/workshops.jpeg" }, alt: "Workshop session" } },
+          { _id: "h4", title: "Retreats", type: "Multi-day", description: "Transformative retreat experiences across Portugal and Europe.", pricing: "From €350", image: { asset: { url: "/images/retreats.jpg" }, alt: "Retreat in nature" } },
         ]}
         background="cream"
       />
@@ -130,19 +136,27 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Complete Guide to Breathwork", category: "Breathwork" },
-              { title: "Finding the Right Yoga Practice", category: "Yoga" },
-              { title: "What is Somatic Therapy?", category: "Somatic" },
+              { title: "Complete Guide to Breathwork", category: "Breathwork", slug: "complete-guide-breathwork" },
+              { title: "Finding the Right Yoga Practice", category: "Yoga", slug: "finding-right-yoga-practice", image: "/images/yoga-practice.jpg" },
+              { title: "What is Somatic Therapy?", category: "Somatic", slug: "what-is-somatic-therapy" },
             ].map((post) => (
-              <div key={post.title} className="group">
-                <div className="aspect-[4/3] bg-sand/30 rounded-2xl mb-4 overflow-hidden" />
+              <a key={post.title} href={`/journal/${post.slug}`} className="group">
+                <div className="relative aspect-[4/3] bg-sand/30 rounded-2xl mb-4 overflow-hidden">
+                  {post.image && (
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  )}
+                </div>
                 <p className="font-sans text-xs uppercase tracking-widest text-sage mb-2">
                   {post.category}
                 </p>
                 <h3 className="font-serif text-xl group-hover:text-terracotta transition-colors">
                   {post.title}
                 </h3>
-              </div>
+              </a>
             ))}
           </div>
           <div className="text-center mt-10">
