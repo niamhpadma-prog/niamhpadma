@@ -7,8 +7,9 @@ import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { BlogCard } from "@/components/cards/BlogCard";
 import { JsonLd } from "@/components/seo/JsonLd";
 
-const postImages: Record<string, { src: string; alt: string }> = {
-  "finding-right-yoga-practice": { src: "/images/yoga-practice.jpg", alt: "Niamh practicing yoga" },
+const postImages: Record<string, { src: string; alt: string; orientation?: "vertical" | "landscape" }> = {
+  "finding-right-yoga-practice": { src: "/images/yoga-practice.jpg", alt: "Niamh practicing yoga", orientation: "vertical" },
+  "yoga-nidra-sleep": { src: "/images/Yoga-Nidra.jpg", alt: "Yoga Nidra practice at sunset" },
 };
 
 // TODO: Fetch from Sanity + ISR
@@ -313,7 +314,15 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
               {post.title}
             </h1>
             <div className="flex items-center justify-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-sand/50" />
+              <div className="w-10 h-10 rounded-full overflow-hidden relative flex-shrink-0">
+                <Image
+                  src="/images/niamh-profile-pic.png"
+                  alt="Niamh Padma"
+                  fill
+                  className="object-cover"
+                  sizes="40px"
+                />
+              </div>
               <div className="text-left">
                 <p className="font-sans text-sm font-medium">Niamh Padma</p>
                 <p className="font-sans text-xs text-espresso/40">
@@ -327,15 +336,23 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
 
       {/* Cover image */}
       <Container>
-        <div className="relative aspect-[21/9] bg-sand/20 rounded-3xl overflow-hidden mb-12">
-          {postImages[slug] && (
-            <Image
-              src={postImages[slug].src}
-              alt={postImages[slug].alt}
-              fill
-              className="object-cover"
-              sizes="100vw"
-            />
+        <div className="pt-8 mb-12">
+          {postImages[slug] ? (
+            <div className={`relative rounded-3xl overflow-hidden ${
+              postImages[slug].orientation === "vertical"
+                ? "aspect-[3/4] max-w-2xl mx-auto"
+                : "aspect-[21/9]"
+            }`}>
+              <Image
+                src={postImages[slug].src}
+                alt={postImages[slug].alt}
+                fill
+                className="object-cover"
+                sizes={postImages[slug].orientation === "vertical" ? "(max-width: 768px) 100vw, 672px" : "100vw"}
+              />
+            </div>
+          ) : (
+            <div className="relative aspect-[21/9] bg-sand/20 rounded-3xl" />
           )}
         </div>
       </Container>
