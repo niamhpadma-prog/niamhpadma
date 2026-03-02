@@ -66,7 +66,7 @@ export default function HomePage() {
                 facilitating retreats across Europe, my path has always led back to one
                 truth — wellness is a return to who you already are.
               </p>
-              <Button href="/about" variant="outline">
+              <Button href="/my-story" variant="outline">
                 Read My Story
               </Button>
             </div>
@@ -146,7 +146,7 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <Button href="/blog" variant="outline">
+            <Button href="/journal" variant="outline">
               Read the Journal
             </Button>
           </div>

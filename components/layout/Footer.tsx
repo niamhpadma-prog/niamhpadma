@@ -4,10 +4,10 @@ import { Logo } from "@/components/ui/Logo";
 
 const footerLinks = {
   explore: [
-    { label: "About", href: "/about" },
+    { label: "About", href: "/my-story" },
     { label: "Work With Me", href: "/work-with-me" },
     { label: "Events & Retreats", href: "/events" },
-    { label: "Blog", href: "/blog" },
+    { label: "Blog", href: "/journal" },
   ],
   services: [
     { label: "1-1 Coaching", href: "/work-with-me#coaching" },

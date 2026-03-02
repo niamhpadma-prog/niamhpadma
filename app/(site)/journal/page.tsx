@@ -3,7 +3,7 @@ import { BlogListing } from "./BlogListing";
 import { HeroSection } from "@/components/sections/HeroSection";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Journal",
   description:
     "Insights on yoga, breathwork, somatic practices, and holistic nutrition from Niamh Padma. Guides, tips, and stories from Lisbon.",
 };
@@ -77,6 +77,8 @@ export default function BlogPage() {
       <HeroSection
         headline="The Journal"
         subheadline="Insights on breathwork, yoga, somatic practices and holistic living."
+        imageSrc="/images/journal.jpg"
+        imageAlt="Niamh smiling"
       />
 
       <BlogListing posts={posts} />

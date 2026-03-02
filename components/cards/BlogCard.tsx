@@ -42,7 +42,7 @@ export function BlogCard({
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <Link href={`/blog/${slug}`} className="group block">
+        <Link href={`/journal/${slug}`} className="group block">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-3xl overflow-hidden">
             <div className="relative aspect-[4/3] md:aspect-auto bg-sand/30 overflow-hidden">
               {coverImage?.asset?.url && (
@@ -95,7 +95,7 @@ export function BlogCard({
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: index * 0.08 }}
     >
-      <Link href={`/blog/${slug}`} className="group block">
+      <Link href={`/journal/${slug}`} className="group block">
         <div className="relative aspect-[4/3] bg-sand/30 rounded-2xl overflow-hidden mb-4">
           {coverImage?.asset?.url && (
             <Image

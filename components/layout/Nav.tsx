@@ -7,21 +7,21 @@ import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 
 const leftLinks = [
-  { label: "My Story", href: "/about" },
+  { label: "My Story", href: "/my-story" },
   { label: "Work With Me", href: "/work-with-me" },
   { label: "Events & Retreats", href: "/events" },
 ];
 
 const rightLinks = [
-  { label: "Journal", href: "/blog" },
+  { label: "Journal", href: "/journal" },
   { label: "Contact", href: "/contact" },
 ];
 
 const mobileMenuLinks = [
-  { label: "My Story", href: "/about" },
+  { label: "My Story", href: "/my-story" },
   { label: "Work With Me", href: "/work-with-me" },
   { label: "Events & Retreats", href: "/events" },
-  { label: "Journal", href: "/blog" },
+  { label: "Journal", href: "/journal" },
   { label: "Contact", href: "/contact" },
 ];
 

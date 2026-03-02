@@ -31,7 +31,7 @@ export default function AboutPage() {
           "@type": "Person",
           name: "Niamh Padma",
           jobTitle: "Yoga & Breathwork Facilitator, Nutrition Coach",
-          url: "https://niamhpadma.com/about",
+          url: "https://niamhpadma.com/my-story",
           knowsAbout: [
             "Hatha Yoga",
             "Vinyasa Yoga",
@@ -53,6 +53,8 @@ export default function AboutPage() {
       <HeroSection
         headline="My Story"
         subheadline={"From wandering to rooted.\nA path through ancient wisdom and modern healing."}
+        imageSrc="/images/my-story.jpg"
+        imageAlt="Niamh smiling"
       />
 
       <ImageTextSection

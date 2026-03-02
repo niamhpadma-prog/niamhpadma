@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { BlogCard } from "@/components/cards/BlogCard";
 import { JsonLd } from "@/components/seo/JsonLd";
+
+const postImages: Record<string, { src: string; alt: string }> = {
+  "finding-right-yoga-practice": { src: "/images/yoga-practice.jpg", alt: "Niamh practicing yoga" },
+};
 
 // TODO: Fetch from Sanity + ISR
 const placeholderPosts: Record<string, {
@@ -280,7 +285,7 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
           author: {
             "@type": "Person",
             name: "Niamh Padma",
-            url: "https://niamhpadma.com/about",
+            url: "https://niamhpadma.com/my-story",
           },
           publisher: {
             "@type": "Organization",
@@ -320,9 +325,19 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
         </Container>
       </section>
 
-      {/* Cover image placeholder */}
+      {/* Cover image */}
       <Container>
-        <div className="relative aspect-[21/9] bg-sand/20 rounded-3xl overflow-hidden -mt-0 mb-12" />
+        <div className="relative aspect-[21/9] bg-sand/20 rounded-3xl overflow-hidden mb-12">
+          {postImages[slug] && (
+            <Image
+              src={postImages[slug].src}
+              alt={postImages[slug].alt}
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
+          )}
+        </div>
       </Container>
 
       {/* Article body */}
