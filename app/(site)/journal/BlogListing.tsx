@@ -17,7 +17,7 @@ interface Post {
   readingTime?: number;
 }
 
-const categoryFilters = ["All", "Yoga", "Breathwork", "Somatic", "Nutrition"];
+const categoryFilters = ["All", "Poems", "Yoga", "Mindset", "Nutrition", "Wellness", "Retreats"];
 
 export function BlogListing({ posts }: { posts: Post[] }) {
   const [filter, setFilter] = useState("All");

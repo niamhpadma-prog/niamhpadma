@@ -136,9 +136,9 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Complete Guide to Breathwork", category: "Breathwork", slug: "complete-guide-breathwork" },
-              { title: "Finding the Right Yoga Practice", category: "Yoga", slug: "finding-right-yoga-practice", image: "/images/yoga-practice.jpg" },
-              { title: "What is Somatic Therapy?", category: "Somatic", slug: "what-is-somatic-therapy" },
+              { title: "Turn On.", category: "Poems", slug: "turn-on" },
+              { title: "Making Yoga a Practice of Self-Compassion", category: "Yoga", slug: "making-yoga-a-practice-of-self-compassion", image: "/images/yoga-practice.jpg" },
+              { title: "Awaken Your Senses — Ireland Retreat", category: "Retreats", slug: "awaken-your-senses-ireland-retreat" },
             ].map((post) => (
               <a key={post.title} href={`/journal/${post.slug}`} className="group">
                 <div className="relative aspect-[4/3] bg-sand/30 rounded-2xl mb-4 overflow-hidden">
