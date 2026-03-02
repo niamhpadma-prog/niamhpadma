@@ -4,10 +4,10 @@ import { Logo } from "@/components/ui/Logo";
 
 const footerLinks = {
   explore: [
-    { label: "About", href: "/my-story" },
+    { label: "My Story", href: "/my-story" },
     { label: "Work With Me", href: "/work-with-me" },
     { label: "Events & Retreats", href: "/events" },
-    { label: "Blog", href: "/journal" },
+    { label: "Journal", href: "/journal" },
   ],
   services: [
     { label: "1-1 Coaching", href: "/work-with-me#coaching" },
@@ -17,8 +17,7 @@ const footerLinks = {
   ],
   connect: [
     { label: "Contact", href: "/contact" },
-    { label: "Instagram", href: "#" },
-    { label: "YouTube", href: "#" },
+    { label: "Instagram", href: "https://instagram.com/niamhpadma" },
   ],
 };
 

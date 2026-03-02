@@ -52,20 +52,16 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-sans text-xs uppercase tracking-widest text-espresso/40 mb-1">
-                    Follow
+                    Connect
                   </h3>
                   <div className="flex gap-4">
                     <a
-                      href="#"
+                      href="https://instagram.com/niamhpadma"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="font-sans text-sm text-espresso/60 hover:text-terracotta transition-colors"
                     >
                       Instagram
-                    </a>
-                    <a
-                      href="#"
-                      className="font-sans text-sm text-espresso/60 hover:text-terracotta transition-colors"
-                    >
-                      YouTube
                     </a>
                   </div>
                 </div>
