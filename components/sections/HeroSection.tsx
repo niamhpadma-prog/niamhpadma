@@ -17,7 +17,7 @@ interface HeroSectionProps {
   ctas?: HeroCTA[];
   imageSrc?: string;
   imageAlt?: string;
-  imagePosition?: "center" | "top";
+  imagePosition?: "center" | "top" | "top-20";
   sticky?: boolean;
 }
 
@@ -49,7 +49,7 @@ export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, i
             src={imageSrc}
             alt={imageAlt || ""}
             fill
-            className={`object-cover ${imagePosition === "top" ? "object-top" : ""}`}
+            className={`object-cover ${imagePosition === "top" ? "object-top" : imagePosition === "top-20" ? "object-[center_20%]" : ""}`}
             sizes="100vw"
             priority
           />

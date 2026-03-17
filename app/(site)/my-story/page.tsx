@@ -55,7 +55,7 @@ export default function AboutPage() {
         subheadline={"From wandering to rooted.\nA path through ancient wisdom and modern healing."}
         imageSrc="/images/niamh-my-story.jpg"
         imageAlt="Niamh Padma"
-        imagePosition="center"
+        imagePosition="top-20"
       />
 
       <ImageTextSection
