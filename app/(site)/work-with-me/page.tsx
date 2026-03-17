@@ -109,6 +109,8 @@ export default function WorkWithMePage() {
       <HeroSection
         headline="Work With Me"
         subheadline="Find the practice that fits your life. From private sessions to group experiences."
+        imageSrc="/images/group-classes.avif"
+        imageAlt="Yoga practice"
         ctas={[
           { label: "Take the Questionnaire", href: "/questionnaires/coaching", style: "primary" as const },
         ]}

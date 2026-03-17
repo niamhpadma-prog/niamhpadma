@@ -100,6 +100,8 @@ export default function EventsPage() {
       <HeroSection
         headline="Events & Retreats"
         subheadline="Workshops, classes, and transformative retreat experiences in Lisbon and across Europe."
+        imageSrc="/images/retreats.jpg"
+        imageAlt="Retreat in nature"
       />
 
       <EventsListing events={events} />

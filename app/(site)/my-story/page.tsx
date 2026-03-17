@@ -61,6 +61,8 @@ export default function AboutPage() {
       <ImageTextSection
         heading="A Journey Across Continents"
         body="My path into wellness wasn't linear — it was a winding journey through Central and South America, studying under traditional healers and immersing myself in ancient practices. From ceremonial breathwork in the mountains of Guatemala to yoga ashrams in India, each experience deepened my understanding that healing is not something we find outside ourselves — it's a return to what was always within."
+        imageSrc="/images/rest.jpg"
+        imageAlt="Niamh reading"
         imagePosition="left"
         background="white"
       />
@@ -86,7 +88,14 @@ export default function AboutPage() {
 
       <GallerySection
         heading="Moments on the Path"
-        images={[]}
+        images={[
+          { src: "/images/yoga-discipline.jpg", alt: "Yoga practice" },
+          { src: "/images/hero-center.jpg", alt: "Dancer pose outdoors" },
+          { src: "/images/breathwork.avif", alt: "Breathwork session" },
+          { src: "/images/hero-right.jpg", alt: "Yoga by the pool" },
+          { src: "/images/hero-left.jpg", alt: "Meditation portrait" },
+          { src: "/images/yoga-practice.jpg", alt: "Yoga backbend" },
+        ]}
       />
 
       <CTASection

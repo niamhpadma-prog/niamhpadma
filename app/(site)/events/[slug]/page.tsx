@@ -219,7 +219,23 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
         </Container>
       </Section>
 
-      <GallerySection heading="Gallery" images={[]} />
+      <GallerySection
+        heading="Gallery"
+        images={
+          slug === "yoga-nidra-sound-bath"
+            ? [{ src: "/images/Yoga-Nidra.jpg", alt: "Yoga Nidra deep relaxation" }]
+            : slug === "spring-breathwork-retreat"
+              ? [
+                  { src: "/images/retreats/retreat-001.jpg", alt: "Retreat community" },
+                  { src: "/images/retreats/retreat-002.jpg", alt: "Retreat movement" },
+                  { src: "/images/retreats/retreat-003.jpg", alt: "Retreat connection" },
+                  { src: "/images/retreats/retreat-005.jpg", alt: "Retreat practice" },
+                  { src: "/images/retreats/retreat-006.jpg", alt: "Retreat session" },
+                  { src: "/images/retreats/retreat-008.jpg", alt: "Retreat gathering" },
+                ]
+              : []
+        }
+      />
 
       {event.faq && event.faq.length > 0 && (
         <FAQSection heading="Questions" items={event.faq} />
