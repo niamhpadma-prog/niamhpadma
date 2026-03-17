@@ -53,7 +53,7 @@ export default function AboutPage() {
       <HeroSection
         headline="My Story"
         subheadline={"From wandering to rooted.\nA path through ancient wisdom and modern healing."}
-        imageSrc="/images/niamh-my-story.avif"
+        imageSrc="/images/niamh-my-story.jpg"
         imageAlt="Niamh Padma"
         imagePosition="top"
       />

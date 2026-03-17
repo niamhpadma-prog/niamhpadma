@@ -55,7 +55,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
             <div className="relative aspect-[3/4] rounded-3xl overflow-hidden">
               <img
-                src="/images/niamh-my-story.avif"
+                src="/images/niamh-my-story.jpg"
                 alt="Niamh Padma"
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
