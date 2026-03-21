@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
@@ -18,12 +18,13 @@ interface ServiceItem {
 }
 
 interface ServiceTabsProps {
-  services: ServiceItem[];
+  services?: ServiceItem[];
+  tabContent?: Record<string, ReactNode>;
+  tabs?: string[];
 }
 
-const tabOrder = ["1-1 Coaching", "Group Classes", "Workshops", "Corporate"];
-
-export function ServiceTabs({ services }: ServiceTabsProps) {
+export function ServiceTabs({ services = [], tabContent, tabs }: ServiceTabsProps) {
+  const tabOrder = tabs || ["1-1 Coaching", "Group Classes", "Workshops", "Corporate"];
   const [activeTab, setActiveTab] = useState(tabOrder[0]);
 
   const grouped = tabOrder.reduce(
@@ -64,7 +65,9 @@ export function ServiceTabs({ services }: ServiceTabsProps) {
             transition={{ duration: 0.4 }}
             className="space-y-8"
           >
-            {grouped[activeTab]?.length ? (
+            {tabContent?.[activeTab] ? (
+              tabContent[activeTab]
+            ) : grouped[activeTab]?.length ? (
               grouped[activeTab].map((service) => (
                 <div
                   key={service._id || service.title}
@@ -81,7 +84,7 @@ export function ServiceTabs({ services }: ServiceTabsProps) {
                     <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
                       {service.includes.map((item, i) => (
                         <li key={i} className="flex items-start gap-2">
-                          <span className="text-sage mt-0.5">✓</span>
+                          <span className="text-sage mt-0.5">{"\u2713"}</span>
                           {item}
                         </li>
                       ))}

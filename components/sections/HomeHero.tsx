@@ -102,7 +102,7 @@ export function HomeHero() {
           transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           className="font-sans text-lg md:text-xl max-w-2xl mx-auto mb-10 text-cream/80"
         >
-          Yoga, breathwork & somatic wellness in Lisbon. Retreats across Europe.
+          Yoga, breathwork & somatic wellness in Lisbon and Online. International Retreats
         </motion.p>
 
         <motion.div

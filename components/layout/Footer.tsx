@@ -37,7 +37,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-cream/60">
-              Yoga, breathwork, somatic therapy & holistic nutrition in Lisbon.
+              Yoga, breathwork, somatic coaching & holistic nutrition in Lisbon.
               Guiding you home to yourself.
             </p>
           </div>

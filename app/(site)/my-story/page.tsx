@@ -1,25 +1,29 @@
 import type { Metadata } from "next";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { ImageTextSection } from "@/components/sections/ImageTextSection";
-import { QualificationsGrid } from "@/components/sections/QualificationsGrid";
-import { PullQuote } from "@/components/sections/PullQuote";
-import { GallerySection } from "@/components/sections/GallerySection";
 import { CTASection } from "@/components/sections/CTASection";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Container } from "@/components/ui/Container";
+import { Section } from "@/components/ui/Section";
+import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "About Niamh",
   description:
-    "Yoga, breathwork, somatic therapy & nutrition coach based in Lisbon. 100+ coaching hours, trained across Central & South America, facilitating retreats across Europe.",
+    "Somatic Coach, Breathwork Facilitator & Yoga Teacher based in Lisbon. Guiding busy professionals through reconnection with grounded education, embodied practices and personalised somatic coaching.",
 };
 
 const qualifications = [
-  { title: "Hatha Yoga", description: "200hr certified" },
-  { title: "Vinyasa Flow", description: "Advanced training" },
-  { title: "Yoga Nidra", description: "Sleep & deep relaxation" },
-  { title: "Yin Yoga", description: "Restorative practice" },
-  { title: "Breathwork", description: "Multiple modalities" },
-  { title: "Reiki", description: "Energy healing" },
+  "200hr Yoga Teacher Training \u2013 Sacred Paths Yoga",
+  "50hr Yoga Nidra Training \u2013 Sacred Paths Yoga & Sam Bianchini",
+  "Alignment, Posture & Yoga \u2013 Jenni Rawlings",
+  "Continuous Conscious Connected Breathwork \u2013 Mela Mariposa",
+  "BreathHoldWork Training \u2013 NatMove with Erwan Le Corre",
+  "Accredited Holistic Health & Functional Nutrition Coach \u2013 MindBodyFood Institute",
+  "Level 2 Reiki Facilitator",
+  "Extended Myofascial Release Training",
+  "20hr Cueing & Adjustments Training",
+  "Degree in Marketing & Public Relations",
+  "Yoga Therapist in Training with The Minded Institute",
 ];
 
 export default function AboutPage() {
@@ -30,17 +34,16 @@ export default function AboutPage() {
           "@context": "https://schema.org",
           "@type": "Person",
           name: "Niamh Padma",
-          jobTitle: "Yoga & Breathwork Facilitator, Nutrition Coach",
+          jobTitle: "Somatic Coach, Breathwork Facilitator & Yoga Teacher",
           url: "https://niamhpadma.com/my-story",
           knowsAbout: [
-            "Hatha Yoga",
-            "Vinyasa Yoga",
-            "Yoga Nidra",
-            "Yin Yoga",
+            "Somatic Coaching",
             "Breathwork",
-            "Reiki",
-            "Somatic Therapy",
+            "Yoga",
+            "Yoga Nidra",
             "Holistic Nutrition",
+            "Reiki",
+            "Nervous System Regulation",
           ],
           address: {
             "@type": "PostalAddress",
@@ -58,45 +61,175 @@ export default function AboutPage() {
         imagePosition="top-20"
       />
 
-      <ImageTextSection
-        heading="A Journey Across Continents"
-        body="My path into wellness wasn't linear — it was a winding journey through Central and South America, studying under traditional healers and immersing myself in ancient practices. From ceremonial breathwork in the mountains of Guatemala to yoga ashrams in India, each experience deepened my understanding that healing is not something we find outside ourselves — it's a return to what was always within."
-        imageSrc="/images/rest.jpg"
-        imageAlt="Niamh reading"
-        imagePosition="left"
-        background="white"
-      />
+      {/* Opening story with image */}
+      <Section background="white">
+        <Container>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-sand/30">
+              <img
+                src="/images/rest.jpg"
+                alt="Niamh"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+            <div>
+              <div className="font-sans text-base leading-relaxed text-espresso/70 space-y-5">
+                <p>
+                  My passion for discovering new cultures, movement and food began at a young age with an
+                  urge to travel, explore and experience life fully. But for much of my teens and early twenties, I
+                  was deeply disconnected from my body.
+                </p>
+                <p>
+                  I lived fast. I pushed hard. I numbed myself with alcohol, late nights, overworking and
+                  overtraining. I ignored my intuition and suppressed my emotions because I didn&rsquo;t yet have the
+                  language, safety or support to listen to what my body was asking for.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
 
-      <ImageTextSection
-        heading="Rooted in Lisbon"
-        body="Today I call Lisbon home, where I facilitate 1-1 coaching sessions, group classes, workshops, and retreats across Europe. My approach weaves together yoga, breathwork, somatic practices, and holistic nutrition — because true wellness lives at the intersection of body, breath, and being."
-        imageSrc="/images/my-story.jpg"
-        imageAlt="Niamh in Lisbon"
-        imagePosition="right"
-        background="cream"
-      />
+      {/* The turning point */}
+      <Section background="cream">
+        <Container>
+          <div className="max-w-3xl mx-auto space-y-6">
+            <p className="font-serif text-2xl md:text-3xl font-semibold leading-snug italic">
+              In 2018, everything caught up with me.
+            </p>
+            <div className="font-sans text-base leading-relaxed text-espresso/70 space-y-5 italic">
+              <p>
+                I was rushed to hospital and spent days undergoing scans and tests while my body shut down
+                in ways no one could explain. I was eventually discharged without answers, only fear and
+                exhaustion. I later developed IBS from chronic stress, had no period for six years, and was told
+                this was &ldquo;normal.&rdquo; Deep down, I knew it wasn&rsquo;t.
+              </p>
+              <p>
+                That moment became the beginning of a very different relationship with myself.
+              </p>
+              <p>
+                I began researching how to heal from within. I changed my lifestyle. I changed the way I ate. I
+                started eliminating what was harming me and nourishing what was missing. I found yoga in the
+                most unexpected place, my local bar, and for the first time truly understood what mind&ndash;body
+                connection meant.
+              </p>
+              <p>
+                As I learned to listen to my body, my symptoms softened. My relationship with food, rest and
+                movement transformed. I began to understand how deeply psychosomatic I am, how sensitive
+                my nervous system is, and how powerfully my body responds when I live in alignment with my
+                natural rhythms.
+              </p>
+              <p>
+                I&rsquo;ve lived at both ends of the wellness spectrum. From obsessive clean eating and overtraining
+                fuelled by health anxiety, to overindulgence and burnout. From complete disconnection to deep
+                embodiment. From numbing everything to feeling everything.
+              </p>
+              <p>
+                And through it all, I learned that healing is not a one-time fix. It&rsquo;s a relationship and a rhythm that
+                needs watering and nurturing.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </Section>
 
-      <QualificationsGrid
-        heading="Training & Qualifications"
-        items={qualifications}
-      />
+      {/* Current work */}
+      <Section background="white">
+        <Container>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+            <div>
+              <div className="font-sans text-base leading-relaxed text-espresso/70 space-y-5">
+                <p className="italic">
+                  Now, as a Somatic Coach, Breathwork Facilitator and Yoga Teacher, I guide busy, working
+                  professionals through the same reconnection that changed my life. The wellness world can be
+                  confusing, it doesn&rsquo;t have to be. With grounded education, embodied practices and deeply
+                  personalised somatic coaching, you can feel clear and connected.
+                </p>
+                <p className="italic">
+                  If you choose to walk this path together, we use breathwork, movement, energy work and
+                  mindful nutrition, to increase vitality, regulate the nervous system, release stored stress and
+                  emotion, connect to intuition and build a relationship with the self rooted in softness,
+                  nourishment, creativity and self-trust.
+                </p>
+              </div>
+            </div>
+            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-sand/30">
+              <img
+                src="/images/my-story.jpg"
+                alt="Niamh in Lisbon"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </Container>
+      </Section>
 
-      <PullQuote
-        quote="Wellness isn't a destination — it's a remembering. A return to the home you never left."
-        attribution="Niamh Padma"
-      />
+      {/* Closing poetic section */}
+      <Section background="sage">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center space-y-4">
+            <p className="font-serif text-lg md:text-xl leading-relaxed italic">
+              I know how it feels to live in constant stress.
+            </p>
+            <p className="font-serif text-lg md:text-xl leading-relaxed italic">
+              I know what it&rsquo;s like to feel disconnected from your body.
+            </p>
+            <p className="font-serif text-lg md:text-xl leading-relaxed italic">
+              I know what it&rsquo;s like to ignore your intuition because life feels too busy to listen.
+            </p>
+            <p className="font-serif text-lg md:text-xl leading-relaxed italic mt-8">
+              And I also know what&rsquo;s possible when you finally come home to yourself.
+            </p>
+            <div className="pt-6">
+              <p className="font-serif text-2xl md:text-3xl font-semibold leading-snug italic">
+                Your body already holds the wisdom.
+              </p>
+              <p className="font-serif text-2xl md:text-3xl font-semibold leading-snug italic">
+                I&rsquo;m here to help you listen.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </Section>
 
-      <GallerySection
-        heading="Moments on the Path"
-        images={[
-          { src: "/images/yoga-discipline.jpg", alt: "Yoga practice" },
-          { src: "/images/hero-center.jpg", alt: "Dancer pose outdoors" },
-          { src: "/images/breathwork.avif", alt: "Breathwork session" },
-          { src: "/images/hero-right.jpg", alt: "Yoga by the pool" },
-          { src: "/images/hero-left.jpg", alt: "Meditation portrait" },
-          { src: "/images/yoga-practice.jpg", alt: "Yoga backbend" },
-        ]}
-      />
+      {/* Training & Qualifications */}
+      <Section background="white">
+        <Container>
+          <h2 className="font-serif text-4xl md:text-5xl font-semibold text-center mb-12">
+            Training & Qualifications
+          </h2>
+          <div className="max-w-2xl mx-auto">
+            <ul className="space-y-3">
+              {qualifications.map((q, i) => (
+                <li key={i} className="flex items-start gap-3 font-sans text-base text-espresso/70">
+                  <span className="text-sage mt-1 flex-shrink-0">&bull;</span>
+                  {q}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Instagram link (replaces gallery) */}
+      <Section background="cream">
+        <Container>
+          <div className="text-center">
+            <h2 className="font-serif text-4xl md:text-5xl font-semibold mb-6">
+              Follow the Journey
+            </h2>
+            <p className="font-sans text-base text-espresso/60 mb-8 max-w-lg mx-auto">
+              For daily practices, behind-the-scenes moments and community connection.
+            </p>
+            <Button
+              href="https://instagram.com/niamhpadma"
+              variant="outline"
+            >
+              Follow on Instagram
+            </Button>
+          </div>
+        </Container>
+      </Section>
 
       <CTASection
         heading="Ready to Begin?"

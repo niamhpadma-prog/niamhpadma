@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { EventsListing } from "./EventsListing";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Container } from "@/components/ui/Container";
+import { Section } from "@/components/ui/Section";
+import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Events & Retreats",
@@ -9,60 +12,7 @@ export const metadata: Metadata = {
     "Upcoming yoga retreats, breathwork workshops, and wellness events in Lisbon and across Europe with Niamh Padma.",
 };
 
-// TODO: Fetch from Sanity in production
-const placeholderEvents = [
-  {
-    _id: "e1",
-    title: "Spring Breathwork Retreat",
-    slug: { current: "spring-breathwork-retreat" },
-    type: "Retreat",
-    dateStart: "2026-04-15T10:00:00Z",
-    dateEnd: "2026-04-18T16:00:00Z",
-    location: { name: "Casa da Luz", city: "Sintra", country: "Portugal" },
-    price: "€450",
-    status: "upcoming",
-    excerpt: "A 4-day immersion into breathwork, somatic release and deep rest in the magical hills of Sintra.",
-  },
-  {
-    _id: "e2",
-    title: "Yoga Nidra & Sound Bath",
-    slug: { current: "yoga-nidra-sound-bath" },
-    type: "Workshop",
-    dateStart: "2026-03-22T18:00:00Z",
-    location: { name: "Estúdio Alma", city: "Lisbon", country: "Portugal" },
-    price: "€35",
-    status: "upcoming",
-    excerpt: "An evening of deep relaxation combining yoga nidra with crystal bowl sound healing.",
-  },
-  {
-    _id: "e3",
-    title: "Weekly Vinyasa Flow",
-    slug: { current: "weekly-vinyasa-flow" },
-    type: "Class",
-    dateStart: "2026-03-10T09:00:00Z",
-    location: { name: "Jardim Studio", city: "Lisbon", country: "Portugal" },
-    price: "€15",
-    status: "upcoming",
-    excerpt: "Dynamic vinyasa flow connecting breath and movement. All levels welcome.",
-  },
-  {
-    _id: "e4",
-    title: "Online Breathwork Circle",
-    slug: { current: "online-breathwork-circle" },
-    type: "Online",
-    dateStart: "2026-03-15T19:00:00Z",
-    price: "€10",
-    status: "upcoming",
-    excerpt: "Join from anywhere for a guided breathwork session and community sharing circle.",
-  },
-];
-
 export default function EventsPage() {
-  const events = placeholderEvents.map((e) => ({
-    ...e,
-    slug: e.slug.current,
-  }));
-
   return (
     <>
       <JsonLd
@@ -70,30 +20,7 @@ export default function EventsPage() {
           "@context": "https://schema.org",
           "@type": "ItemList",
           name: "Events & Retreats by Niamh Padma",
-          itemListElement: placeholderEvents.map((e, i) => ({
-            "@type": "ListItem",
-            position: i + 1,
-            item: {
-              "@type": "Event",
-              name: e.title,
-              startDate: e.dateStart,
-              ...(e.dateEnd && { endDate: e.dateEnd }),
-              location: e.location
-                ? {
-                    "@type": "Place",
-                    name: e.location.name,
-                    address: {
-                      "@type": "PostalAddress",
-                      addressLocality: e.location.city,
-                      addressCountry: e.location.country,
-                    },
-                  }
-                : undefined,
-              offers: e.price
-                ? { "@type": "Offer", price: e.price.replace(/[^0-9]/g, ""), priceCurrency: "EUR" }
-                : undefined,
-            },
-          })),
+          itemListElement: [],
         }}
       />
 
@@ -104,7 +31,72 @@ export default function EventsPage() {
         imageAlt="Retreat in nature"
       />
 
-      <EventsListing events={events} />
+      {/* Retreats */}
+      <Section background="white">
+        <Container>
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="font-serif text-4xl md:text-5xl font-semibold mb-6">Retreats</h2>
+            <p className="font-sans text-base text-espresso/70 mb-2">
+              Details coming soon.
+            </p>
+            <p className="font-sans text-base text-espresso/70 mb-8">
+              Be the first to know by signing up to the newsletter below.
+            </p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* In-Person */}
+      <Section background="cream">
+        <Container>
+          <div className="max-w-2xl mx-auto">
+            <h2 className="font-serif text-4xl md:text-5xl font-semibold text-center mb-10">In-Person</h2>
+            <div className="bg-white rounded-3xl p-8 md:p-12">
+              <h3 className="font-serif text-2xl mb-4">The Women{"\u2019"}s Gathering and Somatic Journey</h3>
+              <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6">
+                A monthly in-person gathering in Lisbon for women seeking connection, rest, and embodied practice.
+              </p>
+              <Button href="#" variant="primary" size="md">
+                Book Now
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Online */}
+      <Section background="white">
+        <Container>
+          <div className="max-w-2xl mx-auto">
+            <h2 className="font-serif text-4xl md:text-5xl font-semibold text-center mb-10">Online</h2>
+            <div className="space-y-6">
+              <div className="bg-cream rounded-3xl p-8 md:p-12">
+                <h3 className="font-serif text-2xl mb-4">Online Rest and Reset</h3>
+                <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6">
+                  A monthly online somatic rest and reset session. Join from anywhere.
+                </p>
+                <Button href="#" variant="primary" size="md">
+                  Book Now
+                </Button>
+              </div>
+              <div className="bg-cream rounded-3xl p-8 md:p-12">
+                <h3 className="font-serif text-2xl mb-4">Weekly Yoganidr{"\u0101"}</h3>
+                <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6">
+                  A weekly online yoga nidra session for deep relaxation and restoration.
+                </p>
+                <Button href="#" variant="primary" size="md">
+                  Book Now
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      <NewsletterSection
+        heading="Be the First to Know"
+        body="Sign up to receive early access to retreats, events, and community offerings."
+      />
     </>
   );
 }

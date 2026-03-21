@@ -65,17 +65,49 @@ export default function HomePage() {
                 Meet Niamh
               </p>
               <h2 className="font-serif text-4xl md:text-5xl font-semibold leading-[1.1] mb-6">
-                A Journey of Healing & Transformation
+                A Journey of Remembering
               </h2>
               <p className="font-sans text-base leading-relaxed text-espresso/70 mb-8">
-                From studying ancient practices across Central and South America to
-                facilitating retreats across Europe, my path has always led back to one
-                truth — wellness is a return to who you already are.
+                From the fast-paced, corporate media world, to studying ancient practices across Central and
+                South America, to somatic coaching in Lisbon and online, my path has always led back to one
+                truth — wellness is a remembering.
               </p>
               <Button href="/my-story" variant="outline">
                 Read My Story
               </Button>
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Quote section */}
+      <Section background="sage">
+        <Container>
+          <div className="max-w-3xl mx-auto">
+            <p className="font-serif text-lg md:text-xl leading-relaxed italic mb-6">
+              In <em>Timeless Healing</em>, Dr. Herbert Benson suggests that our bodies are not merely biochemical
+              machines, but responsive, meaning-making systems. Affirming beliefs, especially those rooted
+              in a sense of connection to something greater, are not abstract comforts. They shape
+              physiology. They influence healing. They matter.
+            </p>
+            <p className="font-serif text-lg md:text-xl leading-relaxed italic mb-6">
+              At the heart of his work is a concept he calls <em>remembered wellness</em> — the idea that health is not
+              something we construct from scratch, but something we return to. A state already encoded
+              within us, waiting to be reawakened.
+            </p>
+            <p className="font-serif text-lg md:text-xl leading-relaxed italic mb-6">
+              In this sense, the body is not broken. It is fluent in wholeness. It simply needs the right
+              conditions to remember.
+            </p>
+            <p className="font-serif text-2xl md:text-3xl font-semibold leading-snug mt-10 mb-2">
+              Wellness is not an achievement.
+            </p>
+            <p className="font-serif text-2xl md:text-3xl font-semibold leading-snug mb-10">
+              It is a remembering.
+            </p>
+            <Button href="/my-story" variant="outline">
+              Read My Story
+            </Button>
           </div>
         </Container>
       </Section>

@@ -5,60 +5,288 @@ import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { Button } from "@/components/ui/Button";
 
 export const metadata: Metadata = {
   title: "Work With Me",
   description:
-    "1-1 coaching, group yoga & breathwork classes, workshops, and corporate wellness in Lisbon. Find the right offering for your journey.",
+    "1-1 somatic coaching, group yoga & breathwork classes, workshops, and corporate wellness in Lisbon. Find the right offering for your journey.",
 };
 
-const placeholderServices = [
-  {
-    _id: "1",
-    title: "Private Coaching Sessions",
-    type: "1-1 Coaching",
-    description:
-      "Personalised sessions tailored to your unique needs — weaving together yoga, breathwork, somatic practices, and nutrition guidance. We'll work together to create a practice that fits your life.",
-    pricing: "From €80/session",
-    bookingUrl: "#",
-    questionnaireType: "coaching",
-    includes: [
-      "60 or 90-minute sessions",
-      "Personalised practice plan",
-      "Between-session support",
-      "Progress tracking",
-    ],
-  },
-  {
-    _id: "2",
-    title: "Weekly Group Classes",
-    type: "Group Classes",
-    description:
-      "Join our community for weekly yoga and breathwork classes in beautiful Lisbon studios. All levels welcome — from complete beginners to experienced practitioners.",
-    pricing: "€15/class or €50/month",
-    bookingUrl: "#",
-    questionnaireType: "yoga",
-  },
-  {
-    _id: "3",
-    title: "Breathwork & Somatic Workshops",
-    type: "Workshops",
-    description:
-      "Deep-dive half-day and full-day workshops exploring specific themes — from breathwork for anxiety to somatic release for stored tension. Limited to 12 participants for intimate guidance.",
-    pricing: "From €45/workshop",
-    bookingUrl: "#",
-    questionnaireType: "breathwork",
-  },
-  {
-    _id: "4",
-    title: "Corporate Wellness Programs",
-    type: "Corporate",
-    description:
-      "Bring wellness into your workplace with tailored programs for teams. From lunch-hour breathwork sessions to full wellness days, we'll design a program that serves your team's needs.",
-    pricing: "Custom pricing",
-    questionnaireType: "corporate",
-  },
-];
+function CoachingContent() {
+  return (
+    <>
+      {/* Intro */}
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-4">1-1 Somatic Coaching</h3>
+        <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6 max-w-2xl">
+          Through somatic coaching, we begin where real change happens, beneath the noise of the
+          mind, within the intelligence of the body.
+        </p>
+        <p className="font-sans text-base font-medium text-espresso/80 mb-3">You may find yourself:</p>
+        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
+          {[
+            "Feeling more at home in your body",
+            "Building emotional resilience",
+            "Regulating your nervous system",
+            "Healing your relationship with food and movement",
+            "Working with your cycle and natural rhythms",
+            "Reducing stress and burnout",
+            "Improving focus and creativity",
+            "Trusting your intuition",
+            "Feeling grounded, confident, and clear",
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <span className="text-sage mt-0.5">{"\u2713"}</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+        <div className="space-y-1 font-sans text-base text-espresso/80">
+          <p>This is not mindset work alone.</p>
+          <p>It is nervous system work.</p>
+          <p>It is emotional work.</p>
+          <p>It is embodied work.</p>
+        </div>
+      </div>
+
+      {/* 3 Month Programme */}
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-2">3 Month Programme</h3>
+        <p className="font-sans text-sm uppercase tracking-widest text-sage mb-6">What You Receive</p>
+        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
+          {[
+            "1:1 Personalised Programme tailored to your needs and goals",
+            "6 x 75 minute online sessions (fortnightly)",
+            "Weekday email check-ins",
+            "Additional resources, tools and practices",
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <span className="text-sage mt-0.5">{"\u2713"}</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+        <div className="flex flex-wrap items-center gap-4">
+          <span className="font-sans text-lg font-semibold text-terracotta">
+            611 EUR
+          </span>
+          <span className="font-sans text-sm text-espresso/50">
+            Monthly payment plans available
+          </span>
+        </div>
+        <div className="mt-6">
+          <Button href="/questionnaires/coaching" variant="primary" size="md">
+            Book a Free Enquiry Call
+          </Button>
+        </div>
+      </div>
+
+      {/* 6 Month Programme */}
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-2">6 Month Programme</h3>
+        <p className="font-sans text-sm uppercase tracking-widest text-sage mb-6">What You Receive</p>
+        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
+          {[
+            "1:1 Personalised Programme tailored to your needs and goals",
+            "12 x 75 minute online sessions (fortnightly)",
+            "Weekday email check-ins",
+            "Additional resources, tools and practices",
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <span className="text-sage mt-0.5">{"\u2713"}</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+        <div className="flex flex-wrap items-center gap-4 mb-6">
+          <span className="font-sans text-lg font-semibold text-terracotta">
+            1,111 EUR
+          </span>
+        </div>
+        <Button href="/questionnaires/coaching" variant="primary" size="md">
+          Book a Free Enquiry Call
+        </Button>
+      </div>
+    </>
+  );
+}
+
+function GroupClassesContent() {
+  return (
+    <>
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-4">Weekly Group Classes</h3>
+        <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6 max-w-2xl">
+          Join our community for weekly somatic yoga and breathwork classes in beautiful Lisbon studios.
+          All levels welcome — from complete beginners to experienced practitioners.
+        </p>
+        <div className="flex flex-wrap items-center gap-4">
+          <span className="font-sans text-lg font-semibold text-terracotta">
+            {"\u20AC"}15/class or {"\u20AC"}50/month
+          </span>
+          <Button href="#" variant="primary" size="md">
+            Book Now
+          </Button>
+        </div>
+      </div>
+
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-6">Monthly Group Practices</h3>
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <span className="font-sans text-base font-medium text-espresso">
+              The Women{"\u2019"}s Gathering and Somatic Journey
+            </span>
+            <Button href="#" variant="outline" size="sm">
+              Book Now
+            </Button>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <span className="font-sans text-base font-medium text-espresso">
+              Online Somatic Rest and Reset
+            </span>
+            <Button href="#" variant="outline" size="sm">
+              Book Now
+            </Button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function CorporateContent() {
+  return (
+    <>
+      {/* Intro */}
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-4">Nervous System{"\u2013"}Informed Wellbeing</h3>
+        <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6 max-w-2xl">
+          Padma Collective design and deliver practical, nervous system{"\u2013"}informed wellbeing
+          programmes for organisations looking to support their people through pressure, growth,
+          and change. The focus is on building sustainable capacity at work, helping employees
+          stay clear-headed, resilient, and effective in demanding environments.
+        </p>
+
+        <p className="font-sans text-base font-medium text-espresso/80 mb-3">
+          Programmes are designed to support:
+        </p>
+        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
+          {[
+            "Stress resilience and burnout prevention",
+            "Focus, clarity, and sustainable productivity",
+            "Emotional intelligence and effective communication",
+            "Creativity, adaptability, and decision-making",
+            "Nervous system regulation in everyday working life",
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <span className="text-sage mt-0.5">{"\u2713"}</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <p className="font-sans text-base font-medium text-espresso/80 mb-3">
+          Programmes combine evidence-informed practices adapted for modern workplaces, including:
+        </p>
+        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
+          {[
+            "Breathing practices for focus, regulation, and energy management",
+            "Accessible movement practices suitable for desk-based or remote work",
+            "Stress regulation and resilience workshops",
+            "Mindful approaches to eating, energy, and recovery",
+            "Emotional resilience and self-regulation training",
+            "Team connection and culture-building sessions",
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <span className="text-sage mt-0.5">{"\u2713"}</span>
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <p className="font-sans text-base text-espresso/70 leading-relaxed mb-4 max-w-2xl">
+          With a background in international communications strategy, public speaking, and
+          facilitation, sessions are designed to meet your team in the now with grounded,
+          inclusive, and empowering sessions.
+        </p>
+        <p className="font-sans text-base text-espresso/70 leading-relaxed max-w-2xl">
+          No prior experience is required, and all practices are practical, accessible, and
+          immediately applicable to real working moments such as meetings, presentations,
+          deadlines, and challenging conversations. Programmes are available both in person and online.
+        </p>
+      </div>
+
+      {/* Foundations Programme */}
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-2">Foundations Programme</h3>
+        <p className="font-sans text-sm text-terracotta mb-4">Ongoing wellbeing support for modern workplaces.</p>
+        <div className="font-sans text-base text-espresso/70 leading-relaxed space-y-4 mb-6 max-w-2xl">
+          <p>
+            A structured programme designed to support both new starters and existing employees
+            through periods of growth and change.
+          </p>
+          <p>
+            Weekly live sessions introduce practical tools for managing stress, focus, and energy,
+            while encouraging habit formation through repetition and simple real-world application.
+          </p>
+          <p>
+            Delivered online, with recordings available for a short period and regular feedback loops
+            to ensure sessions remain relevant to employee needs. Programmes can run as a short
+            series or be extended into longer-term support.
+          </p>
+        </div>
+        <Button href="/questionnaires/corporate" variant="primary" size="md">
+          Book a Free Enquiry Call
+        </Button>
+      </div>
+
+      {/* 6 Month Programme */}
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-2">6 Month Programme</h3>
+        <p className="font-sans text-sm text-terracotta mb-4">Focused sessions for teams needing greater depth.</p>
+        <div className="font-sans text-base text-espresso/70 leading-relaxed space-y-4 mb-6 max-w-2xl">
+          <p>
+            Extended sessions designed for smaller teams, leadership groups, or high-pressure
+            environments.
+          </p>
+          <p>
+            These sessions offer a deeper exploration of nervous system regulation, with a stronger
+            emphasis on breathwork, reflection, and integration.
+          </p>
+          <p>
+            Available online, in person, or as a blended experience.
+          </p>
+        </div>
+        <Button href="/questionnaires/corporate" variant="primary" size="md">
+          Book a Free Enquiry Call
+        </Button>
+      </div>
+
+      {/* On-Site Wellbeing Day */}
+      <div className="bg-cream rounded-3xl p-8 md:p-12">
+        <h3 className="font-serif text-3xl mb-2">On-Site Wellbeing Day</h3>
+        <p className="font-sans text-sm text-terracotta mb-4">Immersive experiences to support teams through change.</p>
+        <div className="font-sans text-base text-espresso/70 leading-relaxed space-y-4 mb-6 max-w-2xl">
+          <p>
+            In-person wellbeing days designed to support teams at key moments, such as the start
+            or completion of a project. These half-day experiences combine education,
+            physiological reset, supportive movement, and integration, helping teams restore focus,
+            energy, and connection.
+          </p>
+          <p>
+            Often used as onboarding intensives, quarterly resets, or preparation for demanding
+            project phases.
+          </p>
+        </div>
+        <Button href="/questionnaires/corporate" variant="primary" size="md">
+          Book a Free Enquiry Call
+        </Button>
+      </div>
+    </>
+  );
+}
 
 const faqItems = [
   {
@@ -85,6 +313,31 @@ const faqItems = [
     question: "How do I know which service is right for me?",
     answer:
       "Take the questionnaire! It takes 2 minutes and helps me understand your needs so I can recommend the perfect starting point for your journey.",
+  },
+  {
+    question: "How are 1:1 Sessions Structured?",
+    answer:
+      "We begin by exploring what you are seeking support with, how you want to feel and what\u2019s possible in our time together. We co-create a programme that supports your future self and revisit your intentions as you evolve. Every session begins with a somatic check-in to settle into your body and the present moment. We explore what\u2019s been present for you, what\u2019s felt supportive or challenging, what your body is communicating, and coaching around your current relationship towards nutrition and your body. Sessions flow intuitively while remaining anchored in your long-term goals and intentions.",
+  },
+  {
+    question: "What can I expect physically?",
+    answer:
+      "Somatics is a body-led approach. We work with your nervous system, current sensations that arise, breath and movement. Sessions include accessible movement designed to release tension, enhance focus and creativity, improve body awareness, and reconnect you with your relationship to rest. Your body may express emotion through movement, breath or sensation. We allow this expression to move gently and safely.",
+  },
+  {
+    question: "What can I expect emotionally & mentally?",
+    answer:
+      "1:1 sessions can be grounding, supportive and compassionate, while being inspiring, creative, open and driven. You may experience emotional release, clarity and insight, energy and motivation. We build your capacity to feel and process emotions rather than suppress them. You are always in choice.",
+  },
+  {
+    question: "What can I expect between sessions?",
+    answer:
+      "You\u2019ll receive weekday email check-ins, additional practices and resources, and a programme structure designed for reflection and integration between sessions.",
+  },
+  {
+    question: "What does Somatic mean?",
+    answer:
+      "The word \u2018Somatic\u2019 comes from the Greek word \u2018Soma\u2019 which refers to your living, breathing, sensing body. Intentional somatic practices, such as Yoga, Tai Chi, dancing, making art, going for a walk, nourishing yourself through food and even breathing, aim to guide you towards being more aware, present and understanding of your inner experience. The more you become aware of your somatic or bodily experience, the more likely you are to recognise your emotional needs and learn how to manage or cope with the range of human experiences. Rather than thinking \u201CI need to be calm all the time\u201D, it reminds you that you are human with a wide range of emotional needs that all need to be expressed and validated. This helps you grow your capacity and learn to respond or adapt to life in a healthy and non-harming way. It encourages you to connect with the natural rhythms and cycles of being human \u2014 rather than forcing yourself into \u2018machine mode\u2019.",
   },
 ];
 
@@ -116,7 +369,14 @@ export default function WorkWithMePage() {
         ]}
       />
 
-      <ServiceTabs services={placeholderServices} />
+      <ServiceTabs
+        tabs={["1-1 Coaching", "Group Classes", "Corporate"]}
+        tabContent={{
+          "1-1 Coaching": <CoachingContent />,
+          "Group Classes": <GroupClassesContent />,
+          "Corporate": <CorporateContent />,
+        }}
+      />
 
       <TestimonialsSection
         heading="What Clients Say"
