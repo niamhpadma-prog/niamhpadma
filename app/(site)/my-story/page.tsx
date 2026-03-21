@@ -64,7 +64,7 @@ export default function AboutPage() {
       {/* Opening story with image */}
       <Section background="white">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
             <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-sand/30">
               <img
                 src="/images/rest.jpg"
@@ -72,8 +72,8 @@ export default function AboutPage() {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
-            <div>
-              <div className="font-sans text-base leading-relaxed text-espresso/70 space-y-5">
+            <div className="max-w-md">
+              <div className="font-sans text-base leading-[1.85] text-espresso/70 space-y-6">
                 <p>
                   My passion for discovering new cultures, movement and food began at a young age with an
                   urge to travel, explore and experience life fully. But for much of my teens and early twenties, I
@@ -93,11 +93,11 @@ export default function AboutPage() {
       {/* The turning point */}
       <Section background="cream">
         <Container>
-          <div className="max-w-3xl mx-auto space-y-6">
-            <p className="font-serif text-2xl md:text-3xl font-semibold leading-snug italic">
+          <div className="max-w-xl mx-auto">
+            <p className="font-serif text-3xl md:text-4xl font-semibold leading-snug mb-10">
               In 2018, everything caught up with me.
             </p>
-            <div className="font-sans text-base leading-relaxed text-espresso/70 space-y-5 italic">
+            <div className="font-sans text-base leading-[1.85] text-espresso/70 space-y-6">
               <p>
                 I was rushed to hospital and spent days undergoing scans and tests while my body shut down
                 in ways no one could explain. I was eventually discharged without answers, only fear and
@@ -133,19 +133,19 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Current work */}
+      {/* Current work with image */}
       <Section background="white">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
-            <div>
-              <div className="font-sans text-base leading-relaxed text-espresso/70 space-y-5">
-                <p className="italic">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+            <div className="max-w-md">
+              <div className="font-sans text-base leading-[1.85] text-espresso/70 space-y-6">
+                <p>
                   Now, as a Somatic Coach, Breathwork Facilitator and Yoga Teacher, I guide busy, working
                   professionals through the same reconnection that changed my life. The wellness world can be
                   confusing, it doesn&rsquo;t have to be. With grounded education, embodied practices and deeply
                   personalised somatic coaching, you can feel clear and connected.
                 </p>
-                <p className="italic">
+                <p>
                   If you choose to walk this path together, we use breathwork, movement, energy work and
                   mindful nutrition, to increase vitality, regulate the nervous system, release stored stress and
                   emotion, connect to intuition and build a relationship with the self rooted in softness,
@@ -164,27 +164,31 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Closing poetic section */}
+      {/* Closing section */}
       <Section background="sage">
         <Container>
-          <div className="max-w-3xl mx-auto text-center space-y-4">
-            <p className="font-serif text-lg md:text-xl leading-relaxed italic">
-              I know how it feels to live in constant stress.
-            </p>
-            <p className="font-serif text-lg md:text-xl leading-relaxed italic">
-              I know what it&rsquo;s like to feel disconnected from your body.
-            </p>
-            <p className="font-serif text-lg md:text-xl leading-relaxed italic">
-              I know what it&rsquo;s like to ignore your intuition because life feels too busy to listen.
-            </p>
-            <p className="font-serif text-lg md:text-xl leading-relaxed italic mt-8">
+          <div className="max-w-2xl mx-auto text-center py-8 md:py-12">
+            <div className="space-y-6 mb-16">
+              <p className="font-serif text-2xl md:text-3xl leading-snug">
+                I know how it feels to live in constant stress.
+              </p>
+              <p className="font-serif text-2xl md:text-3xl leading-snug">
+                I know what it&rsquo;s like to feel disconnected from your body.
+              </p>
+              <p className="font-serif text-2xl md:text-3xl leading-snug">
+                I know what it&rsquo;s like to ignore your intuition because life feels too busy to listen.
+              </p>
+            </div>
+
+            <p className="font-serif text-2xl md:text-3xl leading-snug mb-16">
               And I also know what&rsquo;s possible when you finally come home to yourself.
             </p>
-            <div className="pt-6">
-              <p className="font-serif text-2xl md:text-3xl font-semibold leading-snug italic">
+
+            <div className="space-y-3">
+              <p className="font-serif text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight">
                 Your body already holds the wisdom.
               </p>
-              <p className="font-serif text-2xl md:text-3xl font-semibold leading-snug italic">
+              <p className="font-serif text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight">
                 I&rsquo;m here to help you listen.
               </p>
             </div>
@@ -198,10 +202,10 @@ export default function AboutPage() {
           <h2 className="font-serif text-4xl md:text-5xl font-semibold text-center mb-12">
             Training & Qualifications
           </h2>
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-lg mx-auto">
             <ul className="space-y-3">
               {qualifications.map((q, i) => (
-                <li key={i} className="flex items-start gap-3 font-sans text-base text-espresso/70">
+                <li key={i} className="flex items-start gap-3 font-sans text-base leading-relaxed text-espresso/70">
                   <span className="text-sage mt-1 flex-shrink-0">&bull;</span>
                   {q}
                 </li>
@@ -211,14 +215,14 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Instagram link (replaces gallery) */}
+      {/* Instagram link */}
       <Section background="cream">
         <Container>
           <div className="text-center">
             <h2 className="font-serif text-4xl md:text-5xl font-semibold mb-6">
               Follow the Journey
             </h2>
-            <p className="font-sans text-base text-espresso/60 mb-8 max-w-lg mx-auto">
+            <p className="font-sans text-base text-espresso/60 mb-8 max-w-md mx-auto">
               For daily practices, behind-the-scenes moments and community connection.
             </p>
             <Button
