@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import type { ReactNode } from "react";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { ServiceTabs } from "@/components/sections/ServiceTabs";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
@@ -13,19 +15,101 @@ export const metadata: Metadata = {
     "1-1 somatic coaching, group yoga & breathwork classes, workshops, and corporate wellness in Lisbon. Find the right offering for your journey.",
 };
 
-function CoachingContent() {
+type BentoCTA = { label: string; href: string; variant?: "primary" | "outline" };
+
+interface BentoService {
+  id: string;
+  category: "1-1 Coaching" | "Group Classes" | "Corporate";
+  title: string;
+  image: { src: string; alt: string };
+  body: ReactNode;
+  pricing?: string;
+  ctas?: BentoCTA[];
+  /** Span both columns on desktop when true. Use for rich intro cards. */
+  wide?: boolean;
+}
+
+function BentoCard({ service }: { service: BentoService }) {
   return (
-    <>
-      {/* Intro */}
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-4">1-1 Somatic Coaching</h3>
-        <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6 max-w-2xl">
-          Through somatic coaching, we begin where real change happens, beneath the noise of the
-          mind, within the intelligence of the body.
+    <article
+      className={`group relative flex flex-col overflow-hidden rounded-3xl bg-cream ${
+        service.wide ? "md:col-span-2" : ""
+      }`}
+    >
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-sand/30">
+        <Image
+          src={service.image.src}
+          alt={service.image.alt}
+          fill
+          sizes={service.wide ? "(max-width: 768px) 100vw, 1200px" : "(max-width: 768px) 100vw, 600px"}
+          className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+        />
+      </div>
+
+      <div className="flex flex-1 flex-col p-8 md:p-10">
+        <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
+          {service.category}
         </p>
-        <p className="font-sans text-base font-medium text-espresso/80 mb-3">You may find yourself:</p>
-        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
-          {[
+        <h3 className="font-serif text-3xl mb-4">{service.title}</h3>
+
+        <div className="font-sans text-base text-espresso/70 leading-relaxed space-y-4 mb-6">
+          {service.body}
+        </div>
+
+        {(service.pricing || service.ctas?.length) && (
+          <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">
+            {service.pricing && (
+              <span className="font-sans text-lg font-semibold text-terracotta">
+                {service.pricing}
+              </span>
+            )}
+            {service.ctas?.map((cta) => (
+              <Button
+                key={cta.href + cta.label}
+                href={cta.href}
+                variant={cta.variant || "primary"}
+                size="md"
+              >
+                {cta.label}
+              </Button>
+            ))}
+          </div>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="font-sans text-sm text-espresso/70 space-y-2">
+      {items.map((item) => (
+        <li key={item} className="flex items-start gap-2">
+          <span className="text-sage mt-0.5">{"✓"}</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// Replace these image paths in /public/images/services/ to update the bento imagery.
+const services: BentoService[] = [
+  {
+    id: "coaching-intro",
+    category: "1-1 Coaching",
+    title: "1-1 Somatic Coaching",
+    image: { src: "/images/services/coaching-intro.jpg", alt: "Restful somatic coaching session" },
+    wide: true,
+    body: (
+      <>
+        <p>
+          Through somatic coaching, we begin where real change happens, beneath the noise of the mind,
+          within the intelligence of the body.
+        </p>
+        <p className="font-medium text-espresso/80">You may find yourself:</p>
+        <BulletList
+          items={[
             "Feeling more at home in your body",
             "Building emotional resilience",
             "Regulating your nervous system",
@@ -35,256 +119,240 @@ function CoachingContent() {
             "Improving focus and creativity",
             "Trusting your intuition",
             "Feeling grounded, confident, and clear",
-          ].map((item, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="text-sage mt-0.5">{"\u2713"}</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-        <div className="space-y-1 font-sans text-base text-espresso/80">
+          ]}
+        />
+        <div className="space-y-1 text-espresso/80">
           <p>This is not mindset work alone.</p>
           <p>It is nervous system work.</p>
           <p>It is emotional work.</p>
           <p>It is embodied work.</p>
         </div>
-      </div>
-
-      {/* 3 Month Programme */}
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-2">3 Month Programme</h3>
-        <p className="font-sans text-sm uppercase tracking-widest text-sage mb-6">What You Receive</p>
-        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
-          {[
+      </>
+    ),
+    ctas: [
+      { label: "Book a Free Enquiry Call", href: "/questionnaires/coaching", variant: "primary" },
+    ],
+  },
+  {
+    id: "coaching-3month",
+    category: "1-1 Coaching",
+    title: "3 Month Programme",
+    image: { src: "/images/services/coaching-3-month.jpg", alt: "Personalised yoga practice" },
+    body: (
+      <>
+        <p className="font-sans text-sm uppercase tracking-widest text-sage">What You Receive</p>
+        <BulletList
+          items={[
             "1:1 Personalised Programme tailored to your needs and goals",
             "6 x 75 minute online sessions (fortnightly)",
             "Weekday email check-ins",
             "Additional resources, tools and practices",
-          ].map((item, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="text-sage mt-0.5">{"\u2713"}</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-        <div className="flex flex-wrap items-center gap-4">
-          <span className="font-sans text-lg font-semibold text-terracotta">
-            611 EUR
-          </span>
-          <span className="font-sans text-sm text-espresso/50">
-            Monthly payment plans available
-          </span>
-        </div>
-        <div className="mt-6">
-          <Button href="/questionnaires/coaching" variant="primary" size="md">
-            Book a Free Enquiry Call
-          </Button>
-        </div>
-      </div>
-
-      {/* 6 Month Programme */}
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-2">6 Month Programme</h3>
-        <p className="font-sans text-sm uppercase tracking-widest text-sage mb-6">What You Receive</p>
-        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
-          {[
+          ]}
+        />
+        <p className="text-sm text-espresso/50">Monthly payment plans available</p>
+      </>
+    ),
+    pricing: "611 EUR",
+    ctas: [
+      { label: "Book a Free Enquiry Call", href: "/questionnaires/coaching", variant: "primary" },
+    ],
+  },
+  {
+    id: "coaching-6month",
+    category: "1-1 Coaching",
+    title: "6 Month Programme",
+    image: { src: "/images/services/coaching-6-month.jpg", alt: "Yoga nidra restoration" },
+    body: (
+      <>
+        <p className="font-sans text-sm uppercase tracking-widest text-sage">What You Receive</p>
+        <BulletList
+          items={[
             "1:1 Personalised Programme tailored to your needs and goals",
             "12 x 75 minute online sessions (fortnightly)",
             "Weekday email check-ins",
             "Additional resources, tools and practices",
-          ].map((item, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="text-sage mt-0.5">{"\u2713"}</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-          <span className="font-sans text-lg font-semibold text-terracotta">
-            1,111 EUR
-          </span>
-        </div>
-        <Button href="/questionnaires/coaching" variant="primary" size="md">
-          Book a Free Enquiry Call
-        </Button>
-      </div>
-    </>
-  );
-}
-
-function GroupClassesContent() {
-  return (
-    <>
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-4">Weekly Group Classes</h3>
-        <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6 max-w-2xl">
-          Join our community for weekly somatic yoga and breathwork classes in beautiful Lisbon studios.
-          All levels welcome — from complete beginners to experienced practitioners.
-        </p>
-        <div className="flex flex-wrap items-center gap-4">
-          <span className="font-sans text-lg font-semibold text-terracotta">
-            {"\u20AC"}15/class or {"\u20AC"}50/month
-          </span>
-          <Button href="#" variant="primary" size="md">
+          ]}
+        />
+      </>
+    ),
+    pricing: "1,111 EUR",
+    ctas: [
+      { label: "Book a Free Enquiry Call", href: "/questionnaires/coaching", variant: "primary" },
+    ],
+  },
+  {
+    id: "group-weekly",
+    category: "Group Classes",
+    title: "Weekly Group Classes",
+    image: { src: "/images/services/group-weekly.jpg", alt: "Group yoga class in Lisbon" },
+    body: (
+      <p>
+        Join our community for weekly somatic yoga and breathwork classes in beautiful Lisbon studios.
+        All levels welcome — from complete beginners to experienced practitioners.
+      </p>
+    ),
+    pricing: "€15/class or €50/month",
+    ctas: [{ label: "Book Now", href: "#", variant: "primary" }],
+  },
+  {
+    id: "group-monthly",
+    category: "Group Classes",
+    title: "Monthly Group Practices",
+    image: { src: "/images/services/group-monthly.jpg", alt: "Monthly somatic practice gathering" },
+    body: (
+      <>
+        <div className="space-y-3">
+          <p className="font-medium text-espresso">
+            The Women{"’"}s Gathering and Somatic Journey
+          </p>
+          <Button href="#" variant="outline" size="sm">
             Book Now
           </Button>
         </div>
-      </div>
-
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-6">Monthly Group Practices</h3>
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="font-sans text-base font-medium text-espresso">
-              The Women{"\u2019"}s Gathering and Somatic Journey
-            </span>
-            <Button href="#" variant="outline" size="sm">
-              Book Now
-            </Button>
-          </div>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="font-sans text-base font-medium text-espresso">
-              Online Somatic Rest and Reset
-            </span>
-            <Button href="#" variant="outline" size="sm">
-              Book Now
-            </Button>
-          </div>
+        <div className="space-y-3 pt-2">
+          <p className="font-medium text-espresso">Online Somatic Rest and Reset</p>
+          <Button href="#" variant="outline" size="sm">
+            Book Now
+          </Button>
         </div>
-      </div>
-    </>
-  );
-}
-
-function CorporateContent() {
-  return (
-    <>
-      {/* Intro */}
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-4">Nervous System{"\u2013"}Informed Wellbeing</h3>
-        <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6 max-w-2xl">
-          Padma Collective design and deliver practical, nervous system{"\u2013"}informed wellbeing
-          programmes for organisations looking to support their people through pressure, growth,
-          and change. The focus is on building sustainable capacity at work, helping employees
-          stay clear-headed, resilient, and effective in demanding environments.
+      </>
+    ),
+  },
+  {
+    id: "corporate-intro",
+    category: "Corporate",
+    title: "Nervous System–Informed Wellbeing",
+    image: { src: "/images/services/corporate-intro.jpg", alt: "Corporate wellbeing workshop" },
+    wide: true,
+    body: (
+      <>
+        <p>
+          Padma Collective design and deliver practical, nervous system{"–"}informed wellbeing
+          programmes for organisations looking to support their people through pressure, growth, and
+          change. The focus is on building sustainable capacity at work, helping employees stay
+          clear-headed, resilient, and effective in demanding environments.
         </p>
-
-        <p className="font-sans text-base font-medium text-espresso/80 mb-3">
-          Programmes are designed to support:
-        </p>
-        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
-          {[
+        <p className="font-medium text-espresso/80">Programmes are designed to support:</p>
+        <BulletList
+          items={[
             "Stress resilience and burnout prevention",
             "Focus, clarity, and sustainable productivity",
             "Emotional intelligence and effective communication",
             "Creativity, adaptability, and decision-making",
             "Nervous system regulation in everyday working life",
-          ].map((item, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="text-sage mt-0.5">{"\u2713"}</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-
-        <p className="font-sans text-base font-medium text-espresso/80 mb-3">
+          ]}
+        />
+        <p className="font-medium text-espresso/80">
           Programmes combine evidence-informed practices adapted for modern workplaces, including:
         </p>
-        <ul className="font-sans text-sm text-espresso/60 space-y-2 mb-6">
-          {[
+        <BulletList
+          items={[
             "Breathing practices for focus, regulation, and energy management",
             "Accessible movement practices suitable for desk-based or remote work",
             "Stress regulation and resilience workshops",
             "Mindful approaches to eating, energy, and recovery",
             "Emotional resilience and self-regulation training",
             "Team connection and culture-building sessions",
-          ].map((item, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="text-sage mt-0.5">{"\u2713"}</span>
-              {item}
-            </li>
-          ))}
-        </ul>
-
-        <p className="font-sans text-base text-espresso/70 leading-relaxed mb-4 max-w-2xl">
+          ]}
+        />
+        <p>
           With a background in international communications strategy, public speaking, and
-          facilitation, sessions are designed to meet your team in the now with grounded,
-          inclusive, and empowering sessions.
+          facilitation, sessions are designed to meet your team in the now with grounded, inclusive,
+          and empowering sessions.
         </p>
-        <p className="font-sans text-base text-espresso/70 leading-relaxed max-w-2xl">
+        <p>
           No prior experience is required, and all practices are practical, accessible, and
-          immediately applicable to real working moments such as meetings, presentations,
-          deadlines, and challenging conversations. Programmes are available both in person and online.
+          immediately applicable to real working moments such as meetings, presentations, deadlines,
+          and challenging conversations. Programmes are available both in person and online.
         </p>
-      </div>
+      </>
+    ),
+    ctas: [
+      { label: "Book a Free Enquiry Call", href: "/questionnaires/corporate", variant: "primary" },
+    ],
+  },
+  {
+    id: "corporate-foundations",
+    category: "Corporate",
+    title: "Foundations Programme",
+    image: { src: "/images/services/corporate-foundations.jpg", alt: "Workplace wellbeing session" },
+    body: (
+      <>
+        <p className="text-sm text-terracotta">Ongoing wellbeing support for modern workplaces.</p>
+        <p>
+          A structured programme designed to support both new starters and existing employees through
+          periods of growth and change.
+        </p>
+        <p>
+          Weekly live sessions introduce practical tools for managing stress, focus, and energy, while
+          encouraging habit formation through repetition and simple real-world application.
+        </p>
+        <p>
+          Delivered online, with recordings available for a short period and regular feedback loops
+          to ensure sessions remain relevant to employee needs.
+        </p>
+      </>
+    ),
+    ctas: [
+      { label: "Book a Free Enquiry Call", href: "/questionnaires/corporate", variant: "primary" },
+    ],
+  },
+  {
+    id: "corporate-6month",
+    category: "Corporate",
+    title: "6 Month Programme",
+    image: { src: "/images/services/corporate-6-month.jpg", alt: "Breathwork for teams" },
+    body: (
+      <>
+        <p className="text-sm text-terracotta">Focused sessions for teams needing greater depth.</p>
+        <p>
+          Extended sessions designed for smaller teams, leadership groups, or high-pressure
+          environments.
+        </p>
+        <p>
+          These sessions offer a deeper exploration of nervous system regulation, with a stronger
+          emphasis on breathwork, reflection, and integration.
+        </p>
+        <p>Available online, in person, or as a blended experience.</p>
+      </>
+    ),
+    ctas: [
+      { label: "Book a Free Enquiry Call", href: "/questionnaires/corporate", variant: "primary" },
+    ],
+  },
+  {
+    id: "corporate-onsite",
+    category: "Corporate",
+    title: "On-Site Wellbeing Day",
+    image: { src: "/images/services/corporate-onsite.jpg", alt: "On-site team wellbeing day" },
+    body: (
+      <>
+        <p className="text-sm text-terracotta">Immersive experiences to support teams through change.</p>
+        <p>
+          In-person wellbeing days designed to support teams at key moments, such as the start or
+          completion of a project. These half-day experiences combine education, physiological reset,
+          supportive movement, and integration, helping teams restore focus, energy, and connection.
+        </p>
+        <p>
+          Often used as onboarding intensives, quarterly resets, or preparation for demanding project
+          phases.
+        </p>
+      </>
+    ),
+    ctas: [
+      { label: "Book a Free Enquiry Call", href: "/questionnaires/corporate", variant: "primary" },
+    ],
+  },
+];
 
-      {/* Foundations Programme */}
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-2">Foundations Programme</h3>
-        <p className="font-sans text-sm text-terracotta mb-4">Ongoing wellbeing support for modern workplaces.</p>
-        <div className="font-sans text-base text-espresso/70 leading-relaxed space-y-4 mb-6 max-w-2xl">
-          <p>
-            A structured programme designed to support both new starters and existing employees
-            through periods of growth and change.
-          </p>
-          <p>
-            Weekly live sessions introduce practical tools for managing stress, focus, and energy,
-            while encouraging habit formation through repetition and simple real-world application.
-          </p>
-          <p>
-            Delivered online, with recordings available for a short period and regular feedback loops
-            to ensure sessions remain relevant to employee needs. Programmes can run as a short
-            series or be extended into longer-term support.
-          </p>
-        </div>
-        <Button href="/questionnaires/corporate" variant="primary" size="md">
-          Book a Free Enquiry Call
-        </Button>
-      </div>
-
-      {/* 6 Month Programme */}
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-2">6 Month Programme</h3>
-        <p className="font-sans text-sm text-terracotta mb-4">Focused sessions for teams needing greater depth.</p>
-        <div className="font-sans text-base text-espresso/70 leading-relaxed space-y-4 mb-6 max-w-2xl">
-          <p>
-            Extended sessions designed for smaller teams, leadership groups, or high-pressure
-            environments.
-          </p>
-          <p>
-            These sessions offer a deeper exploration of nervous system regulation, with a stronger
-            emphasis on breathwork, reflection, and integration.
-          </p>
-          <p>
-            Available online, in person, or as a blended experience.
-          </p>
-        </div>
-        <Button href="/questionnaires/corporate" variant="primary" size="md">
-          Book a Free Enquiry Call
-        </Button>
-      </div>
-
-      {/* On-Site Wellbeing Day */}
-      <div className="bg-cream rounded-3xl p-8 md:p-12">
-        <h3 className="font-serif text-3xl mb-2">On-Site Wellbeing Day</h3>
-        <p className="font-sans text-sm text-terracotta mb-4">Immersive experiences to support teams through change.</p>
-        <div className="font-sans text-base text-espresso/70 leading-relaxed space-y-4 mb-6 max-w-2xl">
-          <p>
-            In-person wellbeing days designed to support teams at key moments, such as the start
-            or completion of a project. These half-day experiences combine education,
-            physiological reset, supportive movement, and integration, helping teams restore focus,
-            energy, and connection.
-          </p>
-          <p>
-            Often used as onboarding intensives, quarterly resets, or preparation for demanding
-            project phases.
-          </p>
-        </div>
-        <Button href="/questionnaires/corporate" variant="primary" size="md">
-          Book a Free Enquiry Call
-        </Button>
-      </div>
-    </>
+function BentoGrid({ filter }: { filter: "All" | BentoService["category"] }) {
+  const visible = filter === "All" ? services : services.filter((s) => s.category === filter);
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+      {visible.map((service) => (
+        <BentoCard key={service.id} service={service} />
+      ))}
+    </div>
   );
 }
 
@@ -317,7 +385,7 @@ const faqItems = [
   {
     question: "How are 1:1 Sessions Structured?",
     answer:
-      "We begin by exploring what you are seeking support with, how you want to feel and what\u2019s possible in our time together. We co-create a programme that supports your future self and revisit your intentions as you evolve. Every session begins with a somatic check-in to settle into your body and the present moment. We explore what\u2019s been present for you, what\u2019s felt supportive or challenging, what your body is communicating, and coaching around your current relationship towards nutrition and your body. Sessions flow intuitively while remaining anchored in your long-term goals and intentions.",
+      "We begin by exploring what you are seeking support with, how you want to feel and what’s possible in our time together. We co-create a programme that supports your future self and revisit your intentions as you evolve. Every session begins with a somatic check-in to settle into your body and the present moment. We explore what’s been present for you, what’s felt supportive or challenging, what your body is communicating, and coaching around your current relationship towards nutrition and your body. Sessions flow intuitively while remaining anchored in your long-term goals and intentions.",
   },
   {
     question: "What can I expect physically?",
@@ -332,12 +400,12 @@ const faqItems = [
   {
     question: "What can I expect between sessions?",
     answer:
-      "You\u2019ll receive weekday email check-ins, additional practices and resources, and a programme structure designed for reflection and integration between sessions.",
+      "You’ll receive weekday email check-ins, additional practices and resources, and a programme structure designed for reflection and integration between sessions.",
   },
   {
     question: "What does Somatic mean?",
     answer:
-      "The word \u2018Somatic\u2019 comes from the Greek word \u2018Soma\u2019 which refers to your living, breathing, sensing body. Intentional somatic practices, such as Yoga, Tai Chi, dancing, making art, going for a walk, nourishing yourself through food and even breathing, aim to guide you towards being more aware, present and understanding of your inner experience. The more you become aware of your somatic or bodily experience, the more likely you are to recognise your emotional needs and learn how to manage or cope with the range of human experiences. Rather than thinking \u201CI need to be calm all the time\u201D, it reminds you that you are human with a wide range of emotional needs that all need to be expressed and validated. This helps you grow your capacity and learn to respond or adapt to life in a healthy and non-harming way. It encourages you to connect with the natural rhythms and cycles of being human \u2014 rather than forcing yourself into \u2018machine mode\u2019.",
+      "The word ‘Somatic’ comes from the Greek word ‘Soma’ which refers to your living, breathing, sensing body. Intentional somatic practices, such as Yoga, Tai Chi, dancing, making art, going for a walk, nourishing yourself through food and even breathing, aim to guide you towards being more aware, present and understanding of your inner experience. The more you become aware of your somatic or bodily experience, the more likely you are to recognise your emotional needs and learn how to manage or cope with the range of human experiences. Rather than thinking “I need to be calm all the time”, it reminds you that you are human with a wide range of emotional needs that all need to be expressed and validated. This helps you grow your capacity and learn to respond or adapt to life in a healthy and non-harming way. It encourages you to connect with the natural rhythms and cycles of being human — rather than forcing yourself into ‘machine mode’.",
   },
 ];
 
@@ -371,11 +439,12 @@ export default function WorkWithMePage() {
       />
 
       <ServiceTabs
-        tabs={["1-1 Coaching", "Group Classes", "Corporate"]}
+        tabs={["All", "1-1 Coaching", "Group Classes", "Corporate"]}
         tabContent={{
-          "1-1 Coaching": <CoachingContent />,
-          "Group Classes": <GroupClassesContent />,
-          "Corporate": <CorporateContent />,
+          All: <BentoGrid filter="All" />,
+          "1-1 Coaching": <BentoGrid filter="1-1 Coaching" />,
+          "Group Classes": <BentoGrid filter="Group Classes" />,
+          Corporate: <BentoGrid filter="Corporate" />,
         }}
       />
 
