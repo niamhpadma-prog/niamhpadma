@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -27,8 +28,8 @@ export default function EventsPage() {
       <HeroSection
         headline="Events & Retreats"
         subheadline="Workshops, classes, and transformative retreat experiences in Lisbon and across Europe."
-        imageSrc="/images/retreats-hero.jpg"
-        imageAlt="Group breathwork session at an evening retreat"
+        imageSrc="/images/events-hero.jpg"
+        imageAlt="Downward dog yoga practice in a warm terracotta studio"
       />
 
       {/* Retreats */}
@@ -39,9 +40,18 @@ export default function EventsPage() {
             <p className="font-sans text-base text-espresso/70 mb-2">
               Details coming soon.
             </p>
-            <p className="font-sans text-base text-espresso/70 mb-8">
+            <p className="font-sans text-base text-espresso/70 mb-10">
               Be the first to know by signing up to the newsletter below.
             </p>
+          </div>
+          <div className="relative aspect-[16/9] max-w-4xl mx-auto rounded-3xl overflow-hidden">
+            <Image
+              src="/images/retreats-hero.jpg"
+              alt="Group breathwork session at an evening retreat"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 896px"
+            />
           </div>
         </Container>
       </Section>
