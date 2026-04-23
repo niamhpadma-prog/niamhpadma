@@ -1,15 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { Button } from "@/components/ui/Button";
-
-const heroImages = [
-  { src: "/images/hero-left.jpg", alt: "Niamh in meditation", position: "object-center" },
-  { src: "/images/hero-center.jpg", alt: "Niamh practicing yoga", position: "object-top" },
-  { src: "/images/hero-right.jpg", alt: "Niamh in a yoga pose", position: "object-center" },
-];
 
 export function HomeHero() {
   const ref = useRef<HTMLElement>(null);
@@ -21,66 +15,24 @@ export function HomeHero() {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
-  // Mobile slideshow state
-  const [currentImage, setCurrentImage] = useState(0);
-
-  useEffect(() => {
-    // Only run slideshow check on mount — CSS handles visibility
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <section
       ref={ref}
       className="relative min-h-[90vh] md:min-h-screen overflow-hidden"
     >
-      {/* Desktop: Three images side by side */}
-      <div className="absolute inset-0 hidden md:grid grid-cols-3">
-        {heroImages.map((img) => (
-          <div key={img.src} className="relative overflow-hidden">
-            <Image
-              src={img.src}
-              alt={img.alt}
-              fill
-              className={`object-cover ${img.position}`}
-              sizes="33vw"
-              priority
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Mobile: Crossfade slideshow with slow zoom */}
-      <div className="absolute inset-0 md:hidden">
-        <AnimatePresence mode="sync">
-          <motion.div
-            key={currentImage}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, scale: [1, 1.06] }}
-            exit={{ opacity: 0 }}
-            transition={{
-              opacity: { duration: 1.8, ease: "easeInOut" },
-              scale: { duration: 5, ease: "easeOut" },
-            }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={heroImages[currentImage].src}
-              alt={heroImages[currentImage].alt}
-              fill
-              className={`object-cover ${heroImages[currentImage].position}`}
-              sizes="100vw"
-              priority
-            />
-          </motion.div>
-        </AnimatePresence>
+      <div className="absolute inset-0">
+        <Image
+          src="/images/home-hero.jpg"
+          alt="Group shavasana in a candlelit studio"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+          priority
+        />
       </div>
 
       {/* Subtle overlay */}
-      <div className="absolute inset-0 bg-espresso/20" />
+      <div className="absolute inset-0 bg-espresso/30" />
 
       {/* Content */}
       <motion.div
