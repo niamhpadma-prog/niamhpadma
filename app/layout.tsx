@@ -63,8 +63,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${cormorant.variable} ${jakarta.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${cormorant.variable} ${jakarta.variable} ${cormorant.className}`}
+    >
+      <body className="antialiased">
         {children}
         <Analytics />
       </body>

@@ -364,6 +364,7 @@ export default function WorkWithMePage() {
         subheadline="Find the practice that fits your life. From private sessions to group experiences."
         imageSrc="/images/work-with-me-hero.jpg"
         imageAlt="Two practitioners in prayer pose during a yoga class in Lisbon"
+        imagePosition="top"
         ctas={[
           { label: "Take the Questionnaire", href: "/questionnaires/coaching", style: "primary" as const },
         ]}
