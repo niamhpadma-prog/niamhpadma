@@ -23,8 +23,8 @@
   --subtle: var(--sage);
 
   /* Typography */
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
 
   /* Spacing */
   --section-padding: clamp(4rem, 8vw, 8rem);
@@ -49,8 +49,8 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-subtle: var(--subtle);
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
 * {
