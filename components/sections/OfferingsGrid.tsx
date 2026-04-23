@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
@@ -14,6 +15,7 @@ interface Offering {
   image?: { asset?: { url?: string }; alt?: string; position?: string };
   pricing?: string;
   bookingUrl?: string;
+  href?: string;
 }
 
 interface OfferingsGridProps {
@@ -60,53 +62,69 @@ export function OfferingsGrid({
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {items.map((item, i) => (
-            <motion.div
-              key={item._id || i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group bg-cream rounded-3xl overflow-hidden"
-            >
-              <div className="relative aspect-[16/9] bg-sand/30 overflow-hidden">
-                {item.image?.asset?.url && (
-                  <Image
-                    src={item.image.asset.url}
-                    alt={item.image.alt || item.title}
-                    fill
-                    className={`object-cover transition-transform duration-700 group-hover:scale-105 ${item.image?.position || ""}`}
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                )}
-              </div>
-              <div className="p-8">
-                {item.type && (
-                  <p className="font-sans text-xs uppercase tracking-widest text-sage mb-2">
-                    {item.type}
-                  </p>
-                )}
-                <h3 className="font-serif text-2xl mb-3">{item.title}</h3>
-                {item.description && (
-                  <p className="font-sans text-sm text-espresso/60 leading-relaxed mb-4">
-                    {item.description}
-                  </p>
-                )}
-                <div className="flex items-center justify-between">
-                  {item.pricing && (
-                    <p className="font-sans text-sm font-semibold text-terracotta">
-                      {item.pricing}
-                    </p>
-                  )}
-                  {item.bookingUrl && (
-                    <Button href={item.bookingUrl} variant="outline" size="sm">
-                      Book Now
-                    </Button>
+          {items.map((item, i) => {
+            const cardBody = (
+              <>
+                <div className="relative aspect-[16/9] bg-sand/30 overflow-hidden">
+                  {item.image?.asset?.url && (
+                    <Image
+                      src={item.image.asset.url}
+                      alt={item.image.alt || item.title}
+                      fill
+                      className={`object-cover transition-transform duration-700 group-hover:scale-105 ${item.image?.position || ""}`}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                   )}
                 </div>
-              </div>
-            </motion.div>
-          ))}
+                <div className="p-8">
+                  {item.type && (
+                    <p className="font-sans text-xs uppercase tracking-widest text-sage mb-2">
+                      {item.type}
+                    </p>
+                  )}
+                  <h3 className="font-serif text-2xl mb-3 group-hover:text-terracotta transition-colors">
+                    {item.title}
+                  </h3>
+                  {item.description && (
+                    <p className="font-sans text-sm text-espresso/60 leading-relaxed mb-4">
+                      {item.description}
+                    </p>
+                  )}
+                  <div className="flex items-center justify-between">
+                    {item.pricing && (
+                      <p className="font-sans text-sm font-semibold text-terracotta">
+                        {item.pricing}
+                      </p>
+                    )}
+                    {item.bookingUrl && (
+                      <Button href={item.bookingUrl} variant="outline" size="sm">
+                        Book Now
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </>
+            );
+
+            return (
+              <motion.div
+                key={item._id || i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className="group bg-cream rounded-3xl overflow-hidden"
+              >
+                {item.href ? (
+                  <Link href={item.href} className="block">
+                    {cardBody}
+                  </Link>
+                ) : (
+                  cardBody
+                )}
+              </motion.div>
+            );
+          })}
         </div>
       </Container>
     </Section>

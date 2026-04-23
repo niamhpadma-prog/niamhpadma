@@ -84,18 +84,18 @@ export default function HomePage() {
       <Section background="sage">
         <Container>
           <div className="max-w-3xl mx-auto">
-            <p className="font-serif text-lg md:text-xl leading-relaxed italic mb-6">
-              In <em>Timeless Healing</em>, Dr. Herbert Benson suggests that our bodies are not merely biochemical
+            <p className="font-serif text-lg md:text-xl leading-relaxed mb-6">
+              In Timeless Healing, Dr. Herbert Benson suggests that our bodies are not merely biochemical
               machines, but responsive, meaning-making systems. Affirming beliefs, especially those rooted
               in a sense of connection to something greater, are not abstract comforts. They shape
               physiology. They influence healing. They matter.
             </p>
-            <p className="font-serif text-lg md:text-xl leading-relaxed italic mb-6">
-              At the heart of his work is a concept he calls <em>remembered wellness</em> — the idea that health is not
+            <p className="font-serif text-lg md:text-xl leading-relaxed mb-6">
+              At the heart of his work is a concept he calls remembered wellness — the idea that health is not
               something we construct from scratch, but something we return to. A state already encoded
               within us, waiting to be reawakened.
             </p>
-            <p className="font-serif text-lg md:text-xl leading-relaxed italic mb-6">
+            <p className="font-serif text-lg md:text-xl leading-relaxed mb-6">
               In this sense, the body is not broken. It is fluent in wholeness. It simply needs the right
               conditions to remember.
             </p>
@@ -117,10 +117,10 @@ export default function HomePage() {
         heading="How We Can Work Together"
         subheading="From private sessions to group experiences — find the practice that fits your life."
         items={[
-          { _id: "h1", title: "1-1 Coaching", type: "Private", description: "Personalised yoga, breathwork & somatic sessions tailored to your unique needs.", pricing: "From €80", image: { asset: { url: "/images/rest.jpg" }, alt: "One-on-one coaching session", position: "object-top" } },
-          { _id: "h2", title: "Group Classes", type: "Weekly", description: "Community yoga and breathwork classes in Lisbon. All levels welcome.", pricing: "€15/class", image: { asset: { url: "/images/group-classes.avif" }, alt: "Group yoga class" } },
-          { _id: "h3", title: "Workshops", type: "Deep Dive", description: "Half-day and full-day immersions into breathwork, somatic release, and more.", pricing: "From €45", image: { asset: { url: "/images/workshops.jpg" }, alt: "Workshop session" } },
-          { _id: "h4", title: "Retreats", type: "Multi-day", description: "Transformative retreat experiences across Portugal and Europe.", pricing: "From €350", image: { asset: { url: "/images/retreats.jpg" }, alt: "Retreat in nature" } },
+          { _id: "h1", title: "1-1 Coaching", type: "Private", description: "Personalised yoga, breathwork & somatic sessions tailored to your unique needs.", pricing: "From €80", image: { asset: { url: "/images/rest.jpg" }, alt: "One-on-one coaching session", position: "object-top" }, href: "/work-with-me" },
+          { _id: "h2", title: "Group Classes", type: "Weekly", description: "Community yoga and breathwork classes in Lisbon. All levels welcome.", pricing: "€15/class", image: { asset: { url: "/images/group-classes.avif" }, alt: "Group yoga class" }, href: "/work-with-me" },
+          { _id: "h3", title: "Workshops", type: "Deep Dive", description: "Half-day and full-day immersions into breathwork, somatic release, and more.", pricing: "From €45", image: { asset: { url: "/images/workshops.jpg" }, alt: "Workshop session" }, href: "/events" },
+          { _id: "h4", title: "Retreats", type: "Multi-day", description: "Transformative retreat experiences across Portugal and Europe.", pricing: "From €350", image: { asset: { url: "/images/retreats.jpg" }, alt: "Retreat in nature" }, href: "/events" },
         ]}
         background="cream"
       />
