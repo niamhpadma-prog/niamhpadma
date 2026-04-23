@@ -80,6 +80,13 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
+/* Cormorant Garamond reads best at regular weight — override any
+   utility class (font-semibold/font-bold) that would render it bold. */
+h1, h2, h3, h4, h5, h6,
+.font-serif {
+  font-weight: 400 !important;
+}
+
 p {
   text-wrap: pretty;
 }
