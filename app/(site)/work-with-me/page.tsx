@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import type { ReactNode } from "react";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { ServiceTabs } from "@/components/sections/ServiceTabs";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
@@ -8,77 +6,16 @@ import { FAQSection } from "@/components/sections/FAQSection";
 import { CTASection } from "@/components/sections/CTASection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Button } from "@/components/ui/Button";
+import {
+  ServicesBento,
+  type BentoService,
+} from "@/components/services/ServicesBento";
 
 export const metadata: Metadata = {
   title: "Work With Me",
   description:
     "1-1 somatic coaching, group yoga & breathwork classes, workshops, and corporate wellness in Lisbon. Find the right offering for your journey.",
 };
-
-type BentoCTA = { label: string; href: string; variant?: "primary" | "outline" };
-
-interface BentoService {
-  id: string;
-  category: "1-1 Coaching" | "Group Classes" | "Corporate";
-  title: string;
-  image: { src: string; alt: string };
-  body: ReactNode;
-  pricing?: string;
-  ctas?: BentoCTA[];
-  /** Span both columns on desktop when true. Use for rich intro cards. */
-  wide?: boolean;
-}
-
-function BentoCard({ service }: { service: BentoService }) {
-  return (
-    <article
-      className={`group relative flex flex-col overflow-hidden rounded-3xl bg-cream ${
-        service.wide ? "md:col-span-2" : ""
-      }`}
-    >
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-sand/30">
-        <Image
-          src={service.image.src}
-          alt={service.image.alt}
-          fill
-          sizes={service.wide ? "(max-width: 768px) 100vw, 1200px" : "(max-width: 768px) 100vw, 600px"}
-          className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-        />
-      </div>
-
-      <div className="flex flex-1 flex-col p-8 md:p-10">
-        <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
-          {service.category}
-        </p>
-        <h3 className="font-serif text-3xl mb-4">{service.title}</h3>
-
-        <div className="font-sans text-base text-espresso/70 leading-relaxed space-y-4 mb-6">
-          {service.body}
-        </div>
-
-        {(service.pricing || service.ctas?.length) && (
-          <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">
-            {service.pricing && (
-              <span className="font-sans text-lg font-semibold text-terracotta">
-                {service.pricing}
-              </span>
-            )}
-            {service.ctas?.map((cta) => (
-              <Button
-                key={cta.href + cta.label}
-                href={cta.href}
-                variant={cta.variant || "primary"}
-                size="md"
-              >
-                {cta.label}
-              </Button>
-            ))}
-          </div>
-        )}
-      </div>
-    </article>
-  );
-}
 
 function BulletList({ items }: { items: string[] }) {
   return (
@@ -100,7 +37,8 @@ const services: BentoService[] = [
     category: "1-1 Coaching",
     title: "1-1 Somatic Coaching",
     image: { src: "/images/services/coaching-intro.jpg", alt: "Restful somatic coaching session" },
-    wide: true,
+    summary:
+      "Somatic coaching meets you beneath the noise of the mind, working with the body's intelligence. Nervous-system, emotional and embodied work — tailored to how you want to feel.",
     body: (
       <>
         <p>
@@ -223,7 +161,8 @@ const services: BentoService[] = [
     category: "Corporate",
     title: "Nervous System–Informed Wellbeing",
     image: { src: "/images/services/corporate-intro.jpg", alt: "Corporate wellbeing workshop" },
-    wide: true,
+    summary:
+      "Practical, nervous-system-informed wellbeing programmes for organisations navigating pressure, growth and change — helping teams stay clear, resilient and effective.",
     body: (
       <>
         <p>
@@ -345,17 +284,6 @@ const services: BentoService[] = [
   },
 ];
 
-function BentoGrid({ filter }: { filter: "All" | BentoService["category"] }) {
-  const visible = filter === "All" ? services : services.filter((s) => s.category === filter);
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-      {visible.map((service) => (
-        <BentoCard key={service.id} service={service} />
-      ))}
-    </div>
-  );
-}
-
 const faqItems = [
   {
     question: "Do I need experience to work with you?",
@@ -441,10 +369,10 @@ export default function WorkWithMePage() {
       <ServiceTabs
         tabs={["All", "1-1 Coaching", "Group Classes", "Corporate"]}
         tabContent={{
-          All: <BentoGrid filter="All" />,
-          "1-1 Coaching": <BentoGrid filter="1-1 Coaching" />,
-          "Group Classes": <BentoGrid filter="Group Classes" />,
-          Corporate: <BentoGrid filter="Corporate" />,
+          All: <ServicesBento services={services} filter="All" />,
+          "1-1 Coaching": <ServicesBento services={services} filter="1-1 Coaching" />,
+          "Group Classes": <ServicesBento services={services} filter="Group Classes" />,
+          Corporate: <ServicesBento services={services} filter="Corporate" />,
         }}
       />
 
