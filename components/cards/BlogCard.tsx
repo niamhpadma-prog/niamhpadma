@@ -9,6 +9,7 @@ interface BlogCardProps {
   slug: string;
   excerpt?: string;
   coverImage?: { asset?: { url?: string }; alt?: string };
+  coverVideo?: { asset?: { url?: string; mimeType?: string }; alt?: string };
   categories?: string[];
   publishedAt?: string;
   readingTime?: number;
@@ -16,11 +17,52 @@ interface BlogCardProps {
   featured?: boolean;
 }
 
+function CoverMedia({
+  coverImage,
+  coverVideo,
+  fallbackAlt,
+  sizes,
+}: {
+  coverImage?: BlogCardProps["coverImage"];
+  coverVideo?: BlogCardProps["coverVideo"];
+  fallbackAlt: string;
+  sizes: string;
+}) {
+  const videoUrl = coverVideo?.asset?.url;
+  if (videoUrl) {
+    return (
+      <video
+        src={videoUrl}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        aria-label={coverVideo?.alt || fallbackAlt}
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+    );
+  }
+  if (coverImage?.asset?.url) {
+    return (
+      <Image
+        src={coverImage.asset.url}
+        alt={coverImage.alt || fallbackAlt}
+        fill
+        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        sizes={sizes}
+      />
+    );
+  }
+  return null;
+}
+
 export function BlogCard({
   title,
   slug,
   excerpt,
   coverImage,
+  coverVideo,
   categories,
   publishedAt,
   readingTime,
@@ -45,15 +87,12 @@ export function BlogCard({
         <Link href={`/journal/${slug}`} className="group block">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-3xl overflow-hidden">
             <div className="relative aspect-[4/3] md:aspect-auto bg-sand/30 overflow-hidden">
-              {coverImage?.asset?.url && (
-                <Image
-                  src={coverImage.asset.url}
-                  alt={coverImage.alt || title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              )}
+              <CoverMedia
+                coverImage={coverImage}
+                coverVideo={coverVideo}
+                fallbackAlt={title}
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
             </div>
             <div className="p-8 flex flex-col justify-center">
               <div className="flex items-center gap-3 mb-3">
@@ -97,15 +136,12 @@ export function BlogCard({
     >
       <Link href={`/journal/${slug}`} className="group block">
         <div className="relative aspect-[4/3] bg-sand/30 rounded-2xl overflow-hidden mb-4">
-          {coverImage?.asset?.url && (
-            <Image
-              src={coverImage.asset.url}
-              alt={coverImage.alt || title}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          )}
+          <CoverMedia
+            coverImage={coverImage}
+            coverVideo={coverVideo}
+            fallbackAlt={title}
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
         </div>
         <div className="flex items-center gap-3 mb-2">
           {categories?.[0] && (
