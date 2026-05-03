@@ -24,7 +24,43 @@ export function SmoothScroll() {
     }
     requestAnimationFrame(raf);
 
+    // Route in-page hash anchor clicks through Lenis. Without this, Next.js's
+    // scroll-to-anchor uses window.scrollTo, which Lenis overrides on the
+    // next frame so the page never moves.
+    function onAnchorClick(e: MouseEvent) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      const target = e.target as Element | null;
+      if (!target) return;
+      const a = target.closest('a[href*="#"]') as HTMLAnchorElement | null;
+      if (!a) return;
+      let url: URL;
+      try {
+        url = new URL(a.href, window.location.href);
+      } catch {
+        return;
+      }
+      if (url.origin !== window.location.origin) return;
+      if (url.pathname !== window.location.pathname || !url.hash) return;
+      const el = document.querySelector(url.hash);
+      if (!el) return;
+      e.preventDefault();
+      e.stopPropagation();
+      lenis.scrollTo(el as HTMLElement, { offset: 0 });
+      history.pushState(null, "", url.hash);
+    }
+    document.addEventListener("click", onAnchorClick, true);
+
+    // Scroll to hash on initial page load (Lenis swallows the browser's own
+    // anchor scroll otherwise).
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) {
+        setTimeout(() => lenis.scrollTo(el as HTMLElement, { immediate: true }), 100);
+      }
+    }
+
     return () => {
+      document.removeEventListener("click", onAnchorClick, true);
       lenis.destroy();
       lenisRef.current = null;
     };
