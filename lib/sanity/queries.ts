@@ -124,6 +124,37 @@ export const eventQuery = groq`
   }
 `;
 
+// Retreats
+export const retreatsQuery = groq`
+  *[_type == "retreat"] | order(coalesce(dateStart, _updatedAt) asc) {
+    _id,
+    title,
+    slug,
+    subtitle,
+    tagline,
+    locationLine,
+    dateStart,
+    dateEnd,
+    status,
+    heroImage { asset->, alt }
+  }
+`;
+
+export const retreatSlugsQuery = groq`
+  *[_type == "retreat" && defined(slug.current)][].slug.current
+`;
+
+export const retreatQuery = groq`
+  *[_type == "retreat" && slug.current == $slug][0] {
+    ...,
+    heroImage { asset->, alt },
+    venueImage { asset->, alt },
+    guideImage { asset->, alt },
+    gallery[] { asset->, alt, caption },
+    faq[] { question, answer }
+  }
+`;
+
 // Blog
 export const postsQuery = groq`
   *[_type == "post"] | order(publishedAt desc) [$start...$end] {

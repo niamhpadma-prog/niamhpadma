@@ -21,8 +21,27 @@ export default defineConfig({
               .title("Site Settings")
               .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
             S.divider(),
+            S.listItem()
+              .title("Courses")
+              .child(
+                S.list()
+                  .title("Courses")
+                  .items([
+                    S.documentTypeListItem("course").title("All Courses"),
+                    S.documentTypeListItem("courseModule").title("Modules"),
+                    S.documentTypeListItem("courseLesson").title("Lessons"),
+                    S.divider(),
+                    S.documentTypeListItem("courseEnrollment").title("Enrollments"),
+                  ])
+              ),
+            S.divider(),
+            S.documentTypeListItem("retreat").title("Retreats"),
+            S.divider(),
             ...S.documentTypeListItems().filter(
-              (item) => !["siteSettings"].includes(item.getId()!)
+              (item) =>
+                !["siteSettings", "course", "courseModule", "courseLesson", "courseEnrollment", "retreat"].includes(
+                  item.getId()!
+                )
             ),
           ]),
     }),
