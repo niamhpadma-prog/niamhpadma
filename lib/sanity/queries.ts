@@ -148,8 +148,13 @@ export const retreatQuery = groq`
   *[_type == "retreat" && slug.current == $slug][0] {
     ...,
     heroImage { asset->, alt },
+    conceptImage { asset->, alt },
+    whoImage { asset->, alt },
+    experienceImage { asset->, alt },
     venueImage { asset->, alt },
+    includedImage { asset->, alt },
     guideImage { asset->, alt },
+    whatIsImage { asset->, alt },
     gallery[] { asset->, alt, caption },
     faq[] { question, answer }
   }

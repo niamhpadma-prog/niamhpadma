@@ -61,15 +61,18 @@ interface Retreat {
 
   conceptHeading?: string;
   conceptBody?: PortableTextBlock[];
+  conceptImage?: SanityImage;
 
   whoHeading?: string;
   whoSubheading?: string;
   whoIntro?: string;
   whoBullets?: string[];
+  whoImage?: SanityImage;
 
   experienceHeading?: string;
   experienceSubheading?: string;
   experienceBody?: PortableTextBlock[];
+  experienceImage?: SanityImage;
   scheduleHeading?: string;
   schedule?: ScheduleItem[];
 
@@ -82,6 +85,7 @@ interface Retreat {
 
   includedHeading?: string;
   includedItems?: string[];
+  includedImage?: SanityImage;
 
   guideHeading?: string;
   guideName?: string;
@@ -91,6 +95,7 @@ interface Retreat {
 
   whatIsHeading?: string;
   whatIsBody?: PortableTextBlock[];
+  whatIsImage?: SanityImage;
 
   finalHeadline?: string;
   limitedSpotsCopy?: string;
@@ -101,6 +106,32 @@ interface Retreat {
 
   faq?: { question: string; answer: string }[];
   seo?: { metaTitle?: string; metaDescription?: string; noIndex?: boolean };
+}
+
+// Static placeholders so a freshly-seeded retreat looks complete before
+// Niamh has uploaded her own imagery in Studio.
+const PLACEHOLDERS = {
+  hero: "/images/retreats-hero.jpg",
+  concept: "/images/retreats/retreat-002.jpg",
+  who: "/images/retreats/retreat-003.jpg",
+  experience: "/images/retreats/retreat-004.jpg",
+  venue: "/images/retreats/retreat-005.jpg",
+  included: "/images/retreats/retreat-006.jpg",
+  guide: "/images/retreats-niamh.webp",
+  whatIs: "/images/retreats/retreat-008.jpg",
+};
+
+function imageOrPlaceholder(
+  img: SanityImage | undefined,
+  placeholder: string,
+  width = 1600,
+  height?: number
+): string {
+  if (img?.asset) {
+    const builder = urlFor(img).width(width);
+    return height ? builder.height(height).fit("crop").url() : builder.url();
+  }
+  return placeholder;
 }
 
 export async function generateStaticParams() {
@@ -167,15 +198,14 @@ export default async function RetreatPage({
   const retreat = await client.fetch<Retreat | null>(retreatQuery, { slug });
   if (!retreat) notFound();
 
-  const heroSrc = retreat.heroImage?.asset
-    ? urlFor(retreat.heroImage).width(2000).height(1200).fit("crop").url()
-    : null;
-  const venueSrc = retreat.venueImage?.asset
-    ? urlFor(retreat.venueImage).width(1600).url()
-    : null;
-  const guideSrc = retreat.guideImage?.asset
-    ? urlFor(retreat.guideImage).width(900).url()
-    : null;
+  const heroSrc = imageOrPlaceholder(retreat.heroImage, PLACEHOLDERS.hero, 2400);
+  const conceptSrc = imageOrPlaceholder(retreat.conceptImage, PLACEHOLDERS.concept, 1400);
+  const whoSrc = imageOrPlaceholder(retreat.whoImage, PLACEHOLDERS.who, 1400);
+  const experienceSrc = imageOrPlaceholder(retreat.experienceImage, PLACEHOLDERS.experience, 1400);
+  const venueSrc = imageOrPlaceholder(retreat.venueImage, PLACEHOLDERS.venue, 1400);
+  const includedSrc = imageOrPlaceholder(retreat.includedImage, PLACEHOLDERS.included, 2000, 900);
+  const guideSrc = imageOrPlaceholder(retreat.guideImage, PLACEHOLDERS.guide, 1200);
+  const whatIsSrc = imageOrPlaceholder(retreat.whatIsImage, PLACEHOLDERS.whatIs, 2000, 1100);
   const gallery = (retreat.gallery || [])
     .filter((g) => g.asset)
     .map((g) => ({
@@ -200,8 +230,7 @@ export default async function RetreatPage({
           description: retreat.tagline || retreat.subtitle || "",
           startDate: retreat.dateStart,
           ...(retreat.dateEnd && { endDate: retreat.dateEnd }),
-          eventAttendanceMode:
-            "https://schema.org/OfflineEventAttendanceMode",
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
           location: retreat.location
             ? {
                 "@type": "Place",
@@ -228,78 +257,153 @@ export default async function RetreatPage({
         }}
       />
 
-      {/* Hero */}
-      <section className="relative bg-cream-dark pt-12 pb-0">
+      {/* HERO — full-screen with bg image, white text */}
+      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden text-cream">
+        <div className="absolute inset-0 -z-10">
+          <Image
+            src={heroSrc}
+            alt={retreat.heroImage?.alt || retreat.title}
+            fill
+            priority
+            className="object-cover"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-espresso/55 via-espresso/45 to-espresso/70" />
+        </div>
+
         <Container>
-          <div className="max-w-4xl mx-auto text-center pt-8 pb-12">
+          <div className="text-center max-w-4xl mx-auto py-28 md:py-36">
             {retreat.subtitle && (
-              <span className="font-sans text-xs uppercase tracking-widest text-sage mb-4 block">
+              <p className="font-sans text-xs md:text-sm uppercase tracking-[0.25em] text-cream/70 mb-6">
                 {retreat.subtitle}
-              </span>
+              </p>
             )}
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-6">
+            <h1 className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] leading-[0.95] mb-8 text-cream">
               {retreat.title}
             </h1>
             {retreat.tagline && (
-              <p className="font-sans text-lg md:text-xl text-espresso/70 leading-relaxed mb-2">
+              <p className="font-serif italic text-2xl md:text-3xl text-cream/90 mb-8 max-w-2xl mx-auto">
                 {retreat.tagline}
               </p>
             )}
-            {retreat.secondaryTagline && (
-              <p className="font-serif text-2xl md:text-3xl text-espresso/80 mb-6">
-                {retreat.secondaryTagline}
-              </p>
-            )}
             {retreat.partnership && (
-              <p className="font-sans text-sm uppercase tracking-widest text-espresso/40 mb-8">
+              <p className="font-sans text-xs uppercase tracking-[0.25em] text-cream/55 mb-3">
                 {retreat.partnership}
               </p>
             )}
             {(locationDisplay || dateDisplay) && (
-              <p className="font-sans text-base text-espresso/60 mb-8">
+              <p className="font-sans text-base text-cream/80 mb-10">
                 {[locationDisplay, dateDisplay].filter(Boolean).join(" · ")}
               </p>
             )}
             <div className="flex flex-wrap justify-center gap-3">
-              <Button href="#enquiry" variant="primary" size="lg">
+              <Link
+                href="#enquiry"
+                className="inline-flex items-center justify-center font-sans font-medium rounded-full px-9 py-4.5 text-lg bg-cream text-espresso hover:bg-white transition-colors"
+              >
                 {retreat.secureCtaLabel || "Secure Your Spot"}
-              </Button>
+              </Link>
               {retreat.bookCallUrl && (
-                <Button href={retreat.bookCallUrl} variant="outline" size="lg">
+                <a
+                  href={retreat.bookCallUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center font-sans font-medium rounded-full px-9 py-4.5 text-lg border-2 border-cream/70 text-cream hover:bg-cream hover:text-espresso transition-colors"
+                >
                   Book a Call
-                </Button>
+                </a>
               )}
             </div>
           </div>
-          {heroSrc && (
-            <div className="relative aspect-[16/9] max-w-5xl mx-auto rounded-3xl overflow-hidden">
-              <Image
-                src={heroSrc}
-                alt={retreat.heroImage?.alt || retreat.title}
-                fill
-                priority
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 1024px"
-              />
-            </div>
-          )}
         </Container>
       </section>
 
-      {/* Concept */}
-      {retreat.conceptBody && retreat.conceptBody.length > 0 && (
+      {/* CONCEPT — split, secondaryTagline as headline */}
+      {(retreat.conceptBody?.length || retreat.secondaryTagline) && (
         <Section background="white">
           <Container>
-            <div className="max-w-3xl mx-auto">
-              {retreat.conceptHeading && (
-                <p className="font-sans text-xs uppercase tracking-widest text-sage mb-4">
-                  {retreat.conceptHeading}
-                </p>
-              )}
-              <div className="prose-retreat">
-                <PortableText
-                  value={retreat.conceptBody}
-                  components={portableTextComponents}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden order-last lg:order-first">
+                <Image
+                  src={conceptSrc}
+                  alt={retreat.conceptImage?.alt || "The concept"}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 600px"
+                />
+              </div>
+              <div>
+                {retreat.conceptHeading && (
+                  <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-5">
+                    {retreat.conceptHeading}
+                  </p>
+                )}
+                {retreat.secondaryTagline && (
+                  <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.05] mb-8">
+                    {retreat.secondaryTagline}
+                  </h2>
+                )}
+                {retreat.conceptBody && (
+                  <div>
+                    <PortableText
+                      value={retreat.conceptBody}
+                      components={portableTextComponents}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      {/* WHO IT'S FOR — split */}
+      {(retreat.whoSubheading || retreat.whoIntro || retreat.whoBullets?.length) && (
+        <Section background="cream">
+          <Container>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+              <div>
+                {retreat.whoHeading && (
+                  <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-5">
+                    {retreat.whoHeading}
+                  </p>
+                )}
+                {retreat.whoSubheading && (
+                  <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+                    {retreat.whoSubheading}
+                  </h2>
+                )}
+                {retreat.whoIntro && (
+                  <p className="font-sans text-base md:text-lg text-espresso/70 leading-relaxed mb-8 whitespace-pre-line">
+                    {retreat.whoIntro}
+                  </p>
+                )}
+                {retreat.whoBullets && retreat.whoBullets.length > 0 && (
+                  <>
+                    <p className="font-sans text-sm uppercase tracking-widest text-espresso/50 mb-4">
+                      Expect
+                    </p>
+                    <ul className="space-y-3">
+                      {retreat.whoBullets.map((b) => (
+                        <li
+                          key={b}
+                          className="flex items-start gap-3 font-sans text-base text-espresso/80"
+                        >
+                          <span className="text-terracotta mt-1.5 leading-none">•</span>
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </div>
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
+                <Image
+                  src={whoSrc}
+                  alt={retreat.whoImage?.alt || retreat.whoSubheading || "Who it's for"}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 600px"
                 />
               </div>
             </div>
@@ -307,124 +411,90 @@ export default async function RetreatPage({
         </Section>
       )}
 
-      {/* Who It's For */}
-      {(retreat.whoSubheading || retreat.whoIntro || (retreat.whoBullets && retreat.whoBullets.length)) && (
-        <Section background="cream">
-          <Container>
-            <div className="max-w-3xl mx-auto">
-              {retreat.whoHeading && (
-                <p className="font-sans text-xs uppercase tracking-widest text-sage mb-4">
-                  {retreat.whoHeading}
-                </p>
-              )}
-              {retreat.whoSubheading && (
-                <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
-                  {retreat.whoSubheading}
-                </h2>
-              )}
-              {retreat.whoIntro && (
-                <p className="font-sans text-base md:text-lg text-espresso/70 leading-relaxed mb-8 whitespace-pre-line">
-                  {retreat.whoIntro}
-                </p>
-              )}
-              {retreat.whoBullets && retreat.whoBullets.length > 0 && (
-                <>
-                  <p className="font-sans text-sm uppercase tracking-widest text-espresso/50 mb-4">
-                    Expect:
-                  </p>
-                  <ul className="space-y-3">
-                    {retreat.whoBullets.map((b) => (
-                      <li
-                        key={b}
-                        className="flex items-start gap-3 font-sans text-base text-espresso/80"
-                      >
-                        <span className="text-terracotta mt-1.5 leading-none">•</span>
-                        <span>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-          </Container>
-        </Section>
-      )}
-
-      {/* Experience & Schedule */}
+      {/* EXPERIENCE — split with image, schedule below full-width */}
       {(retreat.experienceBody || retreat.schedule?.length) && (
         <Section background="white">
           <Container>
-            <div className="max-w-4xl mx-auto">
-              {retreat.experienceHeading && (
-                <p className="font-sans text-xs uppercase tracking-widest text-sage mb-4">
-                  {retreat.experienceHeading}
-                </p>
-              )}
-              {retreat.experienceSubheading && (
-                <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
-                  {retreat.experienceSubheading}
-                </h2>
-              )}
-              {retreat.experienceBody && (
-                <div className="max-w-3xl mb-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-16">
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden order-last lg:order-first">
+                <Image
+                  src={experienceSrc}
+                  alt={retreat.experienceImage?.alt || retreat.experienceSubheading || "The experience"}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 600px"
+                />
+              </div>
+              <div>
+                {retreat.experienceHeading && (
+                  <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-5">
+                    {retreat.experienceHeading}
+                  </p>
+                )}
+                {retreat.experienceSubheading && (
+                  <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+                    {retreat.experienceSubheading}
+                  </h2>
+                )}
+                {retreat.experienceBody && (
                   <PortableText
                     value={retreat.experienceBody}
                     components={portableTextComponents}
                   />
-                </div>
-              )}
-
-              {retreat.schedule && retreat.schedule.length > 0 && (
-                <div className="bg-cream rounded-3xl p-8 md:p-12">
-                  {retreat.scheduleHeading && (
-                    <h3 className="font-serif text-2xl md:text-3xl mb-6">
-                      {retreat.scheduleHeading}
-                    </h3>
-                  )}
-                  <ul className="divide-y divide-sand/40">
-                    {retreat.schedule.map((item, idx) =>
-                      item.sectionLabel ? (
-                        <li
-                          key={idx}
-                          className="font-sans text-xs uppercase tracking-widest text-terracotta py-3 mt-2"
-                        >
-                          {item.sectionLabel}
-                        </li>
-                      ) : (
-                        <li
-                          key={idx}
-                          className="grid grid-cols-[5.5rem_1fr] md:grid-cols-[7rem_1fr] gap-4 py-3"
-                        >
-                          <span className="font-sans text-sm font-medium text-espresso/80 tabular-nums">
-                            {item.time}
-                          </span>
-                          <span className="font-sans text-sm md:text-base text-espresso/80">
-                            {item.activity}
-                          </span>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                  <div className="pt-8 mt-2 flex flex-wrap gap-3">
-                    <Button href="#enquiry" variant="outline" size="md">
-                      See more details
-                    </Button>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
+
+            {retreat.schedule && retreat.schedule.length > 0 && (
+              <div className="bg-cream rounded-3xl p-8 md:p-12 max-w-4xl mx-auto">
+                {retreat.scheduleHeading && (
+                  <h3 className="font-serif text-2xl md:text-3xl mb-6">
+                    {retreat.scheduleHeading}
+                  </h3>
+                )}
+                <ul className="divide-y divide-sand/40">
+                  {retreat.schedule.map((item, idx) =>
+                    item.sectionLabel ? (
+                      <li
+                        key={idx}
+                        className="font-sans text-xs uppercase tracking-widest text-terracotta py-3 mt-2"
+                      >
+                        {item.sectionLabel}
+                      </li>
+                    ) : (
+                      <li
+                        key={idx}
+                        className="grid grid-cols-[5.5rem_1fr] md:grid-cols-[7rem_1fr] gap-4 py-3"
+                      >
+                        <span className="font-sans text-sm font-medium text-espresso/80 tabular-nums">
+                          {item.time}
+                        </span>
+                        <span className="font-sans text-sm md:text-base text-espresso/80">
+                          {item.activity}
+                        </span>
+                      </li>
+                    )
+                  )}
+                </ul>
+                <div className="pt-8 mt-2 flex flex-wrap gap-3">
+                  <Button href="#enquiry" variant="outline" size="md">
+                    See more details
+                  </Button>
+                </div>
+              </div>
+            )}
           </Container>
         </Section>
       )}
 
-      {/* Venue */}
-      {(retreat.venueBody || venueSrc || retreat.venueBullets?.length) && (
+      {/* VENUE — split */}
+      {(retreat.venueBody || retreat.venueBullets?.length) && (
         <Section background="cream">
           <Container>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
               <div>
                 {retreat.venueHeading && (
-                  <p className="font-sans text-xs uppercase tracking-widest text-sage mb-4">
+                  <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-5">
                     {retreat.venueHeading}
                   </p>
                 )}
@@ -458,37 +528,46 @@ export default async function RetreatPage({
                   </>
                 )}
               </div>
-              {venueSrc && (
-                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
-                  <Image
-                    src={venueSrc}
-                    alt={retreat.venueImage?.alt || retreat.venueSubheading || "Venue"}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 600px"
-                  />
-                </div>
-              )}
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
+                <Image
+                  src={venueSrc}
+                  alt={retreat.venueImage?.alt || retreat.venueSubheading || "Venue"}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 600px"
+                />
+              </div>
             </div>
           </Container>
         </Section>
       )}
 
-      {/* Gallery */}
+      {/* GALLERY */}
       {gallery.length > 0 && <GallerySection heading="Gallery" images={gallery} />}
 
-      {/* What's Included */}
+      {/* WHAT'S INCLUDED — banner image above + grid */}
       {retreat.includedItems && retreat.includedItems.length > 0 && (
         <Section background="white">
           <Container>
-            <div className="max-w-3xl mx-auto">
-              <p className="font-sans text-xs uppercase tracking-widest text-sage mb-4 text-center">
-                {retreat.includedHeading || "What’s Included"}
-              </p>
-              <h2 className="font-serif text-3xl md:text-4xl text-center mb-10">
-                Everything you need
-              </h2>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+            <div className="max-w-5xl mx-auto">
+              <div className="relative aspect-[16/7] rounded-3xl overflow-hidden mb-12">
+                <Image
+                  src={includedSrc}
+                  alt={retreat.includedImage?.alt || "Everything you need"}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                />
+              </div>
+              <div className="text-center mb-10">
+                <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-4">
+                  {retreat.includedHeading || "What’s Included"}
+                </p>
+                <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl">
+                  Everything you need
+                </h2>
+              </div>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 max-w-3xl mx-auto">
                 {retreat.includedItems.map((item) => (
                   <li
                     key={item}
@@ -509,27 +588,25 @@ export default async function RetreatPage({
         </Section>
       )}
 
-      {/* Guide */}
+      {/* GUIDE — split */}
       {(retreat.guideBio || retreat.guideName) && (
         <Section background="cream">
           <Container>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
-              {guideSrc && (
-                <div className="lg:col-span-2">
-                  <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
-                    <Image
-                      src={guideSrc}
-                      alt={retreat.guideImage?.alt || retreat.guideName || "Guide"}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 480px"
-                    />
-                  </div>
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
+              <div className="lg:col-span-2">
+                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
+                  <Image
+                    src={guideSrc}
+                    alt={retreat.guideImage?.alt || retreat.guideName || "Guide"}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 480px"
+                  />
                 </div>
-              )}
-              <div className={guideSrc ? "lg:col-span-3" : "lg:col-span-5 max-w-3xl"}>
+              </div>
+              <div className="lg:col-span-3">
                 {retreat.guideHeading && (
-                  <p className="font-sans text-xs uppercase tracking-widest text-sage mb-4">
+                  <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-5">
                     {retreat.guideHeading}
                   </p>
                 )}
@@ -555,17 +632,27 @@ export default async function RetreatPage({
         </Section>
       )}
 
-      {/* What Is */}
+      {/* WHAT IS — image + text on dark background */}
       {retreat.whatIsBody && retreat.whatIsBody.length > 0 && (
-        <Section background="espresso">
+        <section className="relative overflow-hidden">
+          <div className="absolute inset-0 -z-10">
+            <Image
+              src={whatIsSrc}
+              alt={retreat.whatIsImage?.alt || "What it is"}
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-espresso/75" />
+          </div>
           <Container>
-            <div className="max-w-3xl mx-auto text-center">
+            <div className="max-w-3xl mx-auto text-center py-[clamp(5rem,10vw,9rem)]">
               {retreat.whatIsHeading && (
-                <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-6 text-cream">
+                <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-8 text-cream">
                   {retreat.whatIsHeading}
                 </h2>
               )}
-              <div className="text-cream/80 [&_p]:!text-cream/80 [&_p]:font-sans [&_p]:text-base [&_p]:md:text-lg [&_p]:leading-relaxed">
+              <div className="text-cream/85 [&_p]:!text-cream/85 [&_p]:font-sans [&_p]:text-base [&_p]:md:text-lg [&_p]:leading-relaxed [&_p]:mb-4">
                 <PortableText
                   value={retreat.whatIsBody}
                   components={portableTextComponents}
@@ -573,10 +660,10 @@ export default async function RetreatPage({
               </div>
             </div>
           </Container>
-        </Section>
+        </section>
       )}
 
-      {/* Pricing */}
+      {/* PRICING */}
       {retreat.pricingTiers && retreat.pricingTiers.length > 0 && (
         <Section background="white">
           <Container>
@@ -642,12 +729,23 @@ export default async function RetreatPage({
         <FAQSection heading="Questions" items={retreat.faq} />
       )}
 
-      {/* Enquiry */}
-      <Section background="cream" id="enquiry">
+      {/* CLOSING TAGLINE */}
+      {retreat.secondaryTagline && (
+        <section className="bg-cream py-[clamp(4rem,8vw,7rem)]">
+          <Container>
+            <p className="font-serif italic text-center text-3xl md:text-5xl lg:text-6xl text-espresso/85 leading-tight max-w-3xl mx-auto">
+              {retreat.secondaryTagline}
+            </p>
+          </Container>
+        </section>
+      )}
+
+      {/* ENQUIRY */}
+      <Section background="white" id="enquiry">
         <Container>
           <div className="max-w-5xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-10">
-              <p className="font-sans text-xs uppercase tracking-widest text-sage mb-4">
+              <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-4">
                 Reserve Your Spot
               </p>
               <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-4">

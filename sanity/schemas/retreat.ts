@@ -135,6 +135,14 @@ export const retreat = defineType({
       group: "concept",
       of: [{ type: "block" }],
     }),
+    defineField({
+      name: "conceptImage",
+      title: "Concept Image",
+      type: "image",
+      group: "concept",
+      options: { hotspot: true },
+      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+    }),
 
     // ─── Who It's For ──────────────────────────────────────────
     defineField({
@@ -165,6 +173,14 @@ export const retreat = defineType({
       group: "who",
       of: [{ type: "string" }],
     }),
+    defineField({
+      name: "whoImage",
+      title: "Who It’s For Image",
+      type: "image",
+      group: "who",
+      options: { hotspot: true },
+      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+    }),
 
     // ─── Experience & Schedule ────────────────────────────────
     defineField({
@@ -187,6 +203,14 @@ export const retreat = defineType({
       type: "array",
       group: "experience",
       of: [{ type: "block" }],
+    }),
+    defineField({
+      name: "experienceImage",
+      title: "Experience Image",
+      type: "image",
+      group: "experience",
+      options: { hotspot: true },
+      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
     }),
     defineField({
       name: "scheduleHeading",
@@ -294,6 +318,14 @@ export const retreat = defineType({
       group: "included",
       of: [{ type: "string" }],
     }),
+    defineField({
+      name: "includedImage",
+      title: "What’s Included Banner Image",
+      type: "image",
+      group: "included",
+      options: { hotspot: true },
+      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+    }),
 
     // ─── Guide ────────────────────────────────────────────────
     defineField({
@@ -347,6 +379,14 @@ export const retreat = defineType({
       type: "array",
       group: "whatIs",
       of: [{ type: "block" }],
+    }),
+    defineField({
+      name: "whatIsImage",
+      title: "What Is… Image",
+      type: "image",
+      group: "whatIs",
+      options: { hotspot: true },
+      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
     }),
 
     // ─── Pricing & CTAs ───────────────────────────────────────
