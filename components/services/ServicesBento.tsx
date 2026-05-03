@@ -125,13 +125,14 @@ function ServiceModal({
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[100] flex items-stretch md:items-center justify-center bg-espresso/60 backdrop-blur-sm px-0 md:px-6 py-0 md:py-10"
           onClick={onClose}
+          data-lenis-prevent
         >
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.98 }}
             transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-            className="relative bg-cream w-full md:max-w-3xl md:rounded-3xl overflow-hidden flex flex-col max-h-screen md:max-h-[85vh]"
+            className="relative bg-cream w-full md:max-w-5xl md:rounded-3xl overflow-hidden flex flex-col md:flex-row max-h-screen md:max-h-[85vh]"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
@@ -145,17 +146,17 @@ function ServiceModal({
               <span aria-hidden className="text-lg leading-none">×</span>
             </button>
 
-            <div className="relative aspect-[16/9] w-full shrink-0">
+            <div className="relative aspect-[16/9] md:aspect-auto w-full md:w-2/5 md:self-stretch shrink-0 bg-sand/30">
               <Image
                 src={service.image.src}
                 alt={service.image.alt}
                 fill
-                sizes="(max-width: 768px) 100vw, 768px"
+                sizes="(max-width: 768px) 100vw, 410px"
                 className="object-cover"
               />
             </div>
 
-            <div className="overflow-y-auto px-6 md:px-10 py-8 md:py-10">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 md:px-10 py-8 md:py-12">
               <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
                 {service.category}
               </p>

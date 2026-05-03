@@ -3,6 +3,9 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { CTASection } from "@/components/sections/CTASection";
+import { CalendlyInlineEmbed } from "@/components/booking/CalendlyInlineEmbed";
+
+const CALENDLY_URL = "https://calendly.com/hello-somatictherapyinlisbon/30min";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -10,7 +13,15 @@ export const metadata: Metadata = {
     "Get in touch with Niamh Padma. Based in Lisbon, available worldwide for yoga, breathwork, somatic therapy and holistic nutrition coaching.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ subject?: string }>;
+}) {
+  const { subject } = await searchParams;
+  const defaultSubject = subject ?? "";
+  const isBookingEnquiry = defaultSubject.toLowerCase().startsWith("booking:");
+
   return (
     <>
       <Section background="cream">
@@ -19,15 +30,15 @@ export default function ContactPage() {
             {/* Info side */}
             <div>
               <p className="font-sans text-sm uppercase tracking-widest text-sage mb-4">
-                Get in Touch
+                {isBookingEnquiry ? "Booking Enquiry" : "Get in Touch"}
               </p>
               <h1 className="font-serif text-5xl md:text-6xl leading-tight mb-6">
-                Let&apos;s Connect
+                {isBookingEnquiry ? "Reserve Your Spot" : "Let’s Connect"}
               </h1>
               <p className="font-sans text-base text-espresso/60 leading-relaxed mb-10">
-                Whether you have a question about services, want to discuss a
-                collaboration, or are ready to start your wellness journey —
-                I&apos;d love to hear from you.
+                {isBookingEnquiry
+                  ? `Send a quick note and I’ll get back to you within 48 hours to confirm your place${defaultSubject.replace(/^Booking:\s*/i, " in ")}.`
+                  : "Whether you have a question about services, want to discuss a collaboration, or are ready to start your wellness journey — I’d love to hear from you."}
               </p>
 
               <div className="space-y-6">
@@ -63,6 +74,14 @@ export default function ContactPage() {
                     >
                       Instagram
                     </a>
+                    <a
+                      href="https://thelittlemoments.substack.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-sans text-sm text-espresso/60 hover:text-terracotta transition-colors"
+                    >
+                      Substack
+                    </a>
                   </div>
                 </div>
               </div>
@@ -70,8 +89,28 @@ export default function ContactPage() {
 
             {/* Form side */}
             <div>
-              <ContactForm />
+              <ContactForm defaultSubject={defaultSubject} />
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section background="white">
+        <Container>
+          <div className="max-w-2xl mx-auto text-center mb-10">
+            <p className="font-sans text-sm uppercase tracking-widest text-sage mb-4">
+              Or Talk Live
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl leading-tight mb-4">
+              Book a Free Discovery Call
+            </h2>
+            <p className="font-sans text-base text-espresso/60 leading-relaxed">
+              A relaxed 30-minute conversation to explore what you&apos;re
+              seeking and feel into whether we&apos;re a fit.
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto">
+            <CalendlyInlineEmbed url={CALENDLY_URL} minHeight={780} />
           </div>
         </Container>
       </Section>

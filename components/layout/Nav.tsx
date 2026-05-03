@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
+import { InstagramIcon } from "@/components/ui/icons/InstagramIcon";
+import { SubstackIcon } from "@/components/ui/icons/SubstackIcon";
 
 const leftLinks = [
   { label: "My Story", href: "/my-story" },
@@ -14,7 +16,7 @@ const leftLinks = [
 
 const rightLinks = [
   { label: "Journal", href: "/journal" },
-  { label: "Contact", href: "/contact" },
+  { label: "Kontakt", href: "/contact" },
 ];
 
 const mobileMenuLinks = [
@@ -22,8 +24,11 @@ const mobileMenuLinks = [
   { label: "Work With Me", href: "/work-with-me" },
   { label: "Events & Retreats", href: "/events" },
   { label: "Journal", href: "/journal" },
-  { label: "Contact", href: "/contact" },
+  { label: "Kontakt", href: "/contact" },
 ];
+
+const INSTAGRAM_URL = "https://instagram.com/niamhpadma";
+const SUBSTACK_URL = "https://thelittlemoments.substack.com/";
 
 export function Nav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -125,6 +130,26 @@ export function Nav() {
                 </Link>
               </li>
             ))}
+            <li className="flex items-center gap-3">
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-espresso/60 hover:text-terracotta transition-colors"
+              >
+                <InstagramIcon size={18} />
+              </a>
+              <a
+                href={SUBSTACK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Substack"
+                className="text-espresso/60 hover:text-terracotta transition-colors"
+              >
+                <SubstackIcon size={16} />
+              </a>
+            </li>
             <li>
               <Link
                 href="/questionnaires/coaching"
@@ -180,8 +205,26 @@ export function Nav() {
             </AnimatePresence>
           </button>
 
-          {/* Right side: Get Started + Menu */}
+          {/* Right side: socials + Get Started + Menu */}
           <div className="flex items-center gap-3">
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="text-espresso/70 hover:text-terracotta transition-colors p-1"
+            >
+              <InstagramIcon size={18} />
+            </a>
+            <a
+              href={SUBSTACK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Substack"
+              className="text-espresso/70 hover:text-terracotta transition-colors p-1"
+            >
+              <SubstackIcon size={16} />
+            </a>
             <Link
               href="/questionnaires/coaching"
               className="font-sans text-[11px] font-medium bg-espresso text-cream px-3.5 py-1.5 rounded-full hover:bg-espresso-light transition-colors duration-300"
@@ -250,7 +293,7 @@ export function Nav() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="mt-10"
+                className="mt-10 flex items-center gap-6"
               >
                 <Link
                   href="/questionnaires/coaching"
@@ -259,6 +302,24 @@ export function Nav() {
                 >
                   Get Started
                 </Link>
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="text-espresso/70 hover:text-terracotta transition-colors p-2"
+                >
+                  <InstagramIcon size={22} />
+                </a>
+                <a
+                  href={SUBSTACK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Substack"
+                  className="text-espresso/70 hover:text-terracotta transition-colors p-2"
+                >
+                  <SubstackIcon size={20} />
+                </a>
               </motion.div>
             </Container>
           </motion.div>

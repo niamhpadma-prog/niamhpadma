@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 
-export function ContactForm() {
+interface ContactFormProps {
+  defaultSubject?: string;
+}
+
+export function ContactForm({ defaultSubject = "" }: ContactFormProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "",
+    subject: defaultSubject,
     message: "",
   });
 

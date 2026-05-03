@@ -18,6 +18,7 @@ const footerLinks = {
   connect: [
     { label: "Contact", href: "/contact" },
     { label: "Instagram", href: "https://instagram.com/niamhpadma" },
+    { label: "Substack", href: "https://thelittlemoments.substack.com/" },
   ],
 };
 

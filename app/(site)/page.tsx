@@ -6,6 +6,7 @@ import { StatsStrip } from "@/components/sections/StatsStrip";
 import { OfferingsGrid } from "@/components/sections/OfferingsGrid";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { NewsletterSection } from "@/components/sections/NewsletterSection";
+import { SubstackSection } from "@/components/sections/SubstackSection";
 import { JsonLd } from "@/components/seo/JsonLd";
 
 export default function HomePage() {
@@ -198,6 +199,8 @@ export default function HomePage() {
           </div>
         </Container>
       </Section>
+
+      <SubstackSection />
 
       <NewsletterSection
         heading="Join the Community"

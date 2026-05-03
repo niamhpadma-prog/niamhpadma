@@ -68,7 +68,7 @@ const services: BentoService[] = [
       </>
     ),
     ctas: [
-      { label: "Book a Free Enquiry Call", href: "/questionnaires/coaching", variant: "primary" },
+      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
     ],
   },
   {
@@ -92,7 +92,7 @@ const services: BentoService[] = [
     ),
     pricing: "611 EUR",
     ctas: [
-      { label: "Book a Free Enquiry Call", href: "/questionnaires/coaching", variant: "primary" },
+      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
     ],
   },
   {
@@ -115,7 +115,7 @@ const services: BentoService[] = [
     ),
     pricing: "1,111 EUR",
     ctas: [
-      { label: "Book a Free Enquiry Call", href: "/questionnaires/coaching", variant: "primary" },
+      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
     ],
   },
   {
@@ -130,7 +130,13 @@ const services: BentoService[] = [
       </p>
     ),
     pricing: "€15/class or €50/month",
-    ctas: [{ label: "Book Now", href: "#", variant: "primary" }],
+    ctas: [
+      {
+        label: "Book Now",
+        href: "/contact?subject=Booking%3A%20Weekly%20Group%20Classes",
+        variant: "primary",
+      },
+    ],
   },
   {
     id: "group-monthly",
@@ -143,13 +149,21 @@ const services: BentoService[] = [
           <p className="font-medium text-espresso">
             The Women{"’"}s Gathering and Somatic Journey
           </p>
-          <Button href="#" variant="outline" size="sm">
+          <Button
+            href="/contact?subject=Booking%3A%20The%20Women%E2%80%99s%20Gathering%20and%20Somatic%20Journey"
+            variant="outline"
+            size="sm"
+          >
             Book Now
           </Button>
         </div>
         <div className="space-y-3 pt-2">
           <p className="font-medium text-espresso">Online Somatic Rest and Reset</p>
-          <Button href="#" variant="outline" size="sm">
+          <Button
+            href="/contact?subject=Booking%3A%20Online%20Somatic%20Rest%20and%20Reset"
+            variant="outline"
+            size="sm"
+          >
             Book Now
           </Button>
         </div>
@@ -207,7 +221,7 @@ const services: BentoService[] = [
       </>
     ),
     ctas: [
-      { label: "Book a Free Enquiry Call", href: "/questionnaires/corporate", variant: "primary" },
+      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
     ],
   },
   {
@@ -233,7 +247,7 @@ const services: BentoService[] = [
       </>
     ),
     ctas: [
-      { label: "Book a Free Enquiry Call", href: "/questionnaires/corporate", variant: "primary" },
+      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
     ],
   },
   {
@@ -256,7 +270,7 @@ const services: BentoService[] = [
       </>
     ),
     ctas: [
-      { label: "Book a Free Enquiry Call", href: "/questionnaires/corporate", variant: "primary" },
+      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
     ],
   },
   {
@@ -279,7 +293,7 @@ const services: BentoService[] = [
       </>
     ),
     ctas: [
-      { label: "Book a Free Enquiry Call", href: "/questionnaires/corporate", variant: "primary" },
+      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
     ],
   },
 ];
