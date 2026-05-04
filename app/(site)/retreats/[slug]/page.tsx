@@ -15,6 +15,9 @@ import { retreatQuery, retreatSlugsQuery } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import { portableTextComponents } from "@/lib/sanity/portableText";
 
+// Re-render at most every 60s so Sanity edits appear without a redeploy.
+export const revalidate = 60;
+
 type Params = { slug: string };
 
 interface SanityImage {

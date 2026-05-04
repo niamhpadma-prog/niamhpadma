@@ -17,6 +17,9 @@ export const metadata: Metadata = {
     "Upcoming yoga retreats, breathwork workshops, and wellness events in Lisbon and across Europe with Niamh Padma.",
 };
 
+// Re-render at most every 60s so Sanity edits appear without a redeploy.
+export const revalidate = 60;
+
 interface RetreatCard {
   _id: string;
   title: string;
