@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-
-interface KitErrorResponse {
-  errors?: string[];
-  message?: string;
-}
+import {
+  upsertMailchimpMember,
+  isMailchimpConfigured,
+  MailchimpError,
+} from "@/lib/mailchimp";
 
 export async function POST(request: Request) {
   try {
@@ -13,12 +13,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    const apiKey = process.env.KIT_API_KEY;
-    const formId = process.env.KIT_FORM_ID;
-
-    if (!apiKey || !formId) {
+    if (!isMailchimpConfigured()) {
       console.error(
-        "[newsletter] Missing env vars — set KIT_API_KEY and KIT_FORM_ID in Vercel"
+        "[newsletter] Missing env vars — set MAILCHIMP_API_KEY and MAILCHIMP_AUDIENCE_ID in Vercel"
       );
       return NextResponse.json(
         { error: "Newsletter is not configured" },
@@ -26,25 +23,25 @@ export async function POST(request: Request) {
       );
     }
 
-    const res = await fetch(
-      `https://api.kit.com/v4/forms/${formId}/subscribers`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Kit-Api-Key": apiKey,
-        },
-        body: JSON.stringify({ email_address: email }),
+    try {
+      await upsertMailchimpMember({
+        email,
+        tags: ["source:newsletter"],
+      });
+    } catch (err) {
+      if (err instanceof MailchimpError) {
+        // Member already exists / similar — treat as success so we don't
+        // leak whether an email is already on the list.
+        if (err.status === 400) {
+          return NextResponse.json({ success: true });
+        }
+        console.error("[newsletter] Mailchimp error", err.status, err.detail);
+        return NextResponse.json(
+          { error: "Failed to subscribe" },
+          { status: 502 }
+        );
       }
-    );
-
-    if (!res.ok) {
-      const data: KitErrorResponse = await res.json().catch(() => ({}));
-      console.error("[newsletter] Kit API error", res.status, data);
-      return NextResponse.json(
-        { error: data.errors?.[0] || data.message || "Failed to subscribe" },
-        { status: 502 }
-      );
+      throw err;
     }
 
     return NextResponse.json({ success: true });
