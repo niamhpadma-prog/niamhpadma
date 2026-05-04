@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     try {
       await upsertMailchimpMember({
         email,
-        tags: ["source:newsletter"],
+        tags: ["newsletter"],
       });
     } catch (err) {
       if (err instanceof MailchimpError) {

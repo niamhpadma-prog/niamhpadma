@@ -40,8 +40,8 @@ export async function POST(request: Request) {
     if (isMailchimpConfigured()) {
       try {
         const { firstName, lastName } = splitName(name);
-        const tags = ["source:retreat-enquiry"];
-        if (retreatSlug) tags.push(`retreat:${retreatSlug}`);
+        const tags = ["retreat-enquiry"];
+        if (retreatSlug) tags.push(`retreat-${retreatSlug}`);
 
         await upsertMailchimpMember({
           email,
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
           message ? message : "(no message)",
           "",
           mailchimpOk
-            ? "✓ Added to Mailchimp with tag retreat:" + (retreatSlug || "(unknown)")
+            ? "✓ Added to Mailchimp with tag retreat-" + (retreatSlug || "(unknown)")
             : "⚠ Mailchimp add failed — see server logs",
         ];
 
