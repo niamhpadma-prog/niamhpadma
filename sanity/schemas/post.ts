@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { seoFields } from "./seoFields";
+import { imageCaptionFields, richBlock } from "./_shared";
 
 export const post = defineType({
   name: "post",
@@ -14,7 +15,7 @@ export const post = defineType({
       title: "Cover Image",
       type: "image",
       options: { hotspot: true },
-      fields: [{ name: "alt", title: "Alt Text", type: "string" }],
+      fields: imageCaptionFields,
       description:
         "Either upload an image OR a video below. If both are set, the video is used.",
     }),
@@ -54,14 +55,11 @@ export const post = defineType({
       title: "Body",
       type: "array",
       of: [
-        { type: "block" },
+        richBlock,
         {
           type: "image",
           options: { hotspot: true },
-          fields: [
-            { name: "alt", title: "Alt Text", type: "string" },
-            { name: "caption", title: "Caption", type: "string" },
-          ],
+          fields: imageCaptionFields,
         },
         {
           name: "videoBlock",

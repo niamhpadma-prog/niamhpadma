@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { seoFields } from "./seoFields";
+import { imageCaptionFields, richBlock } from "./_shared";
 
 export const course = defineType({
   name: "course",
@@ -29,7 +30,7 @@ export const course = defineType({
       name: "description",
       title: "Description",
       type: "array",
-      of: [{ type: "block" }],
+      of: [richBlock],
       description: "Full course description for the sales page",
     }),
     defineField({
@@ -57,7 +58,7 @@ export const course = defineType({
       title: "Thumbnail",
       type: "image",
       options: { hotspot: true },
-      fields: [{ name: "alt", title: "Alt Text", type: "string" }],
+      fields: imageCaptionFields,
     }),
     defineField({
       name: "previewVideoUrl",

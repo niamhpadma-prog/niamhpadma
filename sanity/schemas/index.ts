@@ -12,8 +12,10 @@ import { course } from "./course";
 import { courseModule } from "./courseModule";
 import { courseLesson } from "./courseLesson";
 import { courseEnrollment } from "./courseEnrollment";
+import { captionedImage } from "./_shared";
 
 export const schemaTypes = [
+  captionedImage,
   siteSettings,
   page,
   service,

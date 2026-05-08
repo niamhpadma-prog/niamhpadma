@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { richBlock } from "./_shared";
 
 export const courseLesson = defineType({
   name: "courseLesson",
@@ -61,7 +62,7 @@ export const courseLesson = defineType({
       name: "body",
       title: "Lesson Notes",
       type: "array",
-      of: [{ type: "block" }],
+      of: [richBlock],
       description: "Optional text content below the video",
     }),
   ],

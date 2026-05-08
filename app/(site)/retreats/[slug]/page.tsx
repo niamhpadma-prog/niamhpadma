@@ -13,17 +13,21 @@ import { EventEnquiryForm } from "@/components/forms/EventEnquiryForm";
 import { client } from "@/lib/sanity/client";
 import { retreatQuery, retreatSlugsQuery } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
-import { portableTextComponents } from "@/lib/sanity/portableText";
+import { portableTextComponents, inlinePortableTextComponents } from "@/lib/sanity/portableText";
 
 // Re-render at most every 60s so Sanity edits appear without a redeploy.
 export const revalidate = 60;
 
 type Params = { slug: string };
 
+type CaptionPosition = "above" | "below" | "overlay";
+
 interface SanityImage {
   asset?: { url?: string };
   alt?: string;
   caption?: string;
+  creditUrl?: string;
+  captionPosition?: CaptionPosition;
 }
 
 interface ScheduleItem {
@@ -69,7 +73,7 @@ interface Retreat {
   whoHeading?: string;
   whoSubheading?: string;
   whoIntro?: string;
-  whoBullets?: string[];
+  whoBullets?: (string | PortableTextBlock)[];
   whoImage?: SanityImage;
 
   experienceHeading?: string;
@@ -82,12 +86,12 @@ interface Retreat {
   venueHeading?: string;
   venueSubheading?: string;
   venueBody?: PortableTextBlock[];
-  venueBullets?: string[];
+  venueBullets?: (string | PortableTextBlock)[];
   venueImage?: SanityImage;
   gallery?: SanityImage[];
 
   includedHeading?: string;
-  includedItems?: string[];
+  includedItems?: (string | PortableTextBlock)[];
   includedImage?: SanityImage;
 
   guideHeading?: string;
@@ -135,6 +139,106 @@ function imageOrPlaceholder(
     return height ? builder.height(height).fit("crop").url() : builder.url();
   }
   return placeholder;
+}
+
+function ImageCaption({
+  text,
+  href,
+  tone = "default",
+  className = "",
+}: {
+  text?: string;
+  href?: string;
+  tone?: "default" | "light";
+  className?: string;
+}) {
+  if (!text) return null;
+  const colour = tone === "light" ? "text-cream/70" : "text-espresso/55";
+  const linkColour =
+    tone === "light"
+      ? "text-cream/90 hover:text-cream"
+      : "text-espresso/70 hover:text-terracotta";
+  const inner = href ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`underline underline-offset-2 transition-colors ${linkColour}`}
+    >
+      {text}
+    </a>
+  ) : (
+    text
+  );
+  return (
+    <p className={`font-sans text-xs ${colour} ${className}`}>{inner}</p>
+  );
+}
+
+// Wrapper that renders a section image with optional caption above, below,
+// or overlaid on the image itself, based on Niamh's choice in Studio.
+function CaptionedSectionImage({
+  src,
+  alt,
+  image,
+  className,
+  imageClassName,
+  sizes,
+  priority,
+  tone = "default",
+}: {
+  src: string;
+  alt: string;
+  image?: SanityImage;
+  className?: string;
+  imageClassName?: string;
+  sizes?: string;
+  priority?: boolean;
+  tone?: "default" | "light";
+}) {
+  const caption = image?.caption || image?.alt;
+  const href = image?.creditUrl;
+  const position = (image?.captionPosition as CaptionPosition) || "below";
+  return (
+    <figure className={className}>
+      {position === "above" && caption && (
+        <ImageCaption text={caption} href={href} tone={tone} className="mb-2 text-center" />
+      )}
+      <div className={`relative overflow-hidden ${imageClassName || ""}`}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover"
+          sizes={sizes}
+          priority={priority}
+        />
+        {position === "overlay" && caption && (
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-espresso/65 to-transparent p-3">
+            <ImageCaption text={caption} href={href} tone="light" className="text-center" />
+          </div>
+        )}
+      </div>
+      {position === "below" && caption && (
+        <ImageCaption text={caption} href={href} tone={tone} className="mt-2 text-center" />
+      )}
+    </figure>
+  );
+}
+
+// Bullets started life as plain strings in Sanity. Niamh's schema now stores
+// them as portable text so she can hyperlink inline (e.g. the hotel name).
+// Existing documents may still contain raw strings, so render either shape.
+function BulletContent({ value }: { value: string | PortableTextBlock }) {
+  if (typeof value === "string") return <>{value}</>;
+  return (
+    <PortableText value={[value]} components={inlinePortableTextComponents} />
+  );
+}
+
+function bulletKey(value: string | PortableTextBlock, fallback: number) {
+  if (typeof value === "string") return value;
+  return value._key || fallback;
 }
 
 export async function generateStaticParams() {
@@ -214,6 +318,9 @@ export default async function RetreatPage({
     .map((g) => ({
       src: urlFor(g).width(1600).url(),
       alt: g.alt || retreat.title,
+      caption: g.caption || g.alt,
+      captionPosition: g.captionPosition,
+      creditUrl: g.creditUrl,
     }));
 
   const locationDisplay =
@@ -273,6 +380,16 @@ export default async function RetreatPage({
           />
           <div className="absolute inset-0 bg-gradient-to-b from-espresso/55 via-espresso/45 to-espresso/70" />
         </div>
+        {(retreat.heroImage?.caption || retreat.heroImage?.alt) && (
+          <div className="absolute bottom-4 right-5 z-10">
+            <ImageCaption
+              text={retreat.heroImage?.caption || retreat.heroImage?.alt}
+              href={retreat.heroImage?.creditUrl}
+              tone="light"
+              className="tracking-wide"
+            />
+          </div>
+        )}
 
         <Container>
           <div className="text-center max-w-4xl mx-auto py-28 md:py-36">
@@ -326,15 +443,14 @@ export default async function RetreatPage({
         <Section background="white">
           <Container>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden order-last lg:order-first">
-                <Image
-                  src={conceptSrc}
-                  alt={retreat.conceptImage?.alt || "The concept"}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 600px"
-                />
-              </div>
+              <CaptionedSectionImage
+                src={conceptSrc}
+                alt={retreat.conceptImage?.alt || "The concept"}
+                image={retreat.conceptImage}
+                className="order-last lg:order-first"
+                imageClassName="aspect-[4/5] rounded-3xl"
+                sizes="(max-width: 1024px) 100vw, 600px"
+              />
               <div>
                 {retreat.conceptHeading && (
                   <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-5">
@@ -387,28 +503,28 @@ export default async function RetreatPage({
                       Expect
                     </p>
                     <ul className="space-y-3">
-                      {retreat.whoBullets.map((b) => (
+                      {retreat.whoBullets.map((b, i) => (
                         <li
-                          key={b}
+                          key={bulletKey(b, i)}
                           className="flex items-start gap-3 font-sans text-base text-espresso/80"
                         >
                           <span className="text-terracotta mt-1.5 leading-none">•</span>
-                          <span>{b}</span>
+                          <span>
+                            <BulletContent value={b} />
+                          </span>
                         </li>
                       ))}
                     </ul>
                   </>
                 )}
               </div>
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
-                <Image
-                  src={whoSrc}
-                  alt={retreat.whoImage?.alt || retreat.whoSubheading || "Who it's for"}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 600px"
-                />
-              </div>
+              <CaptionedSectionImage
+                src={whoSrc}
+                alt={retreat.whoImage?.alt || retreat.whoSubheading || "Who it's for"}
+                image={retreat.whoImage}
+                imageClassName="aspect-[4/5] rounded-3xl"
+                sizes="(max-width: 1024px) 100vw, 600px"
+              />
             </div>
           </Container>
         </Section>
@@ -419,15 +535,14 @@ export default async function RetreatPage({
         <Section background="white">
           <Container>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-16">
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden order-last lg:order-first">
-                <Image
-                  src={experienceSrc}
-                  alt={retreat.experienceImage?.alt || retreat.experienceSubheading || "The experience"}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 600px"
-                />
-              </div>
+              <CaptionedSectionImage
+                src={experienceSrc}
+                alt={retreat.experienceImage?.alt || retreat.experienceSubheading || "The experience"}
+                image={retreat.experienceImage}
+                className="order-last lg:order-first"
+                imageClassName="aspect-[4/5] rounded-3xl"
+                sizes="(max-width: 1024px) 100vw, 600px"
+              />
               <div>
                 {retreat.experienceHeading && (
                   <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-5">
@@ -518,28 +633,28 @@ export default async function RetreatPage({
                       Between sessions
                     </p>
                     <ul className="space-y-3">
-                      {retreat.venueBullets.map((b) => (
+                      {retreat.venueBullets.map((b, i) => (
                         <li
-                          key={b}
+                          key={bulletKey(b, i)}
                           className="flex items-start gap-3 font-sans text-base text-espresso/80"
                         >
                           <span className="text-terracotta mt-1.5 leading-none">•</span>
-                          <span>{b}</span>
+                          <span>
+                            <BulletContent value={b} />
+                          </span>
                         </li>
                       ))}
                     </ul>
                   </>
                 )}
               </div>
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
-                <Image
-                  src={venueSrc}
-                  alt={retreat.venueImage?.alt || retreat.venueSubheading || "Venue"}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 600px"
-                />
-              </div>
+              <CaptionedSectionImage
+                src={venueSrc}
+                alt={retreat.venueImage?.alt || retreat.venueSubheading || "Venue"}
+                image={retreat.venueImage}
+                imageClassName="aspect-[4/5] rounded-3xl"
+                sizes="(max-width: 1024px) 100vw, 600px"
+              />
             </div>
           </Container>
         </Section>
@@ -553,15 +668,14 @@ export default async function RetreatPage({
         <Section background="white">
           <Container>
             <div className="max-w-5xl mx-auto">
-              <div className="relative aspect-[16/7] rounded-3xl overflow-hidden mb-12">
-                <Image
-                  src={includedSrc}
-                  alt={retreat.includedImage?.alt || "Everything you need"}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 1024px"
-                />
-              </div>
+              <CaptionedSectionImage
+                src={includedSrc}
+                alt={retreat.includedImage?.alt || "Everything you need"}
+                image={retreat.includedImage}
+                className="mb-12"
+                imageClassName="aspect-[16/7] rounded-3xl"
+                sizes="(max-width: 1024px) 100vw, 1024px"
+              />
               <div className="text-center mb-10">
                 <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-4">
                   {retreat.includedHeading || "What’s Included"}
@@ -571,13 +685,15 @@ export default async function RetreatPage({
                 </h2>
               </div>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4 max-w-3xl mx-auto">
-                {retreat.includedItems.map((item) => (
+                {retreat.includedItems.map((item, i) => (
                   <li
-                    key={item}
+                    key={bulletKey(item, i)}
                     className="flex items-start gap-3 font-sans text-base text-espresso/80"
                   >
                     <span className="text-sage mt-1 leading-none">✓</span>
-                    <span>{item}</span>
+                    <span>
+                      <BulletContent value={item} />
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -596,17 +712,14 @@ export default async function RetreatPage({
         <Section background="cream">
           <Container>
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
-              <div className="lg:col-span-2">
-                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
-                  <Image
-                    src={guideSrc}
-                    alt={retreat.guideImage?.alt || retreat.guideName || "Guide"}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 480px"
-                  />
-                </div>
-              </div>
+              <CaptionedSectionImage
+                src={guideSrc}
+                alt={retreat.guideImage?.alt || retreat.guideName || "Guide"}
+                image={retreat.guideImage}
+                className="lg:col-span-2"
+                imageClassName="aspect-[4/5] rounded-3xl"
+                sizes="(max-width: 1024px) 100vw, 480px"
+              />
               <div className="lg:col-span-3">
                 {retreat.guideHeading && (
                   <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-5">
@@ -648,6 +761,16 @@ export default async function RetreatPage({
             />
             <div className="absolute inset-0 bg-espresso/75" />
           </div>
+          {(retreat.whatIsImage?.caption || retreat.whatIsImage?.alt) && (
+            <div className="absolute bottom-3 right-5 z-10">
+              <ImageCaption
+                text={retreat.whatIsImage?.caption || retreat.whatIsImage?.alt}
+                href={retreat.whatIsImage?.creditUrl}
+                tone="light"
+                className="tracking-wide"
+              />
+            </div>
+          )}
           <Container>
             <div className="max-w-3xl mx-auto text-center py-[clamp(5rem,10vw,9rem)]">
               {retreat.whatIsHeading && (

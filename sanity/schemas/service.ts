@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { imageCaptionFields, richBlock } from "./_shared";
 
 export const service = defineType({
   name: "service",
@@ -12,8 +13,8 @@ export const service = defineType({
       type: "string",
       options: { list: ["1-1 Coaching", "Group Classes", "Workshops", "Corporate"] },
     }),
-    defineField({ name: "description", title: "Description", type: "array", of: [{ type: "block" }] }),
-    defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true }, fields: [{ name: "alt", title: "Alt Text", type: "string" }] }),
+    defineField({ name: "description", title: "Description", type: "array", of: [richBlock] }),
+    defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true }, fields: imageCaptionFields }),
     defineField({ name: "pricing", title: "Pricing", type: "string" }),
     defineField({ name: "bookingUrl", title: "Booking URL", type: "url" }),
     defineField({

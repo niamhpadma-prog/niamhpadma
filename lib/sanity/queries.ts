@@ -34,13 +34,13 @@ export const pageQuery = groq`
       _type == "hero" => {
         headline,
         subheadline,
-        image { asset->, alt },
+        image { asset->, alt, caption, creditUrl, captionPosition },
         ctas[] { label, href, style }
       },
       _type == "imageText" => {
         heading,
         body,
-        image { asset->, alt },
+        image { asset->, alt, caption, creditUrl, captionPosition },
         imagePosition,
         cta { label, href }
       },
@@ -51,7 +51,7 @@ export const pageQuery = groq`
       _type == "offerings" => {
         heading,
         subheading,
-        items[]-> { title, type, description, image { asset->, alt }, pricing, bookingUrl }
+        items[]-> { title, type, description, image { asset->, alt, caption, creditUrl, captionPosition }, pricing, bookingUrl }
       },
       _type == "stats" => {
         items[] { number, label }
@@ -71,7 +71,7 @@ export const pageQuery = groq`
       },
       _type == "gallery" => {
         heading,
-        images[] { asset->, alt, caption }
+        images[] { asset->, alt, caption, creditUrl, captionPosition }
       },
       _type == "cta" => {
         heading,
@@ -89,7 +89,7 @@ export const servicesQuery = groq`
     title,
     type,
     description,
-    image { asset->, alt },
+    image { asset->, alt, caption, creditUrl, captionPosition },
     pricing,
     bookingUrl,
     questionnaireType,
@@ -110,7 +110,7 @@ export const eventsQuery = groq`
     price,
     capacity,
     status,
-    image { asset->, alt },
+    image { asset->, alt, caption, creditUrl, captionPosition },
     excerpt
   }
 `;
@@ -118,8 +118,8 @@ export const eventsQuery = groq`
 export const eventQuery = groq`
   *[_type == "event" && slug.current == $slug][0] {
     ...,
-    image { asset->, alt },
-    gallery[] { asset->, alt, caption },
+    image { asset->, alt, caption, creditUrl, captionPosition },
+    gallery[] { asset->, alt, caption, creditUrl, captionPosition },
     faq[] { question, answer }
   }
 `;
@@ -136,7 +136,7 @@ export const retreatsQuery = groq`
     dateStart,
     dateEnd,
     status,
-    heroImage { asset->, alt }
+    heroImage { asset->, alt, caption, creditUrl, captionPosition }
   }
 `;
 
@@ -147,15 +147,15 @@ export const retreatSlugsQuery = groq`
 export const retreatQuery = groq`
   *[_type == "retreat" && slug.current == $slug][0] {
     ...,
-    heroImage { asset->, alt },
-    conceptImage { asset->, alt },
-    whoImage { asset->, alt },
-    experienceImage { asset->, alt },
-    venueImage { asset->, alt },
-    includedImage { asset->, alt },
-    guideImage { asset->, alt },
-    whatIsImage { asset->, alt },
-    gallery[] { asset->, alt, caption },
+    heroImage { asset->, alt, caption, creditUrl, captionPosition },
+    conceptImage { asset->, alt, caption, creditUrl, captionPosition },
+    whoImage { asset->, alt, caption, creditUrl, captionPosition },
+    experienceImage { asset->, alt, caption, creditUrl, captionPosition },
+    venueImage { asset->, alt, caption, creditUrl, captionPosition },
+    includedImage { asset->, alt, caption, creditUrl, captionPosition },
+    guideImage { asset->, alt, caption, creditUrl, captionPosition },
+    whatIsImage { asset->, alt, caption, creditUrl, captionPosition },
+    gallery[] { asset->, alt, caption, creditUrl, captionPosition },
     faq[] { question, answer }
   }
 `;
@@ -167,7 +167,7 @@ export const postsQuery = groq`
     title,
     slug,
     excerpt,
-    coverImage { asset->, alt },
+    coverImage { asset->, alt, caption, creditUrl, captionPosition },
     coverVideo { asset->{ url, mimeType }, alt },
     categories,
     publishedAt,
@@ -178,13 +178,13 @@ export const postsQuery = groq`
 export const postQuery = groq`
   *[_type == "post" && slug.current == $slug][0] {
     ...,
-    coverImage { asset->, alt },
+    coverImage { asset->, alt, caption, creditUrl, captionPosition },
     coverVideo { asset->{ url, mimeType }, alt },
     body,
     "readingTime": round(length(pt::text(body)) / 5 / 200),
     "relatedPosts": relatedPosts[]-> {
       _id, title, slug,
-      coverImage { asset->, alt },
+      coverImage { asset->, alt, caption, creditUrl, captionPosition },
       coverVideo { asset->{ url, mimeType }, alt },
       excerpt, publishedAt
     }
@@ -238,7 +238,7 @@ export const coursesQuery = groq`
     title,
     slug,
     tagline,
-    thumbnail { asset->, alt },
+    thumbnail { asset->, alt, caption, creditUrl, captionPosition },
     price,
     currency,
     level,
@@ -258,7 +258,7 @@ export const courseQuery = groq`
     price,
     currency,
     stripePriceId,
-    thumbnail { asset->, alt },
+    thumbnail { asset->, alt, caption, creditUrl, captionPosition },
     previewVideoUrl,
     level,
     totalDuration,

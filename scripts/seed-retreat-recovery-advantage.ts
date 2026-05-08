@@ -96,10 +96,10 @@ const retreatDoc = {
   whoIntro:
     "Founders. Creatives. Remote professionals.\nYou’re done choosing between work and your wellbeing.",
   whoBullets: [
-    "Real progress on something that matters",
-    "Focused work in a like-minded group",
-    "Movement that builds strength, not just stretch",
-    "Time to experience Porto properly",
+    block("Real progress on something that matters"),
+    block("Focused work in a like-minded group"),
+    block("Movement that builds strength, not just stretch"),
+    block("Time to experience Porto properly"),
   ],
 
   experienceHeading: "The Experience",
@@ -132,21 +132,21 @@ const retreatDoc = {
     block("Built for people who move between work and life without switching identity."),
   ],
   venueBullets: [
-    "Work from the riverside or the hotel’s relaxed social spaces",
-    "Reset in a Roman-inspired spa with indoor pool, sauna and treatment rooms",
-    "Head up to Bello Rooftop for sunsets over Porto",
-    "Eat at Pot&Pan, where local ingredients meet modern Portuguese cooking",
+    block("Work from the riverside or the hotel’s relaxed social spaces"),
+    block("Reset in a Roman-inspired spa with indoor pool, sauna and treatment rooms"),
+    block("Head up to Bello Rooftop for sunsets over Porto"),
+    block("Eat at Pot&Pan, where local ingredients meet modern Portuguese cooking"),
   ],
 
   includedHeading: "What’s Included",
   includedItems: [
-    "4 nights at The Rebello with daily breakfast, lunch and dinner",
-    "Daily movement, breathwork and structured deep work sessions",
-    "Spa access (pool, sauna, gym)",
-    "Professional headshot session",
-    "Pre and post 1:1 sessions with Niamh",
-    "Workshops on creativity and productivity",
-    "All food at the Rebello",
+    block("4 nights at The Rebello with daily breakfast, lunch and dinner"),
+    block("Daily movement, breathwork and structured deep work sessions"),
+    block("Spa access (pool, sauna, gym)"),
+    block("Professional headshot session"),
+    block("Pre and post 1:1 sessions with Niamh"),
+    block("Workshops on creativity and productivity"),
+    block("All food at the Rebello"),
   ],
 
   guideHeading: "Meet Your Guide",

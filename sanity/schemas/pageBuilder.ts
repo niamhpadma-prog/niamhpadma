@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField } from "sanity";
+import { imageCaptionFields, richBlock } from "./_shared";
 
 export const pageBuilderBlocks = [
   defineArrayMember({
@@ -8,7 +9,7 @@ export const pageBuilderBlocks = [
     fields: [
       defineField({ name: "headline", title: "Headline", type: "string" }),
       defineField({ name: "subheadline", title: "Subheadline", type: "text", rows: 2 }),
-      defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true }, fields: [{ name: "alt", title: "Alt Text", type: "string" }] }),
+      defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true }, fields: imageCaptionFields }),
       defineField({
         name: "ctas",
         title: "CTAs",
@@ -31,8 +32,8 @@ export const pageBuilderBlocks = [
     type: "object",
     fields: [
       defineField({ name: "heading", title: "Heading", type: "string" }),
-      defineField({ name: "body", title: "Body", type: "array", of: [{ type: "block" }] }),
-      defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true }, fields: [{ name: "alt", title: "Alt Text", type: "string" }] }),
+      defineField({ name: "body", title: "Body", type: "array", of: [richBlock] }),
+      defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true }, fields: imageCaptionFields }),
       defineField({ name: "imagePosition", title: "Image Position", type: "string", options: { list: ["left", "right"] }, initialValue: "right" }),
       defineField({ name: "cta", title: "CTA", type: "object", fields: [{ name: "label", title: "Label", type: "string" }, { name: "href", title: "Link", type: "string" }] }),
     ],
@@ -117,7 +118,7 @@ export const pageBuilderBlocks = [
     title: "Rich Text",
     type: "object",
     fields: [
-      defineField({ name: "content", title: "Content", type: "array", of: [{ type: "block" }, { type: "image", options: { hotspot: true }, fields: [{ name: "alt", title: "Alt Text", type: "string" }, { name: "caption", title: "Caption", type: "string" }] }] }),
+      defineField({ name: "content", title: "Content", type: "array", of: [richBlock, { type: "image", options: { hotspot: true }, fields: imageCaptionFields }] }),
     ],
     preview: { prepare: () => ({ title: "Rich Text Block" }) },
   }),
@@ -131,7 +132,7 @@ export const pageBuilderBlocks = [
         name: "images",
         title: "Images",
         type: "array",
-        of: [{ type: "image", options: { hotspot: true }, fields: [{ name: "alt", title: "Alt Text", type: "string" }, { name: "caption", title: "Caption", type: "string" }] }],
+        of: [{ type: "image", options: { hotspot: true }, fields: imageCaptionFields }],
       }),
     ],
     preview: { prepare: () => ({ title: "Gallery" }) },

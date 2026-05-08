@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { seoFields } from "./seoFields";
+import { imageCaptionFields, richBlock } from "./_shared";
 
 export const event = defineType({
   name: "event",
@@ -45,13 +46,13 @@ export const event = defineType({
       initialValue: "upcoming",
     }),
     defineField({ name: "excerpt", title: "Excerpt", type: "text", rows: 3 }),
-    defineField({ name: "body", title: "Description", type: "array", of: [{ type: "block" }] }),
-    defineField({ name: "image", title: "Cover Image", type: "image", options: { hotspot: true }, fields: [{ name: "alt", title: "Alt Text", type: "string" }] }),
+    defineField({ name: "body", title: "Description", type: "array", of: [richBlock] }),
+    defineField({ name: "image", title: "Cover Image", type: "image", options: { hotspot: true }, fields: imageCaptionFields }),
     defineField({
       name: "gallery",
       title: "Gallery",
       type: "array",
-      of: [{ type: "image", options: { hotspot: true }, fields: [{ name: "alt", title: "Alt Text", type: "string" }, { name: "caption", title: "Caption", type: "string" }] }],
+      of: [{ type: "image", options: { hotspot: true }, fields: imageCaptionFields }],
     }),
     defineField({
       name: "faq",

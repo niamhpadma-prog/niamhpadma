@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { seoFields } from "./seoFields";
+import { bulletBlock, imageCaptionFields, richBlock } from "./_shared";
 
 export const retreat = defineType({
   name: "retreat",
@@ -117,7 +118,7 @@ export const retreat = defineType({
       type: "image",
       group: "hero",
       options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+      fields: imageCaptionFields,
     }),
 
     // ─── Concept ──────────────────────────────────────────────
@@ -133,7 +134,7 @@ export const retreat = defineType({
       title: "Concept Body",
       type: "array",
       group: "concept",
-      of: [{ type: "block" }],
+      of: [richBlock],
     }),
     defineField({
       name: "conceptImage",
@@ -141,7 +142,7 @@ export const retreat = defineType({
       type: "image",
       group: "concept",
       options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+      fields: imageCaptionFields,
     }),
 
     // ─── Who It's For ──────────────────────────────────────────
@@ -171,7 +172,8 @@ export const retreat = defineType({
       title: "Bullets",
       type: "array",
       group: "who",
-      of: [{ type: "string" }],
+      of: [bulletBlock],
+      description: "Each bullet supports inline links — select text and click the link icon.",
     }),
     defineField({
       name: "whoImage",
@@ -179,7 +181,7 @@ export const retreat = defineType({
       type: "image",
       group: "who",
       options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+      fields: imageCaptionFields,
     }),
 
     // ─── Experience & Schedule ────────────────────────────────
@@ -202,7 +204,7 @@ export const retreat = defineType({
       title: "Body",
       type: "array",
       group: "experience",
-      of: [{ type: "block" }],
+      of: [richBlock],
     }),
     defineField({
       name: "experienceImage",
@@ -210,7 +212,7 @@ export const retreat = defineType({
       type: "image",
       group: "experience",
       options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+      fields: imageCaptionFields,
     }),
     defineField({
       name: "scheduleHeading",
@@ -269,14 +271,15 @@ export const retreat = defineType({
       title: "Body",
       type: "array",
       group: "venue",
-      of: [{ type: "block" }],
+      of: [richBlock],
     }),
     defineField({
       name: "venueBullets",
       title: "Highlights / Between Sessions",
       type: "array",
       group: "venue",
-      of: [{ type: "string" }],
+      of: [bulletBlock],
+      description: "Each line supports inline links — e.g. link the hotel name to its website.",
     }),
     defineField({
       name: "venueImage",
@@ -284,7 +287,7 @@ export const retreat = defineType({
       type: "image",
       group: "venue",
       options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+      fields: imageCaptionFields,
     }),
     defineField({
       name: "gallery",
@@ -295,10 +298,7 @@ export const retreat = defineType({
         {
           type: "image",
           options: { hotspot: true },
-          fields: [
-            { name: "alt", title: "Alt Text", type: "string" },
-            { name: "caption", title: "Caption", type: "string" },
-          ],
+          fields: imageCaptionFields,
         },
       ],
     }),
@@ -316,7 +316,8 @@ export const retreat = defineType({
       title: "Items",
       type: "array",
       group: "included",
-      of: [{ type: "string" }],
+      of: [bulletBlock],
+      description: "Each line supports inline links if you want to point to a partner or resource.",
     }),
     defineField({
       name: "includedImage",
@@ -324,7 +325,7 @@ export const retreat = defineType({
       type: "image",
       group: "included",
       options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+      fields: imageCaptionFields,
     }),
 
     // ─── Guide ────────────────────────────────────────────────
@@ -355,7 +356,7 @@ export const retreat = defineType({
       title: "Guide Bio",
       type: "array",
       group: "guide",
-      of: [{ type: "block" }],
+      of: [richBlock],
     }),
     defineField({
       name: "guideImage",
@@ -363,7 +364,7 @@ export const retreat = defineType({
       type: "image",
       group: "guide",
       options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+      fields: imageCaptionFields,
     }),
 
     // ─── What Is… ────────────────────────────────────────────
@@ -378,7 +379,7 @@ export const retreat = defineType({
       title: "Body",
       type: "array",
       group: "whatIs",
-      of: [{ type: "block" }],
+      of: [richBlock],
     }),
     defineField({
       name: "whatIsImage",
@@ -386,7 +387,7 @@ export const retreat = defineType({
       type: "image",
       group: "whatIs",
       options: { hotspot: true },
-      fields: [defineField({ name: "alt", title: "Alt Text", type: "string" })],
+      fields: imageCaptionFields,
     }),
 
     // ─── Pricing & CTAs ───────────────────────────────────────
