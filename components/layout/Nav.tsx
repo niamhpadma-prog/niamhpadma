@@ -227,7 +227,7 @@ export function Nav() {
             </a>
             <Link
               href="/questionnaires/coaching"
-              className="font-sans text-xs font-medium bg-espresso text-cream px-4 py-2 rounded-full hover:bg-espresso-light transition-colors duration-300 whitespace-nowrap leading-none"
+              className="font-sans text-[11px] font-medium bg-espresso text-cream px-3.5 h-7 inline-flex items-center rounded-full hover:bg-espresso-light transition-colors duration-300 whitespace-nowrap"
             >
               Get Started
             </Link>
