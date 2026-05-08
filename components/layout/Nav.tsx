@@ -161,102 +161,47 @@ export function Nav() {
           </ul>
         </nav>
 
-        {/* Mobile nav */}
-        <nav className="flex lg:hidden items-center justify-between py-4">
-          {/* Logo with tap-to-reveal name */}
-          <button
-            onClick={() => setShowName((s) => !s)}
-            className="group flex items-center gap-2"
+        {/* Mobile nav — centered logo (Niamh ✦ Padma) with menu icon on the right */}
+        <nav className="relative flex lg:hidden items-center justify-end py-4">
+          {/* Centered full logo, absolutely positioned so the hamburger doesn't shift it */}
+          <Link
+            href="/"
+            aria-label="Niamh Padma — home"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-3"
           >
-            <AnimatePresence>
-              {showName && (
-                <motion.span
-                  initial={{ opacity: 0, x: 6, width: 0 }}
-                  animate={{ opacity: 1, x: 0, width: "auto" }}
-                  exit={{ opacity: 0, x: 6, width: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="font-serif text-base font-semibold text-espresso tracking-[0.06em] uppercase overflow-hidden whitespace-nowrap"
-                >
-                  Niamh
-                </motion.span>
-              )}
-            </AnimatePresence>
+            <span className="font-serif text-lg font-semibold text-espresso tracking-[0.06em] uppercase leading-none">
+              Niamh
+            </span>
+            <Logo size={34} color="espresso" />
+            <span className="font-serif text-lg font-semibold text-espresso tracking-[0.06em] uppercase leading-none">
+              Padma
+            </span>
+          </Link>
 
-            <Link href="/">
-              <Logo
-                size={30}
-                color="espresso"
-                className="group-hover:scale-110 transition-transform duration-300"
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 -mr-2"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+          >
+            <div className="w-6 flex flex-col gap-1.5">
+              <motion.span
+                animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="block h-0.5 w-full bg-espresso origin-center"
               />
-            </Link>
-
-            <AnimatePresence>
-              {showName && (
-                <motion.span
-                  initial={{ opacity: 0, x: -6, width: 0 }}
-                  animate={{ opacity: 1, x: 0, width: "auto" }}
-                  exit={{ opacity: 0, x: -6, width: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="font-serif text-base font-semibold text-espresso tracking-[0.06em] uppercase overflow-hidden whitespace-nowrap"
-                >
-                  Padma
-                </motion.span>
-              )}
-            </AnimatePresence>
+              <motion.span
+                animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
+                transition={{ duration: 0.15 }}
+                className="block h-0.5 w-full bg-espresso"
+              />
+              <motion.span
+                animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.2 }}
+                className="block h-0.5 w-full bg-espresso origin-center"
+              />
+            </div>
           </button>
-
-          {/* Right side: socials (≥sm) + Get Started + Menu */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <a
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="hidden sm:inline-flex text-espresso/70 hover:text-terracotta transition-colors p-1"
-            >
-              <InstagramIcon size={18} />
-            </a>
-            <a
-              href={SUBSTACK_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Substack"
-              className="hidden sm:inline-flex text-espresso/70 hover:text-terracotta transition-colors p-1"
-            >
-              <SubstackIcon size={16} />
-            </a>
-            <Link
-              href="/questionnaires/coaching"
-              className="font-sans text-[11px] font-medium bg-espresso text-cream px-3.5 h-7 inline-flex items-center rounded-full hover:bg-espresso-light transition-colors duration-300 whitespace-nowrap"
-            >
-              Get Started
-            </Link>
-
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 -mr-2"
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isOpen}
-            >
-              <div className="w-6 flex flex-col gap-1.5">
-                <motion.span
-                  animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="block h-0.5 w-full bg-espresso origin-center"
-                />
-                <motion.span
-                  animate={isOpen ? { opacity: 0 } : { opacity: 1 }}
-                  transition={{ duration: 0.15 }}
-                  className="block h-0.5 w-full bg-espresso"
-                />
-                <motion.span
-                  animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="block h-0.5 w-full bg-espresso origin-center"
-                />
-              </div>
-            </button>
-          </div>
         </nav>
       </Container>
 
