@@ -8,8 +8,23 @@ import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { SubstackSection } from "@/components/sections/SubstackSection";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { client } from "@/lib/sanity/client";
+import { testimonialsQuery } from "@/lib/sanity/queries";
 
-export default function HomePage() {
+interface HomeTestimonial {
+  _id: string;
+  name: string;
+  location?: string;
+  quote: string;
+  service?: string;
+  rating?: number;
+}
+
+// Pick up Sanity edits within ~60s without redeploying.
+export const revalidate = 60;
+
+export default async function HomePage() {
+  const testimonials = await client.fetch<HomeTestimonial[]>(testimonialsQuery);
   return (
     <>
       <JsonLd
@@ -146,15 +161,10 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* Testimonials */}
+      {/* Testimonials — pulled from Sanity (any testimonial flagged "Featured") */}
       <TestimonialsSection
         heading="Kind Words"
-        items={[
-          { name: "Sarah M.", location: "Lisbon", quote: "Niamh has this incredible ability to hold space while gently guiding you deeper into your practice. Every session feels like coming home.", service: "1-1 Coaching", rating: 5 },
-          { name: "Marco R.", location: "Porto", quote: "The breathwork workshop completely changed my relationship with stress. I use the techniques daily now.", service: "Workshops", rating: 5 },
-          { name: "Elena K.", location: "Berlin", quote: "Working with Niamh online has been just as powerful as in-person sessions. She creates a safe, transformative container.", service: "1-1 Coaching", rating: 5 },
-          { name: "Ana L.", location: "Lisbon", quote: "The retreat in the Algarve was life-changing. Niamh creates magic with her combination of yoga, breathwork, and somatic work.", service: "Retreat", rating: 5 },
-        ]}
+        items={testimonials}
         background="white"
       />
 
