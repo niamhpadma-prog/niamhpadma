@@ -99,8 +99,8 @@ export default function PrivacyPage() {
               <h2 className="font-serif text-2xl font-semibold text-espresso mb-3">Contact</h2>
               <p>
                 If you have any questions about this privacy policy or how your data is handled, please contact me at{" "}
-                <a href="mailto:hello@niamhpadma.com" className="text-terracotta hover:underline">
-                  hello@niamhpadma.com
+                <a href="mailto:hello@somatictherapyinlisbon.com" className="text-terracotta hover:underline">
+                  hello@somatictherapyinlisbon.com
                 </a>.
               </p>
             </div>

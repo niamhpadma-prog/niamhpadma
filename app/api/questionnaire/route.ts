@@ -98,7 +98,7 @@ export async function POST(request: Request) {
 
         await resend.emails.send({
           from: "Niamh Padma Website <noreply@niamhpadma.com>",
-          to: "hello@niamhpadma.com",
+          to: "hello@somatictherapyinlisbon.com",
           subject: `New ${title || serviceType} Questionnaire Submission`,
           text: `New questionnaire submission\n\nType: ${serviceType}\nForm: ${title || ""}\n\n${answersFormatted}\n\n${
             mailchimpOk
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { error: "Could not record your submission — please email hello@niamhpadma.com directly" },
+      { error: "Could not record your submission — please email hello@somatictherapyinlisbon.com directly" },
       { status: 503 }
     );
   } catch (error) {

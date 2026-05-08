@@ -126,7 +126,7 @@ export function EventEnquiryForm({
         </div>
         {status === "error" && (
           <p className="font-sans text-sm text-terracotta">
-            Something went wrong. Please try again or email hello@niamhpadma.com.
+            Something went wrong. Please try again or email hello@somatictherapyinlisbon.com.
           </p>
         )}
         <div className="pt-2">

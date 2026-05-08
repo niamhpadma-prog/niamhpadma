@@ -24,8 +24,8 @@ export default function TermsPage() {
               <h2 className="font-serif text-2xl font-semibold text-espresso mb-3">Overview</h2>
               <p>
                 By using this website and booking services with Niamh Padma, you agree to the following terms. Please read them carefully. If you have any questions, contact me at{" "}
-                <a href="mailto:hello@niamhpadma.com" className="text-terracotta hover:underline">
-                  hello@niamhpadma.com
+                <a href="mailto:hello@somatictherapyinlisbon.com" className="text-terracotta hover:underline">
+                  hello@somatictherapyinlisbon.com
                 </a>.
               </p>
             </div>
@@ -130,8 +130,8 @@ export default function TermsPage() {
               <h2 className="font-serif text-2xl font-semibold text-espresso mb-3">Contact</h2>
               <p>
                 Questions about these terms? Reach out at{" "}
-                <a href="mailto:hello@niamhpadma.com" className="text-terracotta hover:underline">
-                  hello@niamhpadma.com
+                <a href="mailto:hello@somatictherapyinlisbon.com" className="text-terracotta hover:underline">
+                  hello@somatictherapyinlisbon.com
                 </a>.
               </p>
             </div>

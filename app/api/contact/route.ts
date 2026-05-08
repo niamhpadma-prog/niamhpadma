@@ -58,7 +58,7 @@ export async function POST(request: Request) {
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
           from: "Niamh Padma Website <noreply@niamhpadma.com>",
-          to: "hello@niamhpadma.com",
+          to: "hello@somatictherapyinlisbon.com",
           subject: `Contact Form: ${subject || "New Message"}`,
           text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject || "N/A"}\n\nMessage:\n${message}\n\n${
             mailchimpOk
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { error: "Could not send your message — please email hello@niamhpadma.com directly" },
+      { error: "Could not send your message — please email hello@somatictherapyinlisbon.com directly" },
       { status: 503 }
     );
   } catch (error) {

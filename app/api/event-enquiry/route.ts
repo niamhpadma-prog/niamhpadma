@@ -5,7 +5,7 @@ import {
   MailchimpError,
 } from "@/lib/mailchimp";
 
-const DEFAULT_RECIPIENT = "hello@niamhpadma.com";
+const DEFAULT_RECIPIENT = "hello@somatictherapyinlisbon.com";
 
 function splitName(full: string): { firstName?: string; lastName?: string } {
   const parts = full.trim().split(/\s+/);
@@ -110,7 +110,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { error: "Could not record your enquiry — please email hello@niamhpadma.com directly" },
+      { error: "Could not record your enquiry — please email hello@somatictherapyinlisbon.com directly" },
       { status: 503 }
     );
   } catch (error) {

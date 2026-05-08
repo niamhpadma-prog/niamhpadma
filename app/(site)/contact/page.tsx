@@ -47,10 +47,10 @@ export default async function ContactPage({
                     Email
                   </h3>
                   <a
-                    href="mailto:hello@niamhpadma.com"
+                    href="mailto:hello@somatictherapyinlisbon.com"
                     className="font-sans text-base text-espresso hover:text-terracotta transition-colors"
                   >
-                    hello@niamhpadma.com
+                    hello@somatictherapyinlisbon.com
                   </a>
                 </div>
                 <div>
