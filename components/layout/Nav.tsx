@@ -205,14 +205,14 @@ export function Nav() {
             </AnimatePresence>
           </button>
 
-          {/* Right side: socials + Get Started + Menu */}
-          <div className="flex items-center gap-3">
+          {/* Right side: socials (≥sm) + Get Started + Menu */}
+          <div className="flex items-center gap-2 sm:gap-3">
             <a
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="text-espresso/70 hover:text-terracotta transition-colors p-1"
+              className="hidden sm:inline-flex text-espresso/70 hover:text-terracotta transition-colors p-1"
             >
               <InstagramIcon size={18} />
             </a>
@@ -221,13 +221,13 @@ export function Nav() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Substack"
-              className="text-espresso/70 hover:text-terracotta transition-colors p-1"
+              className="hidden sm:inline-flex text-espresso/70 hover:text-terracotta transition-colors p-1"
             >
               <SubstackIcon size={16} />
             </a>
             <Link
               href="/questionnaires/coaching"
-              className="font-sans text-[11px] font-medium bg-espresso text-cream px-3.5 py-1.5 rounded-full hover:bg-espresso-light transition-colors duration-300"
+              className="font-sans text-xs font-medium bg-espresso text-cream px-4 py-2 rounded-full hover:bg-espresso-light transition-colors duration-300 whitespace-nowrap leading-none"
             >
               Get Started
             </Link>
