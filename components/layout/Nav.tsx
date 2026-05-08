@@ -162,17 +162,16 @@ export function Nav() {
         </nav>
 
         {/* Mobile nav — centered logo (Niamh ✦ Padma) with menu icon on the right */}
-        <nav className="relative flex lg:hidden items-center justify-end py-4">
-          {/* Centered full logo, absolutely positioned so the hamburger doesn't shift it */}
+        <nav className="relative flex lg:hidden items-center justify-center h-14">
           <Link
             href="/"
             aria-label="Niamh Padma — home"
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-3"
+            className="flex items-center gap-3"
           >
             <span className="font-serif text-lg font-semibold text-espresso tracking-[0.06em] uppercase leading-none">
               Niamh
             </span>
-            <Logo size={34} color="espresso" />
+            <Logo size={32} color="espresso" />
             <span className="font-serif text-lg font-semibold text-espresso tracking-[0.06em] uppercase leading-none">
               Padma
             </span>
@@ -180,13 +179,13 @@ export function Nav() {
 
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 -mr-2"
+            className="absolute right-0 top-1/2 -translate-y-1/2 p-2"
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
           >
-            <div className="w-6 flex flex-col gap-1.5">
+            <div className="w-5 flex flex-col gap-1">
               <motion.span
-                animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                animate={isOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
                 transition={{ duration: 0.2 }}
                 className="block h-0.5 w-full bg-espresso origin-center"
               />
@@ -196,7 +195,7 @@ export function Nav() {
                 className="block h-0.5 w-full bg-espresso"
               />
               <motion.span
-                animate={isOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                animate={isOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
                 transition={{ duration: 0.2 }}
                 className="block h-0.5 w-full bg-espresso origin-center"
               />

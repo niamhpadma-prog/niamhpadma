@@ -172,17 +172,52 @@ export default async function QuestionnairePage({ params }: { params: Promise<Pa
             </div>
 
             {/* Trust signals */}
-            <div className="flex flex-wrap justify-center gap-6 mt-8 text-center">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 mt-8 text-center">
               <div className="flex items-center gap-2">
-                <span className="text-sage text-sm">🔒</span>
+                <svg
+                  aria-hidden="true"
+                  className="w-3.5 h-3.5 text-sage shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="4" y="11" width="16" height="10" rx="2" />
+                  <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                </svg>
                 <span className="font-sans text-xs text-espresso/40">Your data is private</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sage text-sm">⏱</span>
+                <svg
+                  aria-hidden="true"
+                  className="w-3.5 h-3.5 text-sage shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 2" />
+                </svg>
                 <span className="font-sans text-xs text-espresso/40">Takes ~2 minutes</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sage text-sm">💬</span>
+                <svg
+                  aria-hidden="true"
+                  className="w-3.5 h-3.5 text-sage shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.75"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 12a8 8 0 0 1-11.6 7.13L4 20l.86-5.4A8 8 0 1 1 21 12z" />
+                </svg>
                 <span className="font-sans text-xs text-espresso/40">Personal response within 48h</span>
               </div>
             </div>

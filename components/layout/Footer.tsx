@@ -37,7 +37,7 @@ export function Footer() {
                 Padma
               </span>
             </Link>
-            <p className="mt-4 text-sm leading-relaxed text-cream/60">
+            <p className="mt-4 text-base leading-relaxed text-cream/65">
               Yoga, breathwork, somatic coaching & holistic nutrition in Lisbon.
               Guiding you home to yourself.
             </p>
@@ -45,7 +45,7 @@ export function Footer() {
 
           {Object.entries(footerLinks).map(([title, links]) => (
             <div key={title}>
-              <h4 className="font-sans text-xs font-semibold uppercase tracking-widest text-cream/40 mb-4">
+              <h4 className="font-sans text-sm font-semibold uppercase tracking-widest text-cream/50 mb-4">
                 {title}
               </h4>
               <ul className="flex flex-col gap-3">
@@ -53,7 +53,7 @@ export function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm hover:text-cream transition-colors duration-300"
+                      className="text-base hover:text-cream transition-colors duration-300"
                     >
                       {link.label}
                     </Link>
@@ -65,14 +65,14 @@ export function Footer() {
         </div>
 
         <div className="border-t border-cream/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-cream/40">
+          <p className="text-sm text-cream/50">
             &copy; {new Date().getFullYear()} Niamh Padma. All rights reserved.
           </p>
-          <div className="flex gap-6 text-xs text-cream/40">
-            <Link href="/privacy" className="hover:text-cream/60 transition-colors">
+          <div className="flex gap-6 text-sm text-cream/50">
+            <Link href="/privacy" className="hover:text-cream/70 transition-colors">
               Privacy
             </Link>
-            <Link href="/terms" className="hover:text-cream/60 transition-colors">
+            <Link href="/terms" className="hover:text-cream/70 transition-colors">
               Terms
             </Link>
           </div>
