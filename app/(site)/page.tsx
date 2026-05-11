@@ -31,7 +31,7 @@ interface UpcomingRetreat {
   dateStart?: string;
   dateEnd?: string;
   status?: string;
-  heroImage?: { asset?: { url?: string; _ref?: string }; alt?: string } | null;
+  cardImage?: { asset?: { url?: string; _ref?: string }; alt?: string } | null;
 }
 
 // Pick up Sanity edits within ~60s without redeploying.

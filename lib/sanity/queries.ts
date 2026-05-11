@@ -162,7 +162,7 @@ export const upcomingRetreatsQuery = groq`
     dateStart,
     dateEnd,
     status,
-    heroImage { asset->, alt }
+    "cardImage": coalesce(cardImage, heroImage) { asset->, alt }
   }
 `;
 

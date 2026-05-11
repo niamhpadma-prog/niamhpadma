@@ -15,7 +15,7 @@ interface UpcomingRetreat {
   dateStart?: string;
   dateEnd?: string;
   status?: string;
-  heroImage?: { asset?: { url?: string; _ref?: string }; alt?: string } | null;
+  cardImage?: { asset?: { url?: string; _ref?: string }; alt?: string } | null;
 }
 
 function formatDateRange(start?: string, end?: string) {
@@ -44,7 +44,7 @@ function formatDateRange(start?: string, end?: string) {
   return `${dayMonthYear(startDate)} – ${dayMonthYear(endDate)}`;
 }
 
-function resolveImage(img: UpcomingRetreat["heroImage"]) {
+function resolveImage(img: UpcomingRetreat["cardImage"]) {
   if (!img) return null;
   if (img.asset?._ref) return urlFor(img).width(1600).height(900).fit("crop").url();
   if (img.asset?.url) return img.asset.url;
@@ -102,7 +102,7 @@ export function UpcomingRetreats({ retreats }: { retreats: UpcomingRetreat[] }) 
         >
           {retreats.map((retreat) => {
             const dateLabel = formatDateRange(retreat.dateStart, retreat.dateEnd);
-            const imageUrl = resolveImage(retreat.heroImage);
+            const imageUrl = resolveImage(retreat.cardImage);
             return (
               <Link
                 key={retreat._id}
@@ -126,7 +126,7 @@ export function UpcomingRetreats({ retreats }: { retreats: UpcomingRetreat[] }) 
                     {imageUrl && (
                       <Image
                         src={imageUrl}
-                        alt={retreat.heroImage?.alt || retreat.title}
+                        alt={retreat.cardImage?.alt || retreat.title}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-105"
                         sizes={

@@ -120,6 +120,16 @@ export const retreat = defineType({
       options: { hotspot: true },
       fields: imageCaptionFields,
     }),
+    defineField({
+      name: "cardImage",
+      title: "Homepage Card Image (optional)",
+      type: "image",
+      group: "hero",
+      options: { hotspot: true },
+      fields: imageCaptionFields,
+      description:
+        "Optional. If set, this image is used on the homepage 'Upcoming Retreats' card. If left empty, the Hero Image is used.",
+    }),
 
     // ─── Concept ──────────────────────────────────────────────
     defineField({
