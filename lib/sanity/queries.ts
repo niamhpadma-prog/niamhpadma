@@ -328,9 +328,9 @@ export const enrollmentQuery = groq`
 
 // Sitemap
 export const sitemapQuery = groq`{
-  "pages": *[_type == "page"] { slug, _updatedAt },
-  "posts": *[_type == "post"] { slug, _updatedAt },
-  "events": *[_type == "event"] { slug, _updatedAt },
-  "courses": *[_type == "course" && status == "published"] { slug, _updatedAt },
+  "posts": *[_type == "post" && defined(slug.current)] { slug, _updatedAt },
+  "events": *[_type == "event" && defined(slug.current)] { slug, _updatedAt },
+  "courses": *[_type == "course" && status == "published" && defined(slug.current)] { slug, _updatedAt },
+  "retreats": *[_type == "retreat" && defined(slug.current)] { slug, _updatedAt },
   "locationPages": *[_type == "locationPage"] { city, service, _updatedAt }
 }`;
