@@ -7,9 +7,10 @@ import { OfferingsGrid } from "@/components/sections/OfferingsGrid";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { SubstackSection } from "@/components/sections/SubstackSection";
+import { UpcomingRetreats } from "@/components/sections/UpcomingRetreats";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { client } from "@/lib/sanity/client";
-import { testimonialsQuery } from "@/lib/sanity/queries";
+import { testimonialsQuery, upcomingRetreatsQuery } from "@/lib/sanity/queries";
 
 interface HomeTestimonial {
   _id: string;
@@ -20,11 +21,27 @@ interface HomeTestimonial {
   rating?: number;
 }
 
+interface UpcomingRetreat {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  subtitle?: string;
+  tagline?: string;
+  locationLine?: string;
+  dateStart?: string;
+  dateEnd?: string;
+  status?: string;
+  heroImage?: { asset?: { url?: string; _ref?: string }; alt?: string } | null;
+}
+
 // Pick up Sanity edits within ~60s without redeploying.
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const testimonials = await client.fetch<HomeTestimonial[]>(testimonialsQuery);
+  const [testimonials, upcomingRetreats] = await Promise.all([
+    client.fetch<HomeTestimonial[]>(testimonialsQuery),
+    client.fetch<UpcomingRetreat[]>(upcomingRetreatsQuery),
+  ]);
   return (
     <>
       <JsonLd
@@ -141,25 +158,7 @@ export default async function HomePage() {
         background="cream"
       />
 
-      {/* Featured event placeholder */}
-      <Section background="espresso">
-        <Container>
-          <div className="text-center max-w-2xl mx-auto">
-            <p className="font-sans text-xs uppercase tracking-widest text-cream/40 mb-4">
-              Upcoming
-            </p>
-            <h2 className="font-serif text-4xl md:text-5xl font-semibold text-cream mb-4">
-              Next Retreat Coming Soon
-            </h2>
-            <p className="font-sans text-base text-cream/60 mb-8">
-              Sign up to be the first to know about upcoming retreats and events.
-            </p>
-            <Button href="/events" variant="outline" className="border-cream/40 text-cream hover:bg-cream hover:text-espresso">
-              View All Events
-            </Button>
-          </div>
-        </Container>
-      </Section>
+      <UpcomingRetreats retreats={upcomingRetreats} />
 
       {/* Testimonials — pulled from Sanity (any testimonial flagged "Featured") */}
       <TestimonialsSection

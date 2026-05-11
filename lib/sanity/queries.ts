@@ -144,6 +144,28 @@ export const retreatSlugsQuery = groq`
   *[_type == "retreat" && defined(slug.current)][].slug.current
 `;
 
+// Retreats that are still selling or still upcoming.
+// "Upcoming" = status is "upcoming" or unset, AND (no end date OR end date >= today).
+export const upcomingRetreatsQuery = groq`
+  *[
+    _type == "retreat"
+    && defined(slug.current)
+    && coalesce(status, "upcoming") == "upcoming"
+    && (!defined(dateEnd) || dateEnd >= now())
+  ] | order(coalesce(dateStart, _createdAt) asc) [0...3] {
+    _id,
+    title,
+    slug,
+    subtitle,
+    tagline,
+    locationLine,
+    dateStart,
+    dateEnd,
+    status,
+    heroImage { asset->, alt }
+  }
+`;
+
 export const retreatQuery = groq`
   *[_type == "retreat" && slug.current == $slug][0] {
     ...,
