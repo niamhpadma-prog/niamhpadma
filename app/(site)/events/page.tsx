@@ -8,8 +8,9 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { client } from "@/lib/sanity/client";
-import { retreatsQuery } from "@/lib/sanity/queries";
+import { retreatsQuery, eventsQuery } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
+import { EventsListing } from "./EventsListing";
 
 export const metadata: Metadata = {
   title: "Events & Retreats",
@@ -31,6 +32,20 @@ interface RetreatCard {
   dateEnd?: string;
   status?: "upcoming" | "sold-out" | "cancelled";
   heroImage?: { asset?: { url?: string }; alt?: string };
+}
+
+interface EventListItem {
+  _id: string;
+  title: string;
+  slug: string;
+  type?: string;
+  dateStart?: string;
+  dateEnd?: string;
+  location?: { name?: string; city?: string; country?: string };
+  price?: string;
+  status?: string;
+  image?: { asset?: { url?: string }; alt?: string };
+  excerpt?: string;
 }
 
 function formatDateRange(start?: string, end?: string) {
@@ -56,9 +71,10 @@ function formatDateRange(start?: string, end?: string) {
 }
 
 export default async function EventsPage() {
-  const retreats = await client
-    .fetch<RetreatCard[]>(retreatsQuery)
-    .catch(() => [] as RetreatCard[]);
+  const [retreats, events] = await Promise.all([
+    client.fetch<RetreatCard[]>(retreatsQuery).catch(() => [] as RetreatCard[]),
+    client.fetch<EventListItem[]>(eventsQuery).catch(() => [] as EventListItem[]),
+  ]);
 
   return (
     <>
@@ -159,6 +175,23 @@ export default async function EventsPage() {
           )}
         </Container>
       </Section>
+
+      {/* Workshops, classes & online — from Sanity */}
+      {events.length > 0 && (
+        <>
+          <Section background="white">
+            <Container>
+              <div className="max-w-2xl mx-auto text-center mb-4">
+                <h2 className="font-serif text-4xl md:text-5xl font-semibold mb-4">Upcoming Events</h2>
+                <p className="font-sans text-base text-espresso/60">
+                  Workshops, classes and online sessions — book your place below.
+                </p>
+              </div>
+            </Container>
+          </Section>
+          <EventsListing events={events} />
+        </>
+      )}
 
       {/* In-Person */}
       <Section background="cream">

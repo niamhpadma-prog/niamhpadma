@@ -1,102 +1,104 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import { PortableText, type PortableTextBlock } from "@portabletext/react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { Button } from "@/components/ui/Button";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { GallerySection } from "@/components/sections/GallerySection";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { EventEnquiryForm } from "@/components/forms/EventEnquiryForm";
+import { client } from "@/lib/sanity/client";
+import { eventQuery, eventsQuery } from "@/lib/sanity/queries";
+import { urlFor } from "@/lib/sanity/image";
+import { portableTextComponents } from "@/lib/sanity/portableText";
 
-// TODO: Fetch from Sanity + generateStaticParams
-const placeholderEvents: Record<string, {
-  title: string;
-  type: string;
-  dateStart: string;
-  dateEnd?: string;
-  location?: { name?: string; city?: string; country?: string; geo?: { lat: number; lng: number } };
-  price?: string;
-  capacity?: number;
-  status: string;
-  excerpt?: string;
-  description: string;
-  faq?: { question: string; answer: string }[];
-}> = {
-  "spring-breathwork-retreat": {
-    title: "Spring Breathwork Retreat",
-    type: "Retreat",
-    dateStart: "2026-04-15T10:00:00Z",
-    dateEnd: "2026-04-18T16:00:00Z",
-    location: { name: "Casa da Luz", city: "Sintra", country: "Portugal", geo: { lat: 38.7979, lng: -9.3907 } },
-    price: "€450",
-    capacity: 16,
-    status: "upcoming",
-    excerpt: "A 4-day immersion into breathwork, somatic release and deep rest.",
-    description: "Join us for four transformative days in the magical hills of Sintra. This intimate retreat weaves together breathwork, somatic practices, yoga, and nourishing plant-based meals to guide you into deep rest and renewal.\n\nEach day follows a gentle rhythm — morning breathwork and movement, afternoon integration and nature walks, evening sound healing and yoga nidra. Limited to 16 participants for deep, personalised guidance.",
-    faq: [
-      { question: "What's included in the price?", answer: "Accommodation, all meals (plant-based), all sessions and workshops, materials, and airport transfer from Lisbon." },
-      { question: "Do I need previous experience?", answer: "No experience necessary. The retreat is designed for all levels, from complete beginners to experienced practitioners." },
-      { question: "What should I bring?", answer: "Comfortable clothing, a journal, and an open heart. All yoga mats, props, and materials are provided." },
-    ],
-  },
-  "yoga-nidra-sound-bath": {
-    title: "Yoga Nidra & Sound Bath",
-    type: "Workshop",
-    dateStart: "2026-03-22T18:00:00Z",
-    location: { name: "Estúdio Alma", city: "Lisbon", country: "Portugal" },
-    price: "€35",
-    status: "upcoming",
-    description: "An evening of deep relaxation combining yoga nidra with crystal bowl sound healing. You'll be guided through a progressive relaxation into the hypnagogic state — the threshold between waking and sleeping — where deep healing and integration happen naturally.",
-  },
-  "weekly-vinyasa-flow": {
-    title: "Weekly Vinyasa Flow",
-    type: "Class",
-    dateStart: "2026-03-10T09:00:00Z",
-    location: { name: "Jardim Studio", city: "Lisbon", country: "Portugal" },
-    price: "€15",
-    status: "upcoming",
-    description: "A dynamic vinyasa flow class connecting breath and movement. Each class is thoughtfully sequenced to build strength, flexibility, and presence. All levels welcome — modifications offered throughout.",
-  },
-  "online-breathwork-circle": {
-    title: "Online Breathwork Circle",
-    type: "Online",
-    dateStart: "2026-03-15T19:00:00Z",
-    price: "€10",
-    status: "upcoming",
-    description: "Join from anywhere for a guided breathwork session followed by a community sharing circle. We'll practise conscious connected breathing together, followed by space for integration and connection.",
-  },
-};
+export const revalidate = 60;
 
 type Params = { slug: string };
 
-export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
-  const { slug } = await params;
-  const event = placeholderEvents[slug];
-  if (!event) return { title: "Event Not Found" };
-  return {
-    title: event.title,
-    description: event.excerpt || event.description.slice(0, 160),
-  };
+interface SanityImage {
+  asset?: { url?: string };
+  alt?: string;
+  caption?: string;
+  creditUrl?: string;
+  captionPosition?: "above" | "below" | "overlay";
 }
 
-export function generateStaticParams() {
-  return Object.keys(placeholderEvents).map((slug) => ({ slug }));
+interface EventDoc {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  type?: string;
+  dateStart?: string;
+  dateEnd?: string;
+  location?: { name?: string; city?: string; country?: string };
+  price?: string;
+  capacity?: number;
+  status?: string;
+  excerpt?: string;
+  body?: PortableTextBlock[];
+  image?: SanityImage;
+  gallery?: SanityImage[];
+  faq?: { question: string; answer: string }[];
+  enquiryRecipient?: string;
+  bookCallUrl?: string;
+  seo?: { metaTitle?: string; metaDescription?: string; noIndex?: boolean };
+}
+
+export async function generateStaticParams() {
+  const events = await client
+    .fetch<{ slug: string }[]>(eventsQuery)
+    .catch(() => [] as { slug: string }[]);
+  return events.filter((e) => e.slug).map((e) => ({ slug: e.slug }));
+}
+
+async function getEvent(slug: string) {
+  return client.fetch<EventDoc | null>(eventQuery, { slug }).catch(() => null);
+}
+
+function formatDateRange(start?: string, end?: string) {
+  if (!start) return "";
+  const s = new Date(start);
+  const opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
+  if (!end) return s.toLocaleDateString("en-GB", opts);
+  return `${s.toLocaleDateString("en-GB", opts)} – ${new Date(end).toLocaleDateString("en-GB", opts)}`;
+}
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await getEvent(slug);
+  if (!event) return { title: "Event not found" };
+  return {
+    title: event.seo?.metaTitle || event.title,
+    description: event.seo?.metaDescription || event.excerpt,
+    alternates: { canonical: `/events/${slug}` },
+    robots: event.seo?.noIndex ? { index: false } : undefined,
+  };
 }
 
 export default async function EventDetailPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const event = placeholderEvents[slug];
+  const event = await getEvent(slug);
   if (!event) notFound();
 
-  const formatDate = (d: string) =>
-    new Date(d).toLocaleDateString("en-GB", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+  const heroSrc = event.image?.asset
+    ? urlFor(event.image).width(1600).height(900).fit("crop").url()
+    : "/images/events-hero.jpg";
+  const dateStr = formatDateRange(event.dateStart, event.dateEnd);
+  const locationStr = [event.location?.name, event.location?.city, event.location?.country]
+    .filter(Boolean)
+    .join(", ");
 
-  const formatTime = (d: string) =>
-    new Date(d).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  const gallery = (event.gallery || [])
+    .filter((g) => g.asset)
+    .map((g) => ({
+      src: urlFor(g).width(1600).url(),
+      alt: g.alt || event.title,
+      caption: g.caption || g.alt,
+      captionPosition: g.captionPosition,
+      creditUrl: g.creditUrl,
+    }));
 
   return (
     <>
@@ -107,160 +109,85 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
           name: event.title,
           startDate: event.dateStart,
           ...(event.dateEnd && { endDate: event.dateEnd }),
-          eventAttendanceMode: event.type === "Online"
-            ? "https://schema.org/OnlineEventAttendanceMode"
-            : "https://schema.org/OfflineEventAttendanceMode",
-          location: event.location
-            ? {
-                "@type": "Place",
-                name: event.location.name,
-                address: {
-                  "@type": "PostalAddress",
-                  addressLocality: event.location.city,
-                  addressCountry: event.location.country,
-                },
-                ...(event.location.geo && {
-                  geo: {
-                    "@type": "GeoCoordinates",
-                    latitude: event.location.geo.lat,
-                    longitude: event.location.geo.lng,
-                  },
-                }),
-              }
-            : undefined,
+          eventAttendanceMode:
+            event.type === "Online"
+              ? "https://schema.org/OnlineEventAttendanceMode"
+              : "https://schema.org/OfflineEventAttendanceMode",
+          eventStatus:
+            event.status === "cancelled"
+              ? "https://schema.org/EventCancelled"
+              : "https://schema.org/EventScheduled",
+          location: locationStr ? { "@type": "Place", name: locationStr } : undefined,
+          description: event.excerpt,
           organizer: {
             "@type": "Person",
             name: "Niamh Padma",
             url: "https://niamhpadma.com",
           },
-          ...(event.price && {
-            offers: {
-              "@type": "Offer",
-              price: event.price.replace(/[^0-9]/g, ""),
-              priceCurrency: "EUR",
-              availability: event.status === "sold-out"
-                ? "https://schema.org/SoldOut"
-                : "https://schema.org/InStock",
-            },
-          }),
         }}
       />
 
-      {/* Hero */}
-      <section className="relative bg-cream-dark pt-12 pb-0">
+      <Section background="cream">
         <Container>
-          <div className="max-w-3xl mx-auto text-center pt-8 pb-16">
-            <span className="font-sans text-xs uppercase tracking-widest text-sage mb-4 block">
-              {event.type}
-            </span>
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl leading-tight mb-6">
-              {event.title}
-            </h1>
-          </div>
-        </Container>
-      </section>
-
-      {/* Info strip */}
-      <section className="bg-espresso text-cream py-5">
-        <Container>
-          <div className="flex flex-wrap justify-center gap-x-10 gap-y-2 text-center">
-            <div>
-              <p className="font-sans text-xs uppercase tracking-widest text-cream/40">Date</p>
-              <p className="font-sans text-sm">{formatDate(event.dateStart)}</p>
-            </div>
-            {event.location?.city && (
-              <div>
-                <p className="font-sans text-xs uppercase tracking-widest text-cream/40">Location</p>
-                <p className="font-sans text-sm">
-                  {[event.location.name, event.location.city].filter(Boolean).join(", ")}
-                </p>
-              </div>
+          <div className="max-w-3xl mx-auto text-center">
+            {event.type && (
+              <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">{event.type}</p>
             )}
+            <h1 className="font-serif text-4xl md:text-6xl font-semibold mb-4">{event.title}</h1>
+            <p className="font-sans text-base text-espresso/60">
+              {[dateStr, locationStr].filter(Boolean).join(" · ")}
+            </p>
             {event.price && (
-              <div>
-                <p className="font-sans text-xs uppercase tracking-widest text-cream/40">Price</p>
-                <p className="font-sans text-sm">{event.price}</p>
-              </div>
-            )}
-            {!event.dateEnd && (
-              <div>
-                <p className="font-sans text-xs uppercase tracking-widest text-cream/40">Time</p>
-                <p className="font-sans text-sm">{formatTime(event.dateStart)}</p>
-              </div>
-            )}
-            {event.dateEnd && (
-              <div>
-                <p className="font-sans text-xs uppercase tracking-widest text-cream/40">Duration</p>
-                <p className="font-sans text-sm">
-                  {Math.ceil((new Date(event.dateEnd).getTime() - new Date(event.dateStart).getTime()) / (1000 * 60 * 60 * 24))} days
-                </p>
-              </div>
-            )}
-            {event.capacity && (
-              <div>
-                <p className="font-sans text-xs uppercase tracking-widest text-cream/40">Capacity</p>
-                <p className="font-sans text-sm">{event.capacity} spots</p>
-              </div>
+              <p className="font-sans text-base text-espresso/80 mt-2">{event.price}</p>
             )}
           </div>
-        </Container>
-      </section>
-
-      {/* Description */}
-      <Section background="white">
-        <Container>
-          <div className="max-w-2xl mx-auto">
-            {event.description.split("\n\n").map((p, i) => (
-              <p key={i} className="font-sans text-base leading-relaxed text-espresso/75 mb-4">
-                {p}
-              </p>
-            ))}
+          <div className="relative aspect-[16/9] max-w-4xl mx-auto rounded-3xl overflow-hidden mt-10">
+            <Image
+              src={heroSrc}
+              alt={event.image?.alt || event.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 896px"
+              priority
+            />
           </div>
         </Container>
       </Section>
 
-      <GallerySection
-        heading="Gallery"
-        images={
-          slug === "yoga-nidra-sound-bath"
-            ? [{ src: "/images/Yoga-Nidra.jpg", alt: "Yoga Nidra deep relaxation" }]
-            : slug === "spring-breathwork-retreat"
-              ? [
-                  { src: "/images/retreats/retreat-001.jpg", alt: "Retreat community" },
-                  { src: "/images/retreats/retreat-002.jpg", alt: "Retreat movement" },
-                  { src: "/images/retreats/retreat-003.jpg", alt: "Retreat connection" },
-                  { src: "/images/retreats/retreat-005.jpg", alt: "Retreat practice" },
-                  { src: "/images/retreats/retreat-006.jpg", alt: "Retreat session" },
-                  { src: "/images/retreats/retreat-008.jpg", alt: "Retreat gathering" },
-                ]
-              : []
-        }
-      />
+      {event.body && event.body.length > 0 && (
+        <Section background="white">
+          <Container>
+            <div className="prose prose-lg max-w-2xl mx-auto font-sans text-espresso/80">
+              <PortableText value={event.body} components={portableTextComponents} />
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      {gallery.length > 0 && <GallerySection heading="Gallery" images={gallery} />}
 
       {event.faq && event.faq.length > 0 && (
         <FAQSection heading="Questions" items={event.faq} />
       )}
 
-      {/* Sticky booking CTA */}
-      <div className="sticky bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-sand/20 py-4">
+      <Section background="cream">
         <Container>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-serif text-lg">{event.title}</p>
-              <p className="font-sans text-sm text-espresso/50">
-                {formatDate(event.dateStart)} {event.price && `· ${event.price}`}
-              </p>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center max-w-2xl mx-auto mb-8">
+              <h2 className="font-serif text-3xl md:text-4xl font-semibold mb-3">
+                {event.status === "sold-out" ? "Join the waitlist" : "Enquire about this event"}
+              </h2>
             </div>
-            <Button
-              href="/contact"
-              variant={event.status === "sold-out" ? "outline" : "primary"}
-              size="md"
-            >
-              {event.status === "sold-out" ? "Join Waitlist" : "Book Now"}
-            </Button>
+            <EventEnquiryForm
+              retreatTitle={event.title}
+              retreatSlug={event.slug.current}
+              recipientEmail={event.enquiryRecipient}
+              bookCallUrl={event.bookCallUrl}
+              primaryLabel={event.status === "sold-out" ? "Join Waitlist" : "Enquire"}
+            />
           </div>
         </Container>
-      </div>
+      </Section>
     </>
   );
 }
