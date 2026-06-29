@@ -35,11 +35,9 @@ export default defineConfig({
                   ])
               ),
             S.divider(),
-            S.documentTypeListItem("retreat").title("Retreats"),
-            S.divider(),
             ...S.documentTypeListItems().filter(
               (item) =>
-                !["siteSettings", "course", "courseModule", "courseLesson", "courseEnrollment", "retreat"].includes(
+                !["siteSettings", "course", "courseModule", "courseLesson", "courseEnrollment"].includes(
                   item.getId()!
                 )
             ),

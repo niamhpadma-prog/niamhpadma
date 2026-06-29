@@ -50,7 +50,9 @@ async function main() {
 
   for (const r of retreats) {
     const content = Object.fromEntries(Object.entries(r).filter(([k]) => !STRIP.has(k)));
-    const newId = `event.${r._id.replace(/^retreat[.-]?/, "")}`;
+    // Dash, not dot: an id like `event.foo` puts the doc in a special namespace
+    // that normal GROQ queries (and the site) don't see. Match the `event-` convention.
+    const newId = `event-${r._id.replace(/^retreat[.-]?/, "")}`;
     const newDoc = { _id: newId, _type: "event", type: "Retreat", ...content };
     console.log(`  retreat ${r._id} -> event ${newId} (type=Retreat, slug=${r.slug?.current})`);
     if (APPLY) {
