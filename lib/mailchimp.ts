@@ -5,6 +5,8 @@ export interface MailchimpMember {
   firstName?: string;
   lastName?: string;
   tags?: string[];
+  /** Extra Mailchimp merge fields keyed by tag (e.g. { SERVICE: "coaching" }). Tags must exist in the audience. */
+  mergeFields?: Record<string, string>;
   /** "subscribed" | "pending" — only applied to NEW members. Existing members keep their status. */
   statusIfNew?: "subscribed" | "pending";
 }
@@ -49,22 +51,32 @@ export async function upsertMailchimpMember(member: MailchimpMember) {
   const auth = authHeader(apiKey);
   const hash = subscriberHash(member.email);
 
-  const mergeFields: Record<string, string> = {};
-  if (member.firstName) mergeFields.FNAME = member.firstName;
-  if (member.lastName) mergeFields.LNAME = member.lastName;
+  const nameFields: Record<string, string> = {};
+  if (member.firstName) nameFields.FNAME = member.firstName;
+  if (member.lastName) nameFields.LNAME = member.lastName;
+  const mergeFields: Record<string, string> = { ...(member.mergeFields || {}), ...nameFields };
 
-  const memberRes = await fetch(
-    `https://${dc}.api.mailchimp.com/3.0/lists/${audienceId}/members/${hash}`,
-    {
+  const url = `https://${dc}.api.mailchimp.com/3.0/lists/${audienceId}/members/${hash}`;
+  const putMember = (mf: Record<string, string>) =>
+    fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: auth },
       body: JSON.stringify({
         email_address: member.email,
         status_if_new: member.statusIfNew || "subscribed",
-        ...(Object.keys(mergeFields).length ? { merge_fields: mergeFields } : {}),
+        ...(Object.keys(mf).length ? { merge_fields: mf } : {}),
       }),
-    }
-  );
+    });
+
+  let memberRes = await putMember(mergeFields);
+
+  // Custom merge fields (e.g. SERVICE/ANSWERS) may not exist in this audience yet.
+  // Rather than fail the whole upsert — which would also lose the subscribe alert —
+  // retry with just the name fields so the contact and tags still go through.
+  if (!memberRes.ok && memberRes.status === 400 && member.mergeFields) {
+    console.error("[mailchimp] member upsert 400 with custom merge fields — retrying without them");
+    memberRes = await putMember(nameFields);
+  }
 
   if (!memberRes.ok) {
     const data = await memberRes.json().catch(() => ({}));

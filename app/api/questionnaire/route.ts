@@ -27,12 +27,21 @@ export async function POST(request: Request) {
       );
     }
 
-    // Store submission in Sanity (audit trail)
+    let sanityOk = false;
+    let mailchimpOk = false;
+    let resendOk = false;
+
+    const submittedAt = new Date().toISOString();
+    const answersFormatted = Object.entries(answers)
+      .map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(", ") : val}`)
+      .join("\n");
+
+    // Store submission in Sanity (primary store — this is what makes a submission "succeed")
     if (process.env.SANITY_API_TOKEN && process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
       const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
       const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
       try {
-        await fetch(
+        const sanityRes = await fetch(
           `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`,
           {
             method: "POST",
@@ -48,20 +57,24 @@ export async function POST(request: Request) {
                     serviceType,
                     title,
                     answers,
-                    submittedAt: new Date().toISOString(),
+                    answersText: answersFormatted,
+                    submittedAt,
                   },
                 },
               ],
             }),
           }
         );
+        if (sanityRes.ok) {
+          sanityOk = true;
+        } else {
+          const detail = await sanityRes.text().catch(() => "");
+          console.error("[questionnaire] Sanity store failed", sanityRes.status, detail);
+        }
       } catch (err) {
         console.error("[questionnaire] Sanity store failed", err);
       }
     }
-
-    let mailchimpOk = false;
-    let resendOk = false;
 
     // Add to Mailchimp with `questionnaire` + per-type tag
     if (isMailchimpConfigured()) {
@@ -75,6 +88,11 @@ export async function POST(request: Request) {
           firstName,
           lastName,
           tags,
+          mergeFields: {
+            SERVICE: title || serviceType,
+            // Full answers, trimmed so the subscribe-alert email stays tidy.
+            ANSWERS: answersFormatted.slice(0, 500),
+          },
         });
         mailchimpOk = true;
       } catch (err) {
@@ -91,10 +109,6 @@ export async function POST(request: Request) {
       try {
         const { Resend } = await import("resend");
         const resend = new Resend(process.env.RESEND_API_KEY);
-
-        const answersFormatted = Object.entries(answers)
-          .map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(", ") : val}`)
-          .join("\n");
 
         await resend.emails.send({
           from: "Niamh Padma Website <noreply@niamhpadma.com>",
@@ -113,7 +127,7 @@ export async function POST(request: Request) {
       }
     }
 
-    if (mailchimpOk || resendOk) {
+    if (sanityOk || mailchimpOk || resendOk) {
       return NextResponse.json({ success: true });
     }
 
