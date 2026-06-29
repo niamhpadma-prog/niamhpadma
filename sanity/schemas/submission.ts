@@ -17,6 +17,14 @@ export const submission = defineType({
       ],
       options: { collapsible: true },
     }),
+    defineField({
+      name: "answersText",
+      title: "All Answers",
+      type: "text",
+      rows: 12,
+      readOnly: true,
+      description: "Full set of answers exactly as submitted.",
+    }),
     defineField({ name: "submittedAt", title: "Submitted At", type: "datetime" }),
   ],
   preview: {
