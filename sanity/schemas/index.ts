@@ -2,7 +2,6 @@ import { siteSettings } from "./siteSettings";
 import { page } from "./page";
 import { service } from "./service";
 import { event } from "./event";
-import { retreat } from "./retreat";
 import { post } from "./post";
 import { testimonial } from "./testimonial";
 import { questionnaire } from "./questionnaire";
@@ -20,7 +19,6 @@ export const schemaTypes = [
   page,
   service,
   event,
-  retreat,
   post,
   testimonial,
   questionnaire,

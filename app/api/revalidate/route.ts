@@ -5,6 +5,7 @@ import crypto from "crypto";
 interface SanityProjection {
   _id?: string;
   _type?: string;
+  type?: string;
   slug?: { current?: string } | null;
 }
 
@@ -36,10 +37,11 @@ function verifySanitySignature(
 function pathsForDocument(doc: SanityProjection): string[] {
   const slug = doc.slug?.current;
   switch (doc._type) {
-    case "retreat":
-      return ["/events", ...(slug ? [`/retreats/${slug}`] : [])];
-    case "event":
-      return ["/events", ...(slug ? [`/events/${slug}`] : [])];
+    case "event": {
+      const isRetreat = doc.type === "Retreat";
+      const detail = slug ? [isRetreat ? `/retreats/${slug}` : `/events/${slug}`] : [];
+      return ["/", "/events", ...detail];
+    }
     case "post":
       return ["/journal", ...(slug ? [`/journal/${slug}`] : [])];
     case "course":

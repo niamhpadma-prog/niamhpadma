@@ -98,11 +98,12 @@ export const servicesQuery = groq`
 `;
 
 // Events
+// Upcoming events that are NOT retreats (Workshop / Class / Online + untyped).
 export const eventsQuery = groq`
-  *[_type == "event" && dateStart >= now()] | order(dateStart asc) {
+  *[_type == "event" && type != "Retreat" && defined(dateStart) && dateStart >= now()] | order(dateStart asc) {
     _id,
     title,
-    slug,
+    "slug": slug.current,
     type,
     dateStart,
     dateEnd,
@@ -116,7 +117,7 @@ export const eventsQuery = groq`
 `;
 
 export const eventQuery = groq`
-  *[_type == "event" && slug.current == $slug][0] {
+  *[_type == "event" && type != "Retreat" && slug.current == $slug][0] {
     ...,
     image { asset->, alt, caption, creditUrl, captionPosition },
     gallery[] { asset->, alt, caption, creditUrl, captionPosition },
@@ -124,9 +125,9 @@ export const eventQuery = groq`
   }
 `;
 
-// Retreats
+// Retreats = events tagged "Retreat". Card fields for the /events listing.
 export const retreatsQuery = groq`
-  *[_type == "retreat"] | order(coalesce(dateStart, _updatedAt) asc) {
+  *[_type == "event" && type == "Retreat"] | order(coalesce(dateStart, _updatedAt) asc) {
     _id,
     title,
     slug,
@@ -141,11 +142,34 @@ export const retreatsQuery = groq`
 `;
 
 export const retreatSlugsQuery = groq`
-  *[_type == "retreat" && defined(slug.current)][].slug.current
+  *[_type == "event" && type == "Retreat" && defined(slug.current)][].slug.current
+`;
+
+// Retreat-tagged events that are still selling or still upcoming, for the homepage.
+// "Upcoming" = status is "upcoming" or unset, AND (no end date OR end date >= today).
+export const upcomingRetreatsQuery = groq`
+  *[
+    _type == "event"
+    && type == "Retreat"
+    && defined(slug.current)
+    && coalesce(status, "upcoming") == "upcoming"
+    && (!defined(dateEnd) || dateEnd >= now())
+  ] | order(coalesce(dateStart, _createdAt) asc) [0...3] {
+    _id,
+    title,
+    slug,
+    subtitle,
+    tagline,
+    locationLine,
+    dateStart,
+    dateEnd,
+    status,
+    "cardImage": coalesce(cardImage, heroImage) { asset->, alt }
+  }
 `;
 
 export const retreatQuery = groq`
-  *[_type == "retreat" && slug.current == $slug][0] {
+  *[_type == "event" && type == "Retreat" && slug.current == $slug][0] {
     ...,
     heroImage { asset->, alt, caption, creditUrl, captionPosition },
     conceptImage { asset->, alt, caption, creditUrl, captionPosition },
@@ -328,9 +352,9 @@ export const enrollmentQuery = groq`
 
 // Sitemap
 export const sitemapQuery = groq`{
-  "pages": *[_type == "page"] { slug, _updatedAt },
-  "posts": *[_type == "post"] { slug, _updatedAt },
-  "events": *[_type == "event"] { slug, _updatedAt },
-  "courses": *[_type == "course" && status == "published"] { slug, _updatedAt },
+  "posts": *[_type == "post" && defined(slug.current)] { slug, _updatedAt },
+  "events": *[_type == "event" && type != "Retreat" && defined(slug.current)] { slug, _updatedAt },
+  "courses": *[_type == "course" && status == "published" && defined(slug.current)] { slug, _updatedAt },
+  "retreats": *[_type == "event" && type == "Retreat" && defined(slug.current)] { slug, _updatedAt },
   "locationPages": *[_type == "locationPage"] { city, service, _updatedAt }
 }`;
