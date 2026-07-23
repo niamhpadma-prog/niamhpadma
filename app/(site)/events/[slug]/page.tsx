@@ -36,6 +36,7 @@ interface EventDoc {
   price?: string;
   capacity?: number;
   status?: string;
+  bookingUrl?: string;
   excerpt?: string;
   body?: PortableTextBlock[];
   image?: SanityImage;
@@ -140,6 +141,27 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
             {event.price && (
               <p className="font-sans text-base text-espresso/80 mt-2">{event.price}</p>
             )}
+            {event.status !== "cancelled" && (
+              <div className="mt-6">
+                {event.bookingUrl && event.status !== "sold-out" ? (
+                  <a
+                    href={event.bookingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center font-sans font-medium rounded-full transition-all duration-300 bg-espresso text-cream hover:bg-espresso-light px-7 py-3.5 text-base"
+                  >
+                    Book Now
+                  </a>
+                ) : (
+                  <a
+                    href="#enquire"
+                    className="inline-flex items-center justify-center font-sans font-medium rounded-full transition-all duration-300 bg-espresso text-cream hover:bg-espresso-light px-7 py-3.5 text-base"
+                  >
+                    {event.status === "sold-out" ? "Join Waitlist" : "Book Now"}
+                  </a>
+                )}
+              </div>
+            )}
           </div>
           <div className="relative aspect-[16/9] max-w-4xl mx-auto rounded-3xl overflow-hidden mt-10">
             <Image
@@ -172,7 +194,7 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
 
       <Section background="cream">
         <Container>
-          <div className="max-w-5xl mx-auto">
+          <div id="enquire" className="scroll-mt-28 max-w-5xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-8">
               <h2 className="font-serif text-3xl md:text-4xl font-semibold mb-3">
                 {event.status === "sold-out" ? "Join the waitlist" : "Enquire about this event"}

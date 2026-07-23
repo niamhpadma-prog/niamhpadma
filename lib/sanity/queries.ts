@@ -109,7 +109,26 @@ export const eventsQuery = groq`
     dateEnd,
     location,
     price,
+    bookingUrl,
     capacity,
+    status,
+    image { asset->, alt, caption, creditUrl, captionPosition },
+    excerpt
+  }
+`;
+
+// Soonest upcoming non-Retreat events, for the homepage "Upcoming Events" section.
+export const upcomingEventsQuery = groq`
+  *[_type == "event" && type != "Retreat" && defined(dateStart) && dateStart >= now()] | order(dateStart asc) [0...3] {
+    _id,
+    title,
+    "slug": slug.current,
+    type,
+    dateStart,
+    dateEnd,
+    location,
+    price,
+    bookingUrl,
     status,
     image { asset->, alt, caption, creditUrl, captionPosition },
     excerpt

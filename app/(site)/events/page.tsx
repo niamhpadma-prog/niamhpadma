@@ -44,6 +44,7 @@ interface EventListItem {
   location?: { name?: string; city?: string; country?: string };
   price?: string;
   status?: string;
+  bookingUrl?: string;
   image?: { asset?: { url?: string }; alt?: string };
   excerpt?: string;
 }
