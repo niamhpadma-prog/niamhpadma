@@ -102,6 +102,17 @@ export const event = defineType({
       description: "Free text, e.g. “€250” or “From €180”. Leave blank to hide the price.",
     }),
     defineField({
+      name: "bookingUrl",
+      title: "Booking link",
+      type: "url",
+      group: "basics",
+      hidden: ({ document }) => document?.type === "Retreat",
+      description:
+        "Optional. Paste a link where people book or pay — Eventbrite, a Stripe payment link, a Google Form, etc. The “Book Now” button will open it in a new tab. Leave blank and “Book Now” sends people to your contact form instead.",
+      validation: (r) =>
+        r.uri({ scheme: ["http", "https"] }).error("Please paste a full link starting with https://"),
+    }),
+    defineField({
       name: "capacity",
       title: "Capacity",
       type: "number",

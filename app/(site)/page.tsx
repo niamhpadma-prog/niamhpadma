@@ -8,9 +8,10 @@ import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { SubstackSection } from "@/components/sections/SubstackSection";
 import { UpcomingRetreats } from "@/components/sections/UpcomingRetreats";
+import { UpcomingEvents } from "@/components/sections/UpcomingEvents";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { client } from "@/lib/sanity/client";
-import { testimonialsQuery, upcomingRetreatsQuery } from "@/lib/sanity/queries";
+import { testimonialsQuery, upcomingRetreatsQuery, upcomingEventsQuery } from "@/lib/sanity/queries";
 
 interface HomeTestimonial {
   _id: string;
@@ -34,13 +35,29 @@ interface UpcomingRetreat {
   cardImage?: { asset?: { url?: string; _ref?: string }; alt?: string } | null;
 }
 
+interface UpcomingEvent {
+  _id: string;
+  title: string;
+  slug: string;
+  type?: string;
+  dateStart?: string;
+  dateEnd?: string;
+  location?: { name?: string; city?: string; country?: string };
+  price?: string;
+  status?: string;
+  bookingUrl?: string;
+  image?: { asset?: { url?: string }; alt?: string };
+  excerpt?: string;
+}
+
 // Pick up Sanity edits within ~60s without redeploying.
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [testimonials, upcomingRetreats] = await Promise.all([
+  const [testimonials, upcomingRetreats, upcomingEvents] = await Promise.all([
     client.fetch<HomeTestimonial[]>(testimonialsQuery),
     client.fetch<UpcomingRetreat[]>(upcomingRetreatsQuery),
+    client.fetch<UpcomingEvent[]>(upcomingEventsQuery).catch(() => [] as UpcomingEvent[]),
   ]);
   return (
     <>
@@ -159,6 +176,8 @@ export default async function HomePage() {
       />
 
       <UpcomingRetreats retreats={upcomingRetreats} />
+
+      <UpcomingEvents events={upcomingEvents} />
 
       {/* Testimonials — pulled from Sanity (any testimonial flagged "Featured") */}
       <TestimonialsSection
