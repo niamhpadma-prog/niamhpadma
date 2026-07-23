@@ -16,7 +16,7 @@ const leftLinks = [
 
 const rightLinks = [
   { label: "Journal", href: "/journal" },
-  { label: "Kontakt", href: "/contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const mobileMenuLinks = [
@@ -24,7 +24,7 @@ const mobileMenuLinks = [
   { label: "Work With Me", href: "/work-with-me" },
   { label: "Events & Retreats", href: "/events" },
   { label: "Journal", href: "/journal" },
-  { label: "Kontakt", href: "/contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const INSTAGRAM_URL = "https://instagram.com/niamhpadma";
