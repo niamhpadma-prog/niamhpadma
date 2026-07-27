@@ -10,7 +10,7 @@ const CALENDLY_URL = "https://calendly.com/hello-somatictherapyinlisbon/30min";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with Niamh Padma. Based in Lisbon, available worldwide for yoga, breathwork, somatic therapy and holistic nutrition coaching.",
+    "Get in touch with Niamh Padma. Available in-person in Lisbon and London, and online worldwide, for yoga, breathwork, somatic therapy and holistic nutrition coaching.",
 };
 
 export default async function ContactPage({
@@ -55,10 +55,11 @@ export default async function ContactPage({
                 </div>
                 <div>
                   <h3 className="font-sans text-xs uppercase tracking-widest text-espresso/40 mb-1">
-                    Based in
+                    Availability
                   </h3>
                   <p className="font-sans text-base text-espresso">
-                    Lisbon, Portugal
+                    Available in-person in Lisbon, Portugal and London, England.
+                    Available online worldwide.
                   </p>
                 </div>
                 <div>
