@@ -1,4 +1,17 @@
 // Seed script — run with: npx tsx scripts/seed-sanity.ts
+//
+// SAFETY: this script used to run every mutation as `createOrReplace`, keyed on
+// fixed _ids like `post-turn-on`. Running it against the production dataset
+// therefore replaced whatever was in Studio with the fixture text below —
+// including replacing real post bodies with their one-line excerpt. That is
+// exactly what happened on 2026-03-23.
+//
+// It now defaults to `createIfNotExists`, so existing documents are left
+// untouched and only genuinely missing ones get created. Destructive
+// re-seeding is still possible but has to be asked for explicitly:
+//
+//   npx tsx scripts/seed-sanity.ts --replace   (plus SEED_CONFIRM, see below)
+//
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -17,6 +30,29 @@ for (const line of envFile.split('\n')) {
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 const token = process.env.SANITY_API_TOKEN!;
+
+// `createIfNotExists` never destroys content. `--replace` restores the old
+// destructive behaviour, but only alongside the confirmation env var, so it
+// can't happen by reflex or from a stale shell command.
+const REPLACE = process.argv.includes('--replace');
+const CONFIRM_PHRASE = 'yes-overwrite-studio-content';
+
+if (REPLACE && process.env.SEED_CONFIRM !== CONFIRM_PHRASE) {
+  console.error(
+    `Refusing to run with --replace.\n\n` +
+      `This overwrites documents that exist in Studio, discarding anything\n` +
+      `written there — post bodies included. If that is genuinely what you\n` +
+      `want, re-run with:\n\n` +
+      `  SEED_CONFIRM=${CONFIRM_PHRASE} npx tsx scripts/seed-sanity.ts --replace\n`
+  );
+  process.exit(1);
+}
+
+const operation = REPLACE ? 'createOrReplace' : 'createIfNotExists';
+
+function upsert(doc: Record<string, unknown>) {
+  return { [operation]: doc };
+}
 
 async function mutate(mutations: Record<string, unknown>[]) {
   const res = await fetch(
@@ -290,23 +326,28 @@ const posts = [
 }));
 
 async function seed() {
+  console.log(
+    `Mode: ${operation}` +
+      (REPLACE ? '  — EXISTING DOCUMENTS WILL BE OVERWRITTEN' : '  (existing documents left untouched)')
+  );
+
   console.log('Seeding testimonials...');
-  await mutate(testimonials.map((t) => ({ createOrReplace: t })));
+  await mutate(testimonials.map(upsert));
   console.log(`  ✓ ${testimonials.length} testimonials`);
 
   console.log('Seeding events...');
-  await mutate(events.map((e) => ({ createOrReplace: e })));
+  await mutate(events.map(upsert));
   console.log(`  ✓ ${events.length} events`);
 
   console.log('Seeding services...');
-  await mutate(services.map((s) => ({ createOrReplace: s })));
+  await mutate(services.map(upsert));
   console.log(`  ✓ ${services.length} services`);
 
   console.log('Seeding blog posts...');
   // Batch in groups of 10
   for (let i = 0; i < posts.length; i += 10) {
     const batch = posts.slice(i, i + 10);
-    await mutate(batch.map((p) => ({ createOrReplace: p })));
+    await mutate(batch.map(upsert));
   }
   console.log(`  ✓ ${posts.length} blog posts`);
 
