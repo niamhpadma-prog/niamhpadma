@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 interface Testimonial {
   _id?: string;
@@ -20,11 +20,15 @@ interface TestimonialsSectionProps {
   background?: "cream" | "white" | "sage" | "espresso";
 }
 
-// Order requested by Niamh: retreats first, then 1-1, then group classes.
+// Order requested by Niamh: retreats first, then 1-1, then group classes,
+// then corporate. Only tabs that actually have testimonials are shown, so a
+// service Niamh hasn't collected quotes for yet never renders an empty tab —
+// and a service she uses in the Studio is never silently unreachable.
 const SERVICE_TABS: { label: string; value: string }[] = [
   { label: "Retreats", value: "Retreat" },
   { label: "1-1 Coaching", value: "1-1 Coaching" },
   { label: "Group Classes", value: "Group Classes" },
+  { label: "Corporate", value: "Corporate" },
 ];
 
 export function TestimonialsSection({
@@ -33,21 +37,34 @@ export function TestimonialsSection({
   background = "cream",
 }: TestimonialsSectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [activeService, setActiveService] = useState<string>(SERVICE_TABS[0].value);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const tabs = useMemo(
+    () => SERVICE_TABS.filter((tab) => items.some((t) => t.service === tab.value)),
+    [items]
+  );
+
+  // Derived, not stored: land on the first tab that has something in it, and
+  // fall back to it again if the selected service ever has no testimonials.
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const activeService =
+    selectedService && tabs.some((t) => t.value === selectedService)
+      ? selectedService
+      : tabs[0]?.value ?? "";
 
   const filtered = useMemo(
     () => items.filter((t) => t.service === activeService),
     [items, activeService]
   );
 
-  // Reset scroll + index when the user switches tabs so we always start at card 1.
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTo({ left: 0, behavior: "auto" });
-    }
+  // Switching tabs resets to card 1. Done here in the event handler rather than
+  // in an effect on activeService: the reset is a consequence of the click, not
+  // of rendering, and setState inside an effect costs a second render pass.
+  const selectTab = (value: string) => {
+    setSelectedService(value);
+    scrollRef.current?.scrollTo({ left: 0, behavior: "auto" });
     setActiveIndex(0);
-  }, [activeService]);
+  };
 
   const handleScroll = () => {
     const el = scrollRef.current;
@@ -67,8 +84,11 @@ export function TestimonialsSection({
   if (!items?.length) return null;
 
   const total = filtered.length;
-  const canPrev = activeIndex > 0;
-  const canNext = activeIndex < total - 1;
+  // Clamped during render: the active tab can also change when `items` change,
+  // which can leave the stored index past the end of a shorter list.
+  const index = Math.min(activeIndex, Math.max(0, total - 1));
+  const canPrev = index > 0;
+  const canNext = index < total - 1;
 
   return (
     <Section background={background}>
@@ -87,12 +107,12 @@ export function TestimonialsSection({
 
         {/* Service filter pills */}
         <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
-          {SERVICE_TABS.map((tab) => {
+          {tabs.map((tab) => {
             const active = tab.value === activeService;
             return (
               <button
                 key={tab.value}
-                onClick={() => setActiveService(tab.value)}
+                onClick={() => selectTab(tab.value)}
                 aria-pressed={active}
                 className={
                   "font-sans text-sm px-4 py-2 rounded-full border transition-colors duration-200 " +
@@ -185,7 +205,7 @@ export function TestimonialsSection({
                 </svg>
               </button>
               <span className="font-sans text-xs text-espresso/50 tabular-nums min-w-[3.5rem] text-center">
-                {activeIndex + 1} / {total}
+                {index + 1} / {total}
               </span>
               <button
                 onClick={() => scrollByCard(1)}

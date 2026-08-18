@@ -20,6 +20,16 @@ export default defineConfig({
             S.listItem()
               .title("Site Settings")
               .child(S.document().schemaType("siteSettings").documentId("siteSettings")),
+            // Singletons: one document each, opened directly rather than as a list.
+            S.listItem()
+              .title("Free Download Pop-Up")
+              .child(S.document().schemaType("leadMagnet").documentId("leadMagnet")),
+            S.listItem()
+              .title("Intro Video")
+              .child(S.document().schemaType("introMedia").documentId("introMedia")),
+            S.listItem()
+              .title("Ways to Work Together")
+              .child(S.document().schemaType("waysToWork").documentId("waysToWork")),
             S.divider(),
             S.listItem()
               .title("Courses")
@@ -37,7 +47,7 @@ export default defineConfig({
             S.divider(),
             ...S.documentTypeListItems().filter(
               (item) =>
-                !["siteSettings", "course", "courseModule", "courseLesson", "courseEnrollment"].includes(
+                !["siteSettings", "leadMagnet", "introMedia", "waysToWork", "course", "courseModule", "courseLesson", "courseEnrollment"].includes(
                   item.getId()!
                 )
             ),
