@@ -129,3 +129,18 @@ fetch(`https://ckid5xtf.api.sanity.io/v2024-01-01/data/query/production?query=${
 
 A journal post whose body is under ~100 characters and whose `_updatedAt` is
 still `2026-03-23` is leftover seed text, not Niamh's writing.
+
+## Form submissions are stored, not just emailed
+
+Discovered 2026-08-19: `app/api/contact/route.ts` sent everything to Mailchimp
+and Resend and stored nothing. Mailchimp keeps the email address but not the
+message, and `RESEND_API_KEY` was never set in any Vercel environment — so the
+Resend block silently skipped and **every contact-form message body was thrown
+away behind a success screen**. Questionnaires were unaffected; they have always
+written a `submission` document to Sanity.
+
+The rule now: **a form is only "submitted" once it is written to Sanity.**
+Email is a notification, never the record. Both `/api/contact` and
+`/api/questionnaire` create a `submission` document first and treat that as
+success, so a missing or expired API key can delay a notification but can never
+lose someone's words.
