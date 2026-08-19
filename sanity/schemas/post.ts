@@ -40,7 +40,12 @@ export const post = defineType({
       title: "Categories",
       type: "array",
       of: [{ type: "string" }],
-      options: { list: ["Yoga", "Breathwork", "Somatic", "Nutrition", "Wellness", "Lifestyle"] },
+      // Must stay in sync with the filter chips in app/(site)/journal/BlogListing.tsx.
+      // "Poems", "Mindset" and "Retreats" were missing here while being used by
+      // real posts, so Niamh could not pick them in the Studio.
+      options: {
+        list: ["Poems", "Yoga", "Breathwork", "Somatic", "Mindset", "Nutrition", "Wellness", "Retreats", "Lifestyle"],
+      },
     }),
     defineField({
       name: "tags",

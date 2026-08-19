@@ -218,6 +218,22 @@ export const postsQuery = groq`
   }
 `;
 
+export const postSlugsQuery = groq`
+  *[_type == "post" && defined(slug.current)][].slug.current
+`;
+
+// Fallback for the "Continue Reading" strip when a post has no explicit
+// relatedPosts set in the Studio: the most recent other posts.
+export const recentPostsQuery = groq`
+  *[_type == "post" && defined(slug.current) && slug.current != $slug]
+    | order(publishedAt desc) [0...2] {
+    _id, title, slug, excerpt, publishedAt,
+    coverImage { asset->, alt, caption, creditUrl, captionPosition },
+    coverVideo { asset->{ url, mimeType }, alt },
+    "readingTime": round(length(pt::text(body)) / 5 / 200)
+  }
+`;
+
 export const postQuery = groq`
   *[_type == "post" && slug.current == $slug][0] {
     ...,
@@ -377,3 +393,51 @@ export const sitemapQuery = groq`{
   "retreats": *[_type == "event" && type == "Retreat" && defined(slug.current)] { slug, _updatedAt },
   "locationPages": *[_type == "locationPage"] { city, service, _updatedAt }
 }`;
+
+// Free-download pop-up (singleton). `file.asset->url` is the PDF Niamh uploaded.
+export const leadMagnetQuery = groq`
+  *[_type == "leadMagnet"][0] {
+    enabled,
+    heading,
+    body,
+    buttonLabel,
+    successMessage,
+    delaySeconds,
+    "fileUrl": file.asset->url,
+    image { asset->, alt }
+  }
+`;
+
+// Intro video (singleton), shown on My Story.
+export const introMediaQuery = groq`
+  *[_type == "introMedia"][0] {
+    enabled,
+    heading,
+    body,
+    mediaUrl,
+    caption
+  }
+`;
+
+// "Ways to Work Together" (singleton), the numbered offerings block on Work With Me.
+export const waysToWorkQuery = groq`
+  *[_type == "waysToWork"][0] {
+    enabled,
+    eyebrow,
+    eyebrowItalic,
+    heading,
+    intro,
+    pdfLabel,
+    pdfUrl,
+    "pdfFileUrl": pdfFile.asset->url,
+    offerings[] {
+      _key,
+      title,
+      duration,
+      description,
+      price,
+      onlineUrl,
+      inPersonUrl
+    }
+  }
+`;

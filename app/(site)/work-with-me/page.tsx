@@ -10,6 +10,23 @@ import {
   ServicesBento,
   type BentoService,
 } from "@/components/services/ServicesBento";
+import { client } from "@/lib/sanity/client";
+import { testimonialsQuery, waysToWorkQuery } from "@/lib/sanity/queries";
+import {
+  WaysToWorkSection,
+  type WaysToWorkConfig,
+} from "@/components/sections/WaysToWorkSection";
+
+export const revalidate = 60;
+
+interface Testimonial {
+  _id: string;
+  name: string;
+  location?: string;
+  quote: string;
+  service?: string;
+  rating?: number;
+}
 
 export const metadata: Metadata = {
   title: "Work With Me",
@@ -351,7 +368,19 @@ const faqItems = [
   },
 ];
 
-export default function WorkWithMePage() {
+export default async function WorkWithMePage() {
+  // Real client testimonials, from Sanity — the same source the homepage uses.
+  // This page used to pass a hardcoded array of invented quotes attributed to
+  // named people, none of which carried a `service` matching the default
+  // "Retreat" tab, which is why the section rendered as empty.
+  // Both fetched together so one slow query doesn't hold up the other. The
+  // offerings block is Sanity-only on purpose: it is the part Niamh reshapes
+  // most, and it must never need a deploy.
+  const [testimonials, waysToWork] = await Promise.all([
+    client.fetch<Testimonial[]>(testimonialsQuery),
+    client.fetch<WaysToWorkConfig | null>(waysToWorkQuery).catch(() => null),
+  ]);
+
   return (
     <>
       <JsonLd
@@ -380,6 +409,8 @@ export default function WorkWithMePage() {
         ]}
       />
 
+      <WaysToWorkSection config={waysToWork} />
+
       <ServiceTabs
         tabs={["All", "1-1 Coaching", "Group Classes", "Corporate"]}
         tabContent={{
@@ -392,32 +423,7 @@ export default function WorkWithMePage() {
 
       <TestimonialsSection
         heading="What Clients Say"
-        items={[
-          {
-            name: "Sarah M.",
-            location: "Lisbon",
-            quote:
-              "Niamh has this incredible ability to hold space while gently guiding you deeper into your practice. Every session feels like coming home.",
-            service: "1-1 Coaching",
-            rating: 5,
-          },
-          {
-            name: "Marco R.",
-            location: "Porto",
-            quote:
-              "The breathwork workshop completely changed my relationship with stress. I use the techniques daily now.",
-            service: "Workshops",
-            rating: 5,
-          },
-          {
-            name: "Elena K.",
-            location: "Berlin",
-            quote:
-              "Working with Niamh online has been just as powerful as in-person sessions. She creates a safe, transformative container no matter the format.",
-            service: "1-1 Coaching",
-            rating: 5,
-          },
-        ]}
+        items={testimonials}
         background="cream"
       />
 

@@ -21,6 +21,26 @@ function CaptionInner({ text, href, linkClass }: { text: string; href?: string; 
   return <>{text}</>;
 }
 
+const blockStyles = {
+  h2: ({ children }: { children?: React.ReactNode }) => (
+    <h2 className="font-serif text-3xl md:text-4xl mt-12 mb-4">{children}</h2>
+  ),
+  h3: ({ children }: { children?: React.ReactNode }) => (
+    <h3 className="font-serif text-2xl md:text-3xl mt-10 mb-3">{children}</h3>
+  ),
+  h4: ({ children }: { children?: React.ReactNode }) => (
+    <h4 className="font-serif text-xl mt-8 mb-2">{children}</h4>
+  ),
+  normal: ({ children }: { children?: React.ReactNode }) => (
+    <p className="font-sans text-base leading-relaxed text-espresso/75 mb-4">{children}</p>
+  ),
+  blockquote: ({ children }: { children?: React.ReactNode }) => (
+    <blockquote className="border-l-2 border-sage pl-6 my-8 font-serif text-xl italic text-espresso/60">
+      {children}
+    </blockquote>
+  ),
+};
+
 export const portableTextComponents: PortableTextComponents = {
   types: {
     image: ({ value }) => {
@@ -65,25 +85,7 @@ export const portableTextComponents: PortableTextComponents = {
       );
     },
   },
-  block: {
-    h2: ({ children }) => (
-      <h2 className="font-serif text-3xl md:text-4xl mt-12 mb-4">{children}</h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="font-serif text-2xl md:text-3xl mt-10 mb-3">{children}</h3>
-    ),
-    h4: ({ children }) => (
-      <h4 className="font-serif text-xl mt-8 mb-2">{children}</h4>
-    ),
-    normal: ({ children }) => (
-      <p className="font-sans text-base leading-relaxed text-espresso/75 mb-4">{children}</p>
-    ),
-    blockquote: ({ children }) => (
-      <blockquote className="border-l-2 border-sage pl-6 my-8 font-serif text-xl italic text-espresso/60">
-        {children}
-      </blockquote>
-    ),
-  },
+  block: blockStyles,
   marks: {
     link: ({ children, value }) => {
       const href = value?.href || "";
@@ -125,4 +127,27 @@ export const inlinePortableTextComponents: PortableTextComponents = {
     normal: ({ children }) => <>{children}</>,
   },
   marks: portableTextComponents.marks,
+};
+
+// Journal variant. Niamh writes poems, and in a poem every line is its own
+// Portable Text block with blank blocks marking stanza breaks — that is how she
+// formats them in the Studio. The default `normal` renderer puts a 1rem margin
+// under every block, which would space a poem's lines apart like paragraphs, so
+// here lines sit on their natural leading and an empty block becomes the gap.
+// Her prose posts separate paragraphs with a blank line too, so both read right.
+export const journalPortableTextComponents: PortableTextComponents = {
+  ...portableTextComponents,
+  block: {
+    ...blockStyles,
+    normal: ({ children, value }) => {
+      const isBlank = !(value?.children || [])
+        .map((c) => ("text" in c && typeof c.text === "string" ? c.text : ""))
+        .join("")
+        .trim();
+      if (isBlank) return <div className="h-6" aria-hidden />;
+      return (
+        <p className="font-sans text-base leading-relaxed text-espresso/75">{children}</p>
+      );
+    },
+  },
 };

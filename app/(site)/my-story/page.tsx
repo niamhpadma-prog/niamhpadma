@@ -5,6 +5,11 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
+import { IntroMediaSection, type IntroMedia } from "@/components/sections/IntroMediaSection";
+import { client } from "@/lib/sanity/client";
+import { introMediaQuery } from "@/lib/sanity/queries";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "About Niamh",
@@ -26,7 +31,13 @@ const qualifications = [
   "Yoga Therapist in Training with The Minded Institute",
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  // Optional video introduction, configured in Sanity ("Intro Video").
+  // Renders nothing until Niamh switches it on and pastes a link.
+  const introMedia = await client
+    .fetch<IntroMedia | null>(introMediaQuery)
+    .catch(() => null);
+
   return (
     <>
       <JsonLd
@@ -60,6 +71,8 @@ export default function AboutPage() {
         imageAlt="Niamh Padma"
         imagePosition="top-20"
       />
+
+      <IntroMediaSection config={introMedia} />
 
       {/* Opening story with image */}
       <Section background="white">

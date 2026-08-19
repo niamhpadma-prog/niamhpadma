@@ -7,11 +7,16 @@ import {
 
 export async function POST(request: Request) {
   try {
-    const { email } = await request.json();
+    const { email, source } = await request.json();
 
     if (!email || typeof email !== "string") {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
+
+    // Where the signup came from, so Niamh can tell ebook downloads apart from
+    // plain newsletter signups in Mailchimp. Allow-listed, never free text.
+    const SOURCES: Record<string, string> = { ebook: "ebook" };
+    const sourceTag = typeof source === "string" ? SOURCES[source] : undefined;
 
     if (!isMailchimpConfigured()) {
       console.error(
@@ -26,7 +31,7 @@ export async function POST(request: Request) {
     try {
       await upsertMailchimpMember({
         email,
-        tags: ["newsletter"],
+        tags: sourceTag ? ["newsletter", sourceTag] : ["newsletter"],
       });
     } catch (err) {
       if (err instanceof MailchimpError) {

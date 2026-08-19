@@ -1,4 +1,25 @@
-// Seed script — run with: npx tsx scripts/seed-sanity.ts
+// Seed script — scaffolds testimonials / events / services for a FRESH dataset.
+//
+// ⚠️  THIS SCRIPT MUST NEVER OVERWRITE WRITING THAT NIAMH HAS DONE IN THE STUDIO.
+//
+// History: on 2026-03-23 an earlier version of this script ran against production
+// with `createOrReplace` and seeded 24 `post` documents whose body was a single
+// AI-written sentence *about* each poem, published under Niamh's real poem titles.
+// That is why her journal appeared to contain "AI interpretations" of her poems.
+// See docs/content-safety.md.
+//
+// Three rules now enforced below:
+//   1. It never seeds `post` documents. Journal/poem content is authored by Niamh
+//      only — no generated prose is ever written into her journal by a script.
+//   2. It uses `createIfNotExists`, never `createOrReplace`, so a re-run can only
+//      ever add missing scaffolding and can never clobber an edited document.
+//   3. It is a dry run by default, and refuses to touch `production` unless you
+//      pass BOTH --apply and --i-am-sure-production.
+//
+// Usage:
+//   npx tsx scripts/seed-sanity.ts                                  # dry run
+//   npx tsx scripts/seed-sanity.ts --apply                          # write (non-prod dataset)
+//   npx tsx scripts/seed-sanity.ts --apply --i-am-sure-production   # write to production
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -18,7 +39,39 @@ const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 const token = process.env.SANITY_API_TOKEN!;
 
+const APPLY = process.argv.includes('--apply');
+const PROD_OK = process.argv.includes('--i-am-sure-production');
+
+if (dataset === 'production' && APPLY && !PROD_OK) {
+  console.error(
+    `\nRefusing to write to the production dataset.\n` +
+      `Production holds Niamh's real writing. Re-run with --i-am-sure-production ` +
+      `only if you have just taken an export (see docs/content-safety.md).\n`
+  );
+  process.exit(1);
+}
+
 async function mutate(mutations: Record<string, unknown>[]) {
+  // Belt-and-braces: this script may only ever create-if-absent. If a future edit
+  // reintroduces a destructive mutation, fail loudly rather than eat someone's work.
+  const destructive = mutations.filter(
+    (m) => !Object.prototype.hasOwnProperty.call(m, 'createIfNotExists')
+  );
+  if (destructive.length > 0) {
+    throw new Error(
+      `Blocked ${destructive.length} non-createIfNotExists mutation(s). ` +
+        `This script is not allowed to replace, patch or delete existing documents.`
+    );
+  }
+
+  if (!APPLY) {
+    for (const m of mutations) {
+      const doc = (m as { createIfNotExists: { _id: string; _type: string } }).createIfNotExists;
+      console.log(`  [dry run] would create if absent: ${doc._type} ${doc._id}`);
+    }
+    return { dryRun: true };
+  }
+
   const res = await fetch(
     `https://${projectId}.api.sanity.io/v2024-01-01/data/mutate/${dataset}`,
     {
@@ -248,69 +301,35 @@ const services = [
   },
 ];
 
-// ============ BLOG POSTS ============
-const posts = [
-  { _id: 'post-turn-on', title: 'Turn On.', slug: 'turn-on', categories: ['Poems'], publishedAt: '2024-12-15', excerpt: 'A poem about awakening to sensation, presence, and the courage to feel fully alive.' },
-  { _id: 'post-what-if', title: 'What If..', slug: 'what-if', categories: ['Poems'], publishedAt: '2024-11-28', excerpt: 'Exploring the questions that open doors we didn\'t know existed.' },
-  { _id: 'post-poems-shavasanah', title: 'Poems for Shavasanah', slug: 'poems-for-shavasanah', categories: ['Poems'], publishedAt: '2024-11-10', excerpt: 'Words to carry you into stillness at the end of practice.' },
-  { _id: 'post-ireland-retreat', title: 'Awaken Your Senses — Ireland Retreat', slug: 'awaken-your-senses-ireland-retreat', categories: ['Retreats'], publishedAt: '2024-10-20', excerpt: 'A reflection on our transformative retreat along the Wild Atlantic Way.' },
-  { _id: 'post-argentina-retreat', title: 'Awaken Your Senses — Argentina Retreat', slug: 'awaken-your-senses-argentina-retreat', categories: ['Retreats'], publishedAt: '2024-09-15', excerpt: 'Stories and lessons from our retreat in the mountains of Córdoba.' },
-  { _id: 'post-alcohol-chai', title: 'Swapping Alcohol for Chai Lattes', slug: 'swapping-alcohol-for-chai-lattes', categories: ['Wellness'], publishedAt: '2024-08-22', excerpt: 'What happened when I chose presence over numbing — and discovered a whole new way to socialise.' },
-  { _id: 'post-poems-heart', title: 'Poems and Inspiration from the Heart', slug: 'poems-and-inspiration-from-the-heart', categories: ['Poems'], publishedAt: '2024-08-05', excerpt: 'A collection of words that found me during quiet moments of reflection.' },
-  { _id: 'post-fear-others', title: 'How to Overcome Fear of What Others Think', slug: 'how-to-overcome-fear-of-what-others-think', categories: ['Mindset'], publishedAt: '2024-07-18', excerpt: 'The practice of choosing your own truth over the noise of external expectations.' },
-  { _id: 'post-yoga-self-compassion', title: 'Making Yoga a Practice of Self-Compassion', slug: 'making-yoga-a-practice-of-self-compassion', categories: ['Yoga'], publishedAt: '2024-07-01', excerpt: 'How shifting from performance to presence transformed my relationship with yoga — and myself.' },
-  { _id: 'post-chameleon', title: 'Why Being a Chameleon is a SuperPower', slug: 'why-being-a-chameleon-is-a-superpower', categories: ['Mindset'], publishedAt: '2024-06-12', excerpt: 'Reframing adaptability as a strength rather than a loss of identity.' },
-  { _id: 'post-architect-brain', title: 'Be the Architect of Your Brain', slug: 'be-the-architect-of-your-brain', categories: ['Mindset'], publishedAt: '2024-05-28', excerpt: 'Neuroplasticity in action — how your daily choices literally reshape your mind.' },
-  { _id: 'post-words', title: 'Words', slug: 'words', categories: ['Poems'], publishedAt: '2024-05-10', excerpt: 'The power of language to heal, to harm, and to transform.' },
-  { _id: 'post-desk-france', title: 'Why Eating at Your Desk is Illegal in France', slug: 'why-eating-at-your-desk-is-illegal-in-france', categories: ['Nutrition'], publishedAt: '2024-04-22', excerpt: 'What France understands about the relationship between food, rest, and productivity.' },
-  { _id: 'post-food-restrictions', title: 'Food Restrictions..', slug: 'food-restrictions', categories: ['Nutrition'], publishedAt: '2024-04-05', excerpt: 'When healing your relationship with food means letting go of the rules.' },
-  { _id: 'post-eating-mind', title: 'Eating for Your Mind..', slug: 'eating-for-your-mind', categories: ['Nutrition'], publishedAt: '2024-03-18', excerpt: 'The gut-brain connection and how what you eat shapes how you feel.' },
-  { _id: 'post-new-moon', title: 'Setting New Moon Intentions', slug: 'setting-new-moon-intentions', categories: ['Wellness'], publishedAt: '2024-03-01', excerpt: 'A simple ritual for aligning with lunar cycles and planting seeds of intention.' },
-  { _id: 'post-growing-fear', title: 'Growing Through Fear..', slug: 'growing-through-fear', categories: ['Mindset'], publishedAt: '2024-02-14', excerpt: 'Fear as a compass — how our edges show us exactly where growth lives.' },
-  { _id: 'post-morning-routine', title: 'Power of Morning Routine', slug: 'power-of-morning-routine', categories: ['Wellness'], publishedAt: '2024-01-28', excerpt: 'How the first hour of your day sets the tone for everything that follows.' },
-  { _id: 'post-equinox', title: 'Equinox Thoughts..', slug: 'equinox-thoughts', categories: ['Wellness'], publishedAt: '2024-01-10', excerpt: 'Reflections on balance, transition, and the wisdom of seasonal living.' },
-  { _id: 'post-little-things', title: 'Appreciating the Little Things..', slug: 'appreciating-the-little-things', categories: ['Mindset'], publishedAt: '2023-12-20', excerpt: 'A reminder that the extraordinary lives inside the ordinary moments.' },
-  { _id: 'post-inner-critic', title: 'The Inner Critic', slug: 'the-inner-critic', categories: ['Mindset'], publishedAt: '2023-12-05', excerpt: 'Learning to meet your harshest voice with curiosity instead of war.' },
-  { _id: 'post-finding-love', title: "Finding Love in the 'Being'", slug: 'finding-love-in-the-being', categories: ['Mindset'], publishedAt: '2023-11-18', excerpt: 'What happens when you stop searching and simply arrive.' },
-  { _id: 'post-success-inside', title: 'Success is an Inside Job', slug: 'success-is-an-inside-job', categories: ['Mindset'], publishedAt: '2023-11-01', excerpt: 'Redefining achievement through the lens of inner fulfilment.' },
-  { _id: 'post-overnight-fasting', title: 'Overnight Fasting..', slug: 'overnight-fasting', categories: ['Nutrition'], publishedAt: '2023-10-15', excerpt: 'The science and simplicity of giving your digestive system a nightly rest.' },
-].map((p) => ({
-  ...p,
-  _type: 'post',
-  slug: { _type: 'slug', current: p.slug },
-  body: [
-    {
-      _type: 'block',
-      _key: 'b1',
-      style: 'normal',
-      children: [{ _type: 'span', _key: 's1', text: p.excerpt }],
-      markDefs: [],
-    },
-  ],
-}));
+// ============ BLOG POSTS / JOURNAL ============
+// Deliberately empty, and must stay that way.
+//
+// Journal posts and poems are Niamh's own writing. This script previously seeded
+// 24 `post` documents whose body was a one-line AI-written summary of each poem,
+// published under her real titles — which is exactly the bug this file now guards
+// against. Never generate journal or poem prose here. Niamh writes it in the Studio.
 
 async function seed() {
-  console.log('Seeding testimonials...');
-  await mutate(testimonials.map((t) => ({ createOrReplace: t })));
+  console.log(
+    APPLY
+      ? `Seeding dataset "${dataset}" (create-if-absent only)...\n`
+      : `DRY RUN against dataset "${dataset}" — no writes. Pass --apply to write.\n`
+  );
+
+  console.log('Testimonials...');
+  await mutate(testimonials.map((t) => ({ createIfNotExists: t })));
   console.log(`  ✓ ${testimonials.length} testimonials`);
 
-  console.log('Seeding events...');
-  await mutate(events.map((e) => ({ createOrReplace: e })));
+  console.log('Events...');
+  await mutate(events.map((e) => ({ createIfNotExists: e })));
   console.log(`  ✓ ${events.length} events`);
 
-  console.log('Seeding services...');
-  await mutate(services.map((s) => ({ createOrReplace: s })));
+  console.log('Services...');
+  await mutate(services.map((s) => ({ createIfNotExists: s })));
   console.log(`  ✓ ${services.length} services`);
 
-  console.log('Seeding blog posts...');
-  // Batch in groups of 10
-  for (let i = 0; i < posts.length; i += 10) {
-    const batch = posts.slice(i, i + 10);
-    await mutate(batch.map((p) => ({ createOrReplace: p })));
-  }
-  console.log(`  ✓ ${posts.length} blog posts`);
-
-  console.log('\nDone! All content seeded into Sanity.');
+  console.log('\nJournal posts: skipped by design — Niamh authors those in the Studio.');
+  console.log(APPLY ? '\nDone. No existing document was modified.' : '\nDry run complete.');
 }
 
 seed().catch(console.error);
