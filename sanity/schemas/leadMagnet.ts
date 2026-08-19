@@ -38,7 +38,8 @@ export const leadMagnet = defineType({
     defineField({
       name: "file",
       title: "The Download (PDF)",
-      description: "Upload the ebook here. Swap this file any time and the link updates itself.",
+      description:
+        "Upload the ebook here. It is emailed to everyone who signs up, and shown as a download in the pop-up. Swap this file any time — both update themselves, no deploy needed.",
       type: "file",
       options: { accept: ".pdf" },
     }),
