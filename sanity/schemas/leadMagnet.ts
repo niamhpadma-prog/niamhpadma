@@ -43,6 +43,29 @@ export const leadMagnet = defineType({
       type: "file",
       options: { accept: ".pdf" },
     }),
+    // The email that carries the guide. Niamh writes it here in her own words;
+    // the download button is added underneath automatically, so she never has
+    // to paste a link and the email can't break when she swaps the PDF.
+    defineField({
+      name: "emailSubject",
+      title: "Email — Subject Line",
+      description: "The subject of the email that delivers the guide.",
+      type: "string",
+    }),
+    defineField({
+      name: "emailBody",
+      title: "Email — What It Says",
+      description:
+        "Your note to whoever asked for the guide. Write it as you'd write a message — new lines become new paragraphs. The download button appears below it on its own.",
+      type: "text",
+      rows: 8,
+    }),
+    defineField({
+      name: "emailButtonLabel",
+      title: "Email — Download Button",
+      type: "string",
+      initialValue: "Download the guide",
+    }),
     defineField({
       name: "image",
       title: "Cover Image",
