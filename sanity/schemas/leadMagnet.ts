@@ -57,6 +57,21 @@ export const leadMagnet = defineType({
       initialValue: "Check your inbox — and grab your copy below.",
     }),
     defineField({
+      name: "successLinkLabel",
+      title: "Button After They Sign Up",
+      description:
+        "Only used when no PDF is uploaded above — so the pop-up always has somewhere to go. Leave blank to show no button.",
+      type: "string",
+      initialValue: "Get in touch",
+    }),
+    defineField({
+      name: "successLinkUrl",
+      title: "Where That Button Goes",
+      description: 'A page on this site (like "/contact") or a full link.',
+      type: "string",
+      initialValue: "/contact",
+    }),
+    defineField({
       name: "delaySeconds",
       title: "Seconds Before It Appears",
       description:

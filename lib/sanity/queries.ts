@@ -402,6 +402,8 @@ export const leadMagnetQuery = groq`
     body,
     buttonLabel,
     successMessage,
+    successLinkLabel,
+    successLinkUrl,
     delaySeconds,
     "fileUrl": file.asset->url,
     image { asset->, alt }

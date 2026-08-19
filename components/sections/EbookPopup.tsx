@@ -10,6 +10,8 @@ export interface LeadMagnet {
   body?: string;
   buttonLabel?: string;
   successMessage?: string;
+  successLinkLabel?: string;
+  successLinkUrl?: string;
   delaySeconds?: number;
   fileUrl?: string;
   image?: { asset?: { url?: string }; alt?: string };
@@ -138,12 +140,12 @@ export function EbookPopup({ config }: { config: LeadMagnet | null }) {
             </button>
 
             {coverUrl && (
-              <div className="relative w-full aspect-[16/9]">
+              <div className="relative w-full aspect-[4/3]">
                 <Image
                   src={coverUrl}
                   alt={config?.image?.alt || ""}
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                   sizes="(max-width: 640px) 100vw, 512px"
                 />
               </div>
@@ -167,7 +169,10 @@ export function EbookPopup({ config }: { config: LeadMagnet | null }) {
                   <p className="font-sans text-base text-sage-dark">
                     {config?.successMessage || "Check your inbox."}
                   </p>
-                  {config?.fileUrl && (
+                  {/* The download when there is one. Until the PDF is uploaded
+                      the pop-up would otherwise dead-end on a message, so it
+                      falls back to a link — /contact by default. */}
+                  {config?.fileUrl ? (
                     <a
                       href={config.fileUrl}
                       target="_blank"
@@ -176,6 +181,17 @@ export function EbookPopup({ config }: { config: LeadMagnet | null }) {
                     >
                       Download the guide
                     </a>
+                  ) : (
+                    config?.successLinkUrl &&
+                    config?.successLinkLabel && (
+                      <a
+                        href={config.successLinkUrl}
+                        onClick={dismiss}
+                        className="inline-block font-sans text-sm px-6 py-3 rounded-full bg-espresso text-cream hover:bg-espresso/90 transition-colors"
+                      >
+                        {config.successLinkLabel}
+                      </a>
+                    )
                   )}
                 </div>
               ) : (
