@@ -15,6 +15,7 @@ const leftLinks = [
 ];
 
 const rightLinks = [
+  { label: "Shop", href: "/shop" },
   { label: "Journal", href: "/journal" },
   { label: "Contact", href: "/contact" },
 ];
@@ -23,6 +24,7 @@ const mobileMenuLinks = [
   { label: "My Story", href: "/my-story" },
   { label: "Work With Me", href: "/work-with-me" },
   { label: "Events & Retreats", href: "/events" },
+  { label: "Shop", href: "/shop" },
   { label: "Journal", href: "/journal" },
   { label: "Contact", href: "/contact" },
 ];
@@ -63,12 +65,12 @@ export function Nav() {
         {/* Desktop nav — centered logo with links on each side */}
         <nav className="hidden lg:flex items-center justify-between py-5">
           {/* Left links */}
-          <ul className="flex items-center gap-8 flex-1">
+          <ul className="flex items-center gap-6 xl:gap-8 flex-1">
             {leftLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="font-sans text-sm font-medium text-espresso/70 hover:text-espresso transition-colors duration-300"
+                  className="font-sans text-sm font-medium text-espresso/70 hover:text-espresso transition-colors duration-300 whitespace-nowrap"
                 >
                   {link.label}
                 </Link>
@@ -119,12 +121,12 @@ export function Nav() {
           </Link>
 
           {/* Right links */}
-          <ul className="flex items-center gap-8 flex-1 justify-end">
+          <ul className="flex items-center gap-6 xl:gap-8 flex-1 justify-end">
             {rightLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="font-sans text-sm font-medium text-espresso/70 hover:text-espresso transition-colors duration-300"
+                  className="font-sans text-sm font-medium text-espresso/70 hover:text-espresso transition-colors duration-300 whitespace-nowrap"
                 >
                   {link.label}
                 </Link>
@@ -153,7 +155,7 @@ export function Nav() {
             <li>
               <Link
                 href="/questionnaires/coaching"
-                className="font-sans text-sm font-medium bg-espresso text-cream px-6 py-2.5 rounded-full hover:bg-espresso-light transition-colors duration-300"
+                className="font-sans text-sm font-medium bg-espresso text-cream px-6 py-2.5 rounded-full whitespace-nowrap hover:bg-espresso-light transition-colors duration-300"
               >
                 Get Started
               </Link>
