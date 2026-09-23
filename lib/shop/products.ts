@@ -12,10 +12,19 @@ export interface Product {
   tags: string[];
   benefits: string[];
   howToUse: string;
-  provenance?: string[];
 }
 
 export const BRAND = "ISHKA";
+
+// Shown in the hero, above the Order Now button. These describe the ISHKA
+// brand as a whole rather than one product, which is why they sit here and not
+// on an individual product.
+export const brandPrinciples = [
+  "Plants for the mind & body.",
+  "Sourced from the waters.",
+  "Natural and sustainably harvested.",
+  "Conservation-first.",
+];
 
 export const products: Product[] = [
   {
@@ -26,12 +35,6 @@ export const products: Product[] = [
     size: "100g",
     description:
       "Chondrus Crispus, wild-harvested from the Atlantic coast of Ireland. Hand-harvested, sun-dried, with no additives — 100% natural, exactly as the ocean made it.",
-    provenance: [
-      "Plants for the mind & body.",
-      "Sourced from the waters.",
-      "Natural and sustainably harvested.",
-      "Conservation-first.",
-    ],
     tags: ["Wild-harvested", "Sun-dried", "No additives", "100% natural"],
     benefits: [
       "Gut health support",

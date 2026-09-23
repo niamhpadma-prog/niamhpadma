@@ -3,7 +3,13 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { ShopOrderForm } from "@/components/forms/ShopOrderForm";
-import { BRAND, formatEur, products, type Product } from "@/lib/shop/products";
+import {
+  BRAND,
+  brandPrinciples,
+  formatEur,
+  products,
+  type Product,
+} from "@/lib/shop/products";
 
 export const metadata: Metadata = {
   title: "Shop",
@@ -25,16 +31,6 @@ function ProductPanel({ product }: { product: Product }) {
       <p className="font-serif italic text-lg text-espresso/70 mb-6">
         {formatEur(product.priceEur)} · {product.size}
       </p>
-
-      {product.provenance && (
-        <p className="font-sans text-xs uppercase tracking-widest text-espresso/40 leading-loose mb-6">
-          {product.provenance.map((line) => (
-            <span key={line} className="block">
-              {line}
-            </span>
-          ))}
-        </p>
-      )}
 
       <p className="font-sans text-base leading-relaxed text-espresso/75 mb-6">
         {product.description}
@@ -95,6 +91,13 @@ export default function ShopPage() {
               Water changes how we feel — it slows us down, grounds us, opens us,
               brings us back to ourselves. One ritual for the body, one for the
               evening. Together they feel both grounding and expansive.
+            </p>
+            <p className="font-sans text-xs uppercase tracking-widest text-espresso/45 leading-loose mb-10">
+              {brandPrinciples.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))}
             </p>
             <Button href="#order" variant="primary" size="lg">
               Order Now
