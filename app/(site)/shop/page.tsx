@@ -2,10 +2,14 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
+import { SlideUp } from "@/components/animations/SlideUp";
 import { ShopOrderForm } from "@/components/forms/ShopOrderForm";
 import {
   BRAND,
-  brandPrinciples,
+  BRAND_EMAIL,
+  BRAND_INSTAGRAM,
+  brandIntro,
+  brandTagline,
   formatEur,
   products,
   type Product,
@@ -14,60 +18,79 @@ import {
 export const metadata: Metadata = {
   title: "Shop",
   description:
-    "ISHKA wild-harvested Irish Sea Moss and Egyptian Blue Lotus tincture. One ritual for the body, one for the evening.",
+    "ISHKA: rituals from the water. Wild Irish Sea Moss from County Clare and Blue Lotus tincture, traceably sourced and shipped across Europe.",
 };
 
-const feelings = ["grounded", "clear", "nourished", "connected"];
+function ProductStory({
+  product,
+  background,
+}: {
+  product: Product;
+  background: "cream" | "white";
+}) {
+  const cardBg = background === "cream" ? "bg-white" : "bg-cream";
 
-function ProductPanel({ product }: { product: Product }) {
   return (
-    <article className="bg-white rounded-3xl border border-sand/30 p-8 md:p-10 flex flex-col">
-      <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
-        {product.tagline}
-      </p>
-      <h2 className="font-serif text-3xl md:text-4xl leading-tight mb-2">
-        {product.name}
-      </h2>
-      <p className="font-serif italic text-lg text-espresso/70 mb-6">
-        {formatEur(product.priceEur)} · {product.size}
-      </p>
+    <Section background={background} id={product.id}>
+      <Container>
+        <div className="max-w-2xl mx-auto">
+          <SlideUp>
+            <div className="text-center mb-14">
+              <h2 className="font-serif text-4xl md:text-5xl leading-tight mb-3">
+                {product.name}
+              </h2>
+              <p className="font-serif italic text-xl md:text-2xl text-espresso/60 mb-4">
+                {product.tagline}
+              </p>
+              <p className="font-sans text-xs uppercase tracking-widest text-sage">
+                {formatEur(product.priceEur)} · {product.size}
+              </p>
+            </div>
+          </SlideUp>
 
-      <p className="font-sans text-base leading-relaxed text-espresso/75 mb-6">
-        {product.description}
-      </p>
+          <div className="space-y-10">
+            {product.story.map((s) => (
+              <SlideUp key={s.heading}>
+                <h3 className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
+                  {s.heading}
+                </h3>
+                <p className="font-sans text-base leading-[1.85] text-espresso/75">
+                  {s.body}
+                </p>
+              </SlideUp>
+            ))}
+          </div>
 
-      <div className="flex flex-wrap gap-2 mb-8">
-        {product.tags.map((tag) => (
-          <span
-            key={tag}
-            className="font-sans text-[0.68rem] uppercase tracking-widest text-espresso/70 border border-sand/60 rounded-full px-3.5 py-1.5"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+          <SlideUp>
+            <div className="bg-sage/10 rounded-3xl p-8 md:p-10 mt-14 text-center">
+              <h3 className="font-sans text-xs uppercase tracking-widest text-sage mb-4">
+                The ritual
+              </h3>
+              <p className="font-serif italic text-xl md:text-2xl leading-relaxed text-espresso/80">
+                {product.ritual}
+              </p>
+            </div>
+          </SlideUp>
 
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 mb-8">
-        {product.benefits.map((b) => (
-          <li
-            key={b}
-            className="font-sans text-sm text-espresso/70 flex items-start gap-2"
-          >
-            <span className="text-sage mt-0.5">{"✓"}</span>
-            <span>{b}</span>
-          </li>
-        ))}
-      </ul>
+          <SlideUp>
+            <div className={`${cardBg} rounded-2xl border border-sand/40 p-6 mt-6`}>
+              <h3 className="font-sans text-xs uppercase tracking-widest text-espresso/50 mb-2">
+                A note of care
+              </h3>
+              <p className="font-sans text-sm leading-relaxed text-espresso/70">
+                {product.care}
+              </p>
+            </div>
+          </SlideUp>
 
-      <div className="mt-auto pt-6 border-t border-sand/30">
-        <h3 className="font-sans text-xs uppercase tracking-widest text-espresso/50 mb-2">
-          How to use
-        </h3>
-        <p className="font-sans text-sm leading-relaxed text-espresso/70">
-          {product.howToUse}
-        </p>
-      </div>
-    </article>
+          <div className="text-center mt-12">
+            <Button href="#order" variant="primary" size="lg">
+              {product.ctaLabel} →
+            </Button>
+          </div>
+        </div>
+      </Container>
+    </Section>
   );
 }
 
@@ -81,68 +104,35 @@ export default function ShopPage() {
             <p className="font-sans text-sm uppercase tracking-[0.3em] text-sage mb-6">
               {BRAND}
             </p>
-            <h1 className="font-serif text-5xl md:text-6xl leading-tight mb-3">
-              Two Products
+            <h1 className="font-serif text-5xl md:text-6xl leading-tight mb-8">
+              {brandTagline}
             </h1>
-            <p className="font-serif italic text-2xl text-espresso/60 mb-8">
-              One philosophy
-            </p>
             <p className="font-serif text-xl md:text-2xl leading-relaxed text-espresso/80 mb-10">
-              Water changes how we feel — it slows us down, grounds us, opens us,
-              brings us back to ourselves. One ritual for the body, one for the
-              evening. Together they feel both grounding and expansive.
+              {brandIntro}
             </p>
-            <p className="font-sans text-xs uppercase tracking-widest text-espresso/45 leading-loose mb-10">
-              {brandPrinciples.map((line) => (
-                <span key={line} className="block">
-                  {line}
-                </span>
+            <div className="flex flex-wrap justify-center gap-4">
+              {products.map((p, i) => (
+                <Button
+                  key={p.id}
+                  href={`#${p.id}`}
+                  variant={i === 0 ? "primary" : "outline"}
+                  size="lg"
+                >
+                  {p.name}
+                </Button>
               ))}
-            </p>
-            <Button href="#order" variant="primary" size="lg">
-              Order Now
-            </Button>
+            </div>
           </div>
         </Container>
       </section>
 
-      {/* Products */}
-      <Section background="cream">
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {products.map((p) => (
-              <ProductPanel key={p.id} product={p} />
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* Philosophy */}
-      <Section background="white">
-        <Container>
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-serif text-4xl md:text-5xl leading-tight mb-6">
-              More than a supplement
-            </h2>
-            <p className="font-sans text-base leading-relaxed text-espresso/70 mb-10">
-              Sea Moss and Blue Lotus each give people a ritual that feels
-              connected to nature rather than disconnected from it — nourishment
-              for the body, softness for the evening, and a small moment of care
-              in an otherwise loud day.
-            </p>
-            <p className="font-serif italic text-2xl text-espresso/80 flex flex-wrap justify-center gap-x-4 gap-y-2">
-              {feelings.map((f, i) => (
-                <span key={f} className="flex items-center gap-4">
-                  {f}
-                  {i < feelings.length - 1 && (
-                    <span className="text-sage" aria-hidden="true">·</span>
-                  )}
-                </span>
-              ))}
-            </p>
-          </div>
-        </Container>
-      </Section>
+      {products.map((p, i) => (
+        <ProductStory
+          key={p.id}
+          product={p}
+          background={i % 2 === 0 ? "cream" : "white"}
+        />
+      ))}
 
       {/* Order form */}
       <Section background="cream" id="order">
@@ -161,14 +151,21 @@ export default function ShopPage() {
           </div>
           <ShopOrderForm />
           <p className="font-sans text-xs text-espresso/40 text-center mt-12">
-            {BRAND} · Ireland ·{" "}
+            From Ireland to Lisbon · Shipping across Europe ·{" "}
             <a
-              href="https://instagram.com/ishka_org"
+              href={`https://instagram.com/${BRAND_INSTAGRAM}`}
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-2 hover:text-terracotta transition-colors"
             >
-              @ishka_org
+              @{BRAND_INSTAGRAM}
+            </a>{" "}
+            ·{" "}
+            <a
+              href={`mailto:${BRAND_EMAIL}`}
+              className="underline underline-offset-2 hover:text-terracotta transition-colors"
+            >
+              {BRAND_EMAIL}
             </a>
           </p>
         </Container>
