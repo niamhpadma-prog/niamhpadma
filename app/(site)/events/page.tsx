@@ -9,6 +9,7 @@ import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { client } from "@/lib/sanity/client";
 import { retreatsQuery, eventsQuery } from "@/lib/sanity/queries";
+import { hasFinished, FINISHED_RETREAT_MESSAGE } from "@/lib/booking";
 import { urlFor } from "@/lib/sanity/image";
 import { EventsListing } from "./EventsListing";
 
@@ -113,44 +114,109 @@ export default async function EventsPage() {
                   ? urlFor(r.heroImage).width(1200).height(800).fit("crop").url()
                   : "/images/retreats-hero.jpg";
                 const dateStr = formatDateRange(r.dateStart, r.dateEnd);
-                return (
-                  <Link
-                    key={r._id}
-                    href={`/retreats/${r.slug.current}`}
-                    className="group block rounded-3xl overflow-hidden bg-cream"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <Image
-                        src={img}
-                        alt={r.heroImage?.alt || r.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                        sizes="(max-width: 768px) 100vw, 600px"
-                      />
-                      {r.status === "sold-out" && (
+                const finished = hasFinished(r.dateStart, r.dateEnd);
+                const href = `/retreats/${r.slug.current}`;
+
+                const media = (
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={img}
+                      alt={r.heroImage?.alt || r.title}
+                      fill
+                      className={`object-cover transition-transform duration-700 group-hover:scale-[1.03] ${
+                        finished ? "grayscale opacity-75" : ""
+                      }`}
+                      sizes="(max-width: 768px) 100vw, 600px"
+                    />
+                    {finished ? (
+                      <span className="absolute top-4 left-4 bg-espresso/85 text-cream font-sans text-xs uppercase tracking-widest px-3 py-1.5 rounded-full">
+                        Finished
+                      </span>
+                    ) : (
+                      r.status === "sold-out" && (
                         <span className="absolute top-4 left-4 bg-espresso text-cream font-sans text-xs uppercase tracking-widest px-3 py-1.5 rounded-full">
                           Sold Out
                         </span>
-                      )}
-                    </div>
-                    <div className="p-8">
-                      {r.subtitle && (
-                        <p className="font-sans text-xs uppercase tracking-widest text-sage mb-2">
-                          {r.subtitle}
-                        </p>
-                      )}
-                      <h3 className="font-serif text-3xl mb-3 group-hover:text-terracotta transition-colors">
-                        {r.title}
-                      </h3>
-                      {r.tagline && (
-                        <p className="font-sans text-base text-espresso/65 mb-4 leading-relaxed">
-                          {r.tagline}
-                        </p>
-                      )}
-                      <p className="font-sans text-sm text-espresso/50">
-                        {[r.locationLine, dateStr].filter(Boolean).join(" · ")}
+                      )
+                    )}
+                  </div>
+                );
+
+                const details = (
+                  <>
+                    {r.subtitle && (
+                      <p className="font-sans text-xs uppercase tracking-widest text-sage mb-2">
+                        {r.subtitle}
                       </p>
+                    )}
+                    <h3
+                      className={`font-serif text-3xl mb-3 transition-colors ${
+                        finished
+                          ? "line-through decoration-2 text-espresso/45"
+                          : "group-hover:text-terracotta"
+                      }`}
+                    >
+                      {r.title}
+                    </h3>
+                    {r.tagline && (
+                      <p
+                        className={`font-sans text-base mb-4 leading-relaxed ${
+                          finished ? "text-espresso/45" : "text-espresso/65"
+                        }`}
+                      >
+                        {r.tagline}
+                      </p>
+                    )}
+                    <p
+                      className={`font-sans text-sm ${
+                        finished ? "text-espresso/40 line-through" : "text-espresso/50"
+                      }`}
+                    >
+                      {[r.locationLine, dateStr].filter(Boolean).join(" · ")}
+                    </p>
+                  </>
+                );
+
+                // A finished retreat needs its own waitlist link, and a link
+                // cannot be nested inside the whole-card link — so the card
+                // stops being one big link and the title carries it instead.
+                if (finished) {
+                  return (
+                    <div
+                      key={r._id}
+                      className="group rounded-3xl overflow-hidden bg-cream flex flex-col"
+                    >
+                      <Link href={href} className="block">
+                        {media}
+                      </Link>
+                      <div className="p-8 flex flex-col flex-1">
+                        <Link href={href} className="block">
+                          {details}
+                        </Link>
+                        <div className="mt-6 pt-6 border-t border-sand/40">
+                          <p className="font-sans text-sm text-espresso/70 leading-relaxed mb-4">
+                            {FINISHED_RETREAT_MESSAGE}
+                          </p>
+                          <Link
+                            href="#waitlist"
+                            className="inline-flex items-center justify-center font-sans font-medium text-sm px-5 py-2.5 rounded-full border-2 border-espresso text-espresso hover:bg-espresso hover:text-cream transition-colors duration-300"
+                          >
+                            Join the Waitlist
+                          </Link>
+                        </div>
+                      </div>
                     </div>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={r._id}
+                    href={href}
+                    className="group block rounded-3xl overflow-hidden bg-cream"
+                  >
+                    {media}
+                    <div className="p-8">{details}</div>
                   </Link>
                 );
               })}
@@ -253,10 +319,12 @@ export default async function EventsPage() {
         </Container>
       </Section>
 
-      <NewsletterSection
-        heading="Be the First to Know"
-        body="Sign up to receive early access to retreats, events, and community offerings."
-      />
+      <div id="waitlist">
+        <NewsletterSection
+          heading="Be the First to Know"
+          body="Sign up to receive early access to retreats, events, and community offerings."
+        />
+      </div>
     </>
   );
 }

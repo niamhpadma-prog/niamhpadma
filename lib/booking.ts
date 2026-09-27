@@ -5,6 +5,28 @@
 // back to the prefilled contact form. Sold-out events point to a waitlist
 // enquiry; cancelled events get no button.
 
+/**
+ * Has a retreat already happened?
+ *
+ * Retreats, unlike workshops and classes, are not filtered out of the site once
+ * their date passes — they stay up as a record of past work. This decides when
+ * to show them as finished instead of still bookable.
+ *
+ * Multi-day retreats use the end date, so one is not marked finished while it
+ * is still running.
+ */
+export function hasFinished(dateStart?: string, dateEnd?: string): boolean {
+  const last = dateEnd || dateStart;
+  if (!last) return false;
+  const time = new Date(last).getTime();
+  if (Number.isNaN(time)) return false;
+  return time < Date.now();
+}
+
+/** Shown wherever a retreat has finished. */
+export const FINISHED_RETREAT_MESSAGE =
+  "This retreat is now finished — sign up to the waitlist to be the first to know when the next retreat goes live.";
+
 export interface BookingTarget {
   href: string;
   external: boolean;
