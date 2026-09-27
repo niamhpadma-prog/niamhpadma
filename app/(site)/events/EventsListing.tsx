@@ -17,6 +17,7 @@ interface Event {
   price?: string;
   status?: string;
   bookingUrl?: string;
+  paidOnline?: boolean;
   image?: { asset?: { url?: string }; alt?: string };
   excerpt?: string;
 }

@@ -110,6 +110,7 @@ export const eventsQuery = groq`
     location,
     price,
     bookingUrl,
+    "paidOnline": acceptsPayment == true && defined(stripePriceId),
     capacity,
     status,
     image { asset->, alt, caption, creditUrl, captionPosition },
@@ -129,6 +130,7 @@ export const upcomingEventsQuery = groq`
     location,
     price,
     bookingUrl,
+    "paidOnline": acceptsPayment == true && defined(stripePriceId),
     status,
     image { asset->, alt, caption, creditUrl, captionPosition },
     excerpt

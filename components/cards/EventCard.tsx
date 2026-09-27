@@ -15,6 +15,7 @@ interface EventCardProps {
   price?: string;
   status?: string;
   bookingUrl?: string;
+  paidOnline?: boolean;
   image?: { asset?: { url?: string }; alt?: string };
   excerpt?: string;
   index?: number;
@@ -32,6 +33,7 @@ export function EventCard({
   price,
   status,
   bookingUrl,
+  paidOnline,
   image,
   excerpt,
   index = 0,
@@ -43,7 +45,7 @@ export function EventCard({
       year: "numeric",
     });
 
-  const booking = getBookingTarget({ title, bookingUrl, status });
+  const booking = getBookingTarget({ title, slug, bookingUrl, status, paidOnline });
 
   return (
     <motion.div

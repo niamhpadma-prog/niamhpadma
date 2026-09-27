@@ -15,6 +15,9 @@ interface BookingInput {
   title: string;
   bookingUrl?: string;
   status?: string;
+  /** True when the event takes card payment on the site (see the event schema). */
+  paidOnline?: boolean;
+  slug?: string;
 }
 
 const contactSubject = (prefix: string, title: string) =>
@@ -28,6 +31,8 @@ export function getBookingTarget({
   title,
   bookingUrl,
   status,
+  paidOnline,
+  slug,
 }: BookingInput): BookingTarget | null {
   if (status === "cancelled") return null;
 
@@ -37,6 +42,13 @@ export function getBookingTarget({
       external: false,
       label: "Join Waitlist",
     };
+  }
+
+  // Paying happens on the event's own page, so a card sends people there rather
+  // than to the enquiry form. Checked before bookingUrl: if both are set,
+  // taking the payment directly is what was asked for.
+  if (paidOnline && slug) {
+    return { href: `/events/${slug}`, external: false, label: "Book Now" };
   }
 
   if (bookingUrl) {
