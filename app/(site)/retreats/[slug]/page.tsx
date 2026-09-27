@@ -13,6 +13,7 @@ import { EventEnquiryForm } from "@/components/forms/EventEnquiryForm";
 import { client } from "@/lib/sanity/client";
 import { retreatQuery, retreatSlugsQuery } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
+import { hasFinished, FINISHED_RETREAT_MESSAGE } from "@/lib/booking";
 import { portableTextComponents, inlinePortableTextComponents } from "@/lib/sanity/portableText";
 
 // Re-render at most every 60s so Sanity edits appear without a redeploy.
@@ -329,6 +330,7 @@ export default async function RetreatPage({
       .filter(Boolean)
       .join(" · ");
   const dateDisplay = dateRange(retreat.dateStart, retreat.dateEnd);
+  const finished = hasFinished(retreat.dateStart, retreat.dateEnd);
 
   return (
     <>
@@ -416,12 +418,19 @@ export default async function RetreatPage({
                 {[locationDisplay, dateDisplay].filter(Boolean).join(" · ")}
               </p>
             )}
+            {finished && (
+              <p className="font-sans text-base text-cream/90 bg-espresso/40 border border-cream/25 rounded-2xl px-6 py-4 mb-8 max-w-xl mx-auto leading-relaxed">
+                {FINISHED_RETREAT_MESSAGE}
+              </p>
+            )}
             <div className="flex flex-wrap justify-center gap-3">
               <Link
                 href="#enquiry"
                 className="inline-flex items-center justify-center font-sans font-medium rounded-full px-9 py-4.5 text-lg bg-cream text-espresso hover:bg-white transition-colors"
               >
-                {retreat.secureCtaLabel || "Secure Your Spot"}
+                {finished
+                  ? "Join the Waitlist"
+                  : retreat.secureCtaLabel || "Secure Your Spot"}
               </Link>
               {retreat.bookCallUrl && (
                 <a
@@ -837,7 +846,9 @@ export default async function RetreatPage({
               </div>
               <div className="flex flex-wrap justify-center gap-3">
                 <Button href="#enquiry" variant="primary" size="lg">
-                  {retreat.secureCtaLabel || "Secure Your Spot"}
+                  {finished
+                    ? "Join the Waitlist"
+                    : retreat.secureCtaLabel || "Secure Your Spot"}
                 </Button>
                 {retreat.bookCallUrl && (
                   <Button href={retreat.bookCallUrl} variant="outline" size="lg">
@@ -872,14 +883,17 @@ export default async function RetreatPage({
           <div className="max-w-5xl mx-auto">
             <div className="text-center max-w-2xl mx-auto mb-10">
               <p className="font-sans text-xs uppercase tracking-[0.25em] text-sage mb-4">
-                Reserve Your Spot
+                {finished ? "Waitlist" : "Reserve Your Spot"}
               </p>
               <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl leading-tight mb-4">
-                {retreat.secureCtaLabel || "Secure Your Spot"}
+                {finished
+                  ? "Join the Waitlist"
+                  : retreat.secureCtaLabel || "Secure Your Spot"}
               </h2>
               <p className="font-sans text-base text-espresso/60">
-                Leave your details and Niamh will be in touch with full information
-                and next steps.
+                {finished
+                  ? "This retreat has finished. Leave your details and you'll be the first to hear when the next one is announced."
+                  : "Leave your details and Niamh will be in touch with full information and next steps."}
               </p>
             </div>
             <EventEnquiryForm
@@ -887,7 +901,9 @@ export default async function RetreatPage({
               retreatSlug={retreat.slug.current}
               recipientEmail={retreat.enquiryRecipient}
               bookCallUrl={retreat.bookCallUrl}
-              primaryLabel={retreat.secureCtaLabel || "Reserve Your Spot"}
+              primaryLabel={
+                finished ? "Join the Waitlist" : retreat.secureCtaLabel || "Reserve Your Spot"
+              }
             />
           </div>
         </Container>
@@ -898,7 +914,13 @@ export default async function RetreatPage({
         <Container>
           <div className="flex items-center justify-between gap-4">
             <div className="min-w-0">
-              <p className="font-serif text-base md:text-lg truncate">{retreat.title}</p>
+              <p
+                className={`font-serif text-base md:text-lg truncate ${
+                  finished ? "line-through text-espresso/50" : ""
+                }`}
+              >
+                {retreat.title}
+              </p>
               <p className="font-sans text-xs md:text-sm text-espresso/50 truncate">
                 {[locationDisplay, dateDisplay].filter(Boolean).join(" · ")}
               </p>
@@ -906,12 +928,12 @@ export default async function RetreatPage({
             <Link
               href="#enquiry"
               className={`shrink-0 inline-flex items-center justify-center font-sans font-medium rounded-full transition-all duration-300 px-7 py-3.5 text-base ${
-                retreat.status === "sold-out"
+                finished || retreat.status === "sold-out"
                   ? "border-2 border-espresso text-espresso hover:bg-espresso hover:text-cream"
                   : "bg-espresso text-cream hover:bg-espresso-light"
               }`}
             >
-              {retreat.status === "sold-out"
+              {finished || retreat.status === "sold-out"
                 ? "Join Waitlist"
                 : retreat.secureCtaLabel || "Secure Your Spot"}
             </Link>
