@@ -5,6 +5,28 @@
 // back to the prefilled contact form. Sold-out events point to a waitlist
 // enquiry; cancelled events get no button.
 
+/**
+ * Has a retreat already happened?
+ *
+ * Retreats, unlike workshops and classes, are not filtered out of the site once
+ * their date passes — they stay up as a record of past work. This decides when
+ * to show them as finished instead of still bookable.
+ *
+ * Multi-day retreats use the end date, so one is not marked finished while it
+ * is still running.
+ */
+export function hasFinished(dateStart?: string, dateEnd?: string): boolean {
+  const last = dateEnd || dateStart;
+  if (!last) return false;
+  const time = new Date(last).getTime();
+  if (Number.isNaN(time)) return false;
+  return time < Date.now();
+}
+
+/** Shown wherever a retreat has finished. */
+export const FINISHED_RETREAT_MESSAGE =
+  "This retreat is now finished — sign up to the waitlist to be the first to know when the next retreat goes live.";
+
 export interface BookingTarget {
   href: string;
   external: boolean;
@@ -15,6 +37,9 @@ interface BookingInput {
   title: string;
   bookingUrl?: string;
   status?: string;
+  /** True when the event takes card payment on the site (see the event schema). */
+  paidOnline?: boolean;
+  slug?: string;
 }
 
 const contactSubject = (prefix: string, title: string) =>
@@ -28,6 +53,8 @@ export function getBookingTarget({
   title,
   bookingUrl,
   status,
+  paidOnline,
+  slug,
 }: BookingInput): BookingTarget | null {
   if (status === "cancelled") return null;
 
@@ -37,6 +64,13 @@ export function getBookingTarget({
       external: false,
       label: "Join Waitlist",
     };
+  }
+
+  // Paying happens on the event's own page, so a card sends people there rather
+  // than to the enquiry form. Checked before bookingUrl: if both are set,
+  // taking the payment directly is what was asked for.
+  if (paidOnline && slug) {
+    return { href: `/events/${slug}`, external: false, label: "Book Now" };
   }
 
   if (bookingUrl) {

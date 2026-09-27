@@ -11,6 +11,7 @@ import { course } from "./course";
 import { courseModule } from "./courseModule";
 import { courseLesson } from "./courseLesson";
 import { courseEnrollment } from "./courseEnrollment";
+import { eventBooking } from "./eventBooking";
 import { leadMagnet } from "./leadMagnet";
 import { introMedia } from "./introMedia";
 import { waysToWork } from "./waysToWork";
@@ -34,4 +35,5 @@ export const schemaTypes = [
   courseModule,
   courseLesson,
   courseEnrollment,
+  eventBooking,
 ];
