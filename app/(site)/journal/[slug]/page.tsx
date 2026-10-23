@@ -14,7 +14,7 @@ import { journalPortableTextComponents } from "@/lib/sanity/portableText";
 // Every word on this page comes from Sanity. Post text is NEVER hardcoded here —
 // this file previously held a hardcoded copy of the journal whose bodies had
 // been machine-written under Niamh's titles. See docs/content-safety.md.
-export const revalidate = 60;
+export const revalidate = 86400;
 
 // Cover art only — presentation, not content. Used when a post has no cover
 // image set in the Studio.
