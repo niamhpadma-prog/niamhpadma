@@ -7,7 +7,7 @@ import { postsQuery } from "@/lib/sanity/queries";
 // Niamh's journal is edited in the Studio and read from Sanity. Nothing about a
 // post — title, excerpt or body — is ever hardcoded here. See
 // docs/content-safety.md.
-export const revalidate = 60;
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: "Journal",

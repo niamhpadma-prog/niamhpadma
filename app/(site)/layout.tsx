@@ -3,7 +3,7 @@ import { EbookPopup, type LeadMagnet } from "@/components/sections/EbookPopup";
 import { client } from "@/lib/sanity/client";
 import { leadMagnetQuery } from "@/lib/sanity/queries";
 
-export const revalidate = 60;
+export const revalidate = 86400;
 
 export default async function SiteLayout({
   children,

@@ -9,7 +9,7 @@ import { IntroMediaSection, type IntroMedia } from "@/components/sections/IntroM
 import { client } from "@/lib/sanity/client";
 import { introMediaQuery } from "@/lib/sanity/queries";
 
-export const revalidate = 60;
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: "About Niamh",

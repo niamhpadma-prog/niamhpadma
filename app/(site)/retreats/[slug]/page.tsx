@@ -17,7 +17,7 @@ import { hasFinished, FINISHED_RETREAT_MESSAGE } from "@/lib/booking";
 import { portableTextComponents, inlinePortableTextComponents } from "@/lib/sanity/portableText";
 
 // Re-render at most every 60s so Sanity edits appear without a redeploy.
-export const revalidate = 60;
+export const revalidate = 86400;
 
 type Params = { slug: string };
 
