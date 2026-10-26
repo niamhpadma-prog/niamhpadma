@@ -8,6 +8,7 @@ import { FAQSection } from "@/components/sections/FAQSection";
 import { GallerySection } from "@/components/sections/GallerySection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { EventEnquiryForm } from "@/components/forms/EventEnquiryForm";
+import { EventCheckoutButton } from "@/components/events/EventCheckoutButton";
 import { client } from "@/lib/sanity/client";
 import { eventQuery, eventsQuery } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
@@ -37,6 +38,8 @@ interface EventDoc {
   capacity?: number;
   status?: string;
   bookingUrl?: string;
+  acceptsPayment?: boolean;
+  stripePriceId?: string;
   excerpt?: string;
   body?: PortableTextBlock[];
   image?: SanityImage;
@@ -143,7 +146,11 @@ export default async function EventDetailPage({ params }: { params: Promise<Para
             )}
             {event.status !== "cancelled" && (
               <div className="mt-6">
-                {event.bookingUrl && event.status !== "sold-out" ? (
+                {event.acceptsPayment &&
+                event.stripePriceId &&
+                event.status !== "sold-out" ? (
+                  <EventCheckoutButton eventSlug={slug} />
+                ) : event.bookingUrl && event.status !== "sold-out" ? (
                   <a
                     href={event.bookingUrl}
                     target="_blank"

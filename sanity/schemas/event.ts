@@ -113,11 +113,40 @@ export const event = defineType({
         r.uri({ scheme: ["http", "https"] }).error("Please paste a full link starting with https://"),
     }),
     defineField({
+      name: "acceptsPayment",
+      title: "Take payment on the website",
+      type: "boolean",
+      group: "basics",
+      initialValue: false,
+      hidden: ({ document }) => document?.type === "Retreat",
+      description:
+        "Turn this on to let people pay for this event with a card on your site. The “Book Now” button then goes to a secure Stripe checkout instead of your enquiry form. You must also paste the Stripe Price ID below, or the button falls back to the enquiry form.",
+    }),
+    defineField({
+      name: "stripePriceId",
+      title: "Stripe Price ID",
+      type: "string",
+      group: "basics",
+      hidden: ({ document }) => document?.type === "Retreat" || !document?.acceptsPayment,
+      description:
+        "From your Stripe dashboard: Product catalogue → your event → the price → copy its API ID. It starts with “price_”. This is what people are actually charged, so check it matches the Price field above.",
+      validation: (r) =>
+        r.custom((value, context) => {
+          const doc = context.document as { acceptsPayment?: boolean } | undefined;
+          if (!doc?.acceptsPayment) return true;
+          if (!value) return "Add the Stripe Price ID, or turn off “Take payment on the website”.";
+          if (!/^price_[A-Za-z0-9]+$/.test(value as string))
+            return "That doesn't look right — it should start with “price_” (not “prod_”).";
+          return true;
+        }),
+    }),
+    defineField({
       name: "capacity",
       title: "Capacity",
       type: "number",
       group: "basics",
-      description: "Maximum number of spots (optional).",
+      description:
+        "Maximum number of spots (optional). When people pay on the website, bookings stop once this many places are sold.",
     }),
     defineField({
       name: "status",
