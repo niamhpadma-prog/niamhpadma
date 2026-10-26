@@ -13,7 +13,7 @@ import { eventQuery, eventsQuery } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 import { portableTextComponents } from "@/lib/sanity/portableText";
 
-export const revalidate = 60;
+export const revalidate = 86400;
 
 type Params = { slug: string };
 

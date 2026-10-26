@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 // Re-render at most every 60s so Sanity edits appear without a redeploy.
-export const revalidate = 60;
+export const revalidate = 86400;
 
 interface RetreatCard {
   _id: string;
