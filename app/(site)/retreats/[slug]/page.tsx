@@ -10,6 +10,7 @@ import { FAQSection } from "@/components/sections/FAQSection";
 import { GallerySection } from "@/components/sections/GallerySection";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { EventEnquiryForm } from "@/components/forms/EventEnquiryForm";
+import { WaitlistForm } from "@/components/forms/WaitlistForm";
 import { client } from "@/lib/sanity/client";
 import { retreatQuery, retreatSlugsQuery } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
@@ -331,6 +332,7 @@ export default async function RetreatPage({
       .join(" · ");
   const dateDisplay = dateRange(retreat.dateStart, retreat.dateEnd);
   const finished = hasFinished(retreat.dateStart, retreat.dateEnd);
+  const waitlistHref = `/waitlist?retreat=${encodeURIComponent(retreat.slug.current)}`;
 
   return (
     <>
@@ -425,7 +427,7 @@ export default async function RetreatPage({
             )}
             <div className="flex flex-wrap justify-center gap-3">
               <Link
-                href="#enquiry"
+                href={finished ? waitlistHref : "#enquiry"}
                 className="inline-flex items-center justify-center font-sans font-medium rounded-full px-9 py-4.5 text-lg bg-cream text-espresso hover:bg-white transition-colors"
               >
                 {finished
@@ -845,7 +847,7 @@ export default async function RetreatPage({
                 ))}
               </div>
               <div className="flex flex-wrap justify-center gap-3">
-                <Button href="#enquiry" variant="primary" size="lg">
+                <Button href={finished ? waitlistHref : "#enquiry"} variant="primary" size="lg">
                   {finished
                     ? "Join the Waitlist"
                     : retreat.secureCtaLabel || "Secure Your Spot"}
@@ -896,15 +898,19 @@ export default async function RetreatPage({
                   : "Leave your details and Niamh will be in touch with full information and next steps."}
               </p>
             </div>
-            <EventEnquiryForm
-              retreatTitle={retreat.title}
-              retreatSlug={retreat.slug.current}
-              recipientEmail={retreat.enquiryRecipient}
-              bookCallUrl={retreat.bookCallUrl}
-              primaryLabel={
-                finished ? "Join the Waitlist" : retreat.secureCtaLabel || "Reserve Your Spot"
-              }
-            />
+            {finished ? (
+              <div className="max-w-2xl mx-auto">
+                <WaitlistForm retreat={retreat.slug.current} />
+              </div>
+            ) : (
+              <EventEnquiryForm
+                retreatTitle={retreat.title}
+                retreatSlug={retreat.slug.current}
+                recipientEmail={retreat.enquiryRecipient}
+                bookCallUrl={retreat.bookCallUrl}
+                primaryLabel={retreat.secureCtaLabel || "Reserve Your Spot"}
+              />
+            )}
           </div>
         </Container>
       </Section>
@@ -926,7 +932,7 @@ export default async function RetreatPage({
               </p>
             </div>
             <Link
-              href="#enquiry"
+              href={finished ? waitlistHref : "#enquiry"}
               className={`shrink-0 inline-flex items-center justify-center font-sans font-medium rounded-full transition-all duration-300 px-7 py-3.5 text-base ${
                 finished || retreat.status === "sold-out"
                   ? "border-2 border-espresso text-espresso hover:bg-espresso hover:text-cream"
