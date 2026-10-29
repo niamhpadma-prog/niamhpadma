@@ -198,7 +198,7 @@ export default async function EventsPage() {
                             {FINISHED_RETREAT_MESSAGE}
                           </p>
                           <Link
-                            href="#waitlist"
+                            href={`/waitlist?retreat=${encodeURIComponent(r.slug.current)}`}
                             className="inline-flex items-center justify-center font-sans font-medium text-sm px-5 py-2.5 rounded-full border-2 border-espresso text-espresso hover:bg-espresso hover:text-cream transition-colors duration-300"
                           >
                             Join the Waitlist
