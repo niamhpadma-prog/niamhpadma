@@ -1,0 +1,31 @@
+/* Text Niamh writes in Supabase, rendered from Markdown. */
+.portal-prose p { margin: 0.6rem 0; max-width: 68ch; }
+.portal-prose ul { list-style: disc; margin: 0.5rem 0 0.5rem 1.4rem; }
+.portal-prose ol { list-style: decimal; margin: 0.5rem 0 0.5rem 1.4rem; }
+.portal-prose li { margin: 0.25rem 0; }
+.portal-prose a { color: var(--terracotta-dark); text-decoration: underline; text-underline-offset: 3px; }
+.portal-prose strong { font-weight: 600; }
+.portal-prose h2, .portal-prose h3 { font-family: var(--font-serif); margin: 1rem 0 0.4rem; }
+
+.portal-check {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border: 1.5px solid var(--sand);
+  border-radius: 6px;
+  background: var(--white);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.portal-check:checked { background: var(--sage-dark); border-color: var(--sage-dark); }
+.portal-check:checked::after {
+  content: "";
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+.portal-check:focus-visible { outline: 2px solid var(--sage-dark); outline-offset: 2px; }

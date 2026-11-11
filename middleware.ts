@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
+import { updatePortalSession } from "@/lib/supabase/middleware";
 
 const secret = new TextEncoder().encode(process.env.COURSE_ACCESS_SECRET || "dev-secret");
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Client portal: Supabase sign-in
+  if (pathname === "/portal" || pathname.startsWith("/portal/")) {
+    return updatePortalSession(request);
+  }
 
   // Only protect course learning routes
   const learnMatch = pathname.match(/^\/courses\/([^/]+)\/learn/);
@@ -37,5 +43,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/courses/:slug/learn/:path*",
+  matcher: ["/courses/:slug/learn/:path*", "/portal", "/portal/:path*"],
 };

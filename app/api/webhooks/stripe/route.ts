@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { sanityMutate } from "@/lib/sanity/writeClient";
+import { isStilroomSubscription, syncSubscription } from "@/lib/portal/membership";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -20,6 +21,33 @@ export async function POST(request: Request) {
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+  }
+
+  // STILroom membership: keep the member's access in step with Stripe.
+  try {
+    if (
+      event.type === "checkout.session.completed" &&
+      event.data.object.mode === "subscription" &&
+      event.data.object.metadata?.product === "stilroom" &&
+      event.data.object.subscription
+    ) {
+      const sub = event.data.object.subscription;
+      await syncSubscription(typeof sub === "string" ? sub : sub.id);
+      return NextResponse.json({ received: true });
+    }
+    if (
+      (event.type === "customer.subscription.created" ||
+        event.type === "customer.subscription.updated" ||
+        event.type === "customer.subscription.deleted") &&
+      isStilroomSubscription(event.data.object)
+    ) {
+      await syncSubscription(event.data.object);
+      return NextResponse.json({ received: true });
+    }
+  } catch (err) {
+    console.error("[stilroom] webhook failed:", err);
+    // Ask Stripe to retry later.
+    return NextResponse.json({ error: "Membership sync failed" }, { status: 500 });
   }
 
   if (event.type === "checkout.session.completed") {
