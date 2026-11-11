@@ -34,24 +34,48 @@ function verifySanitySignature(
   }
 }
 
-function pathsForDocument(doc: SanityProjection): string[] {
+// Which pages a published document affects.
+//
+// `wholeLayout` is for content that appears on every page (the lead-magnet
+// popup lives in app/(site)/layout.tsx), where listing paths individually
+// would mean naming every route in the site.
+//
+// Anything falling through to `default` updates only when the page's own
+// refresh timer comes round — a day, since the timer was raised to cut ISR
+// writes. So a missing type here reads as "I published it and nothing
+// happened", which is why the four content types that were missing are now
+// listed explicitly.
+function pathsForDocument(doc: SanityProjection): {
+  paths: string[];
+  wholeLayout?: boolean;
+} {
   const slug = doc.slug?.current;
   switch (doc._type) {
     case "event": {
       const isRetreat = doc.type === "Retreat";
       const detail = slug ? [isRetreat ? `/retreats/${slug}` : `/events/${slug}`] : [];
-      return ["/", "/events", ...detail];
+      return { paths: ["/", "/events", ...detail] };
     }
     case "post":
-      return ["/journal", ...(slug ? [`/journal/${slug}`] : [])];
+      return { paths: ["/journal", ...(slug ? [`/journal/${slug}`] : [])] };
     case "course":
-      return ["/courses", ...(slug ? [`/courses/${slug}`] : [])];
+      return { paths: ["/courses", ...(slug ? [`/courses/${slug}`] : [])] };
     case "page":
-      return slug ? [`/${slug}`] : ["/"];
+      return { paths: slug ? [`/${slug}`] : ["/"] };
     case "siteSettings":
-      return ["/"];
+      return { paths: ["/"] };
+    // Shown on the homepage and on Work With Me.
+    case "testimonial":
+      return { paths: ["/", "/work-with-me"] };
+    case "waysToWork":
+      return { paths: ["/work-with-me"] };
+    case "introMedia":
+      return { paths: ["/my-story"] };
+    // The popup renders in the site layout, so it is on every page.
+    case "leadMagnet":
+      return { paths: [], wholeLayout: true };
     default:
-      return [];
+      return { paths: [] };
   }
 }
 
@@ -82,7 +106,16 @@ export async function POST(request: Request) {
 
   // Branch 1: Sanity webhook payload — revalidate based on _type/slug
   if (authedAsWebhook && body._type) {
-    const paths = pathsForDocument(body);
+    const { paths, wholeLayout } = pathsForDocument(body);
+
+    if (wholeLayout) {
+      try {
+        revalidatePath("/", "layout");
+      } catch (err) {
+        console.error("[revalidate] layout revalidation failed", err);
+      }
+    }
+
     paths.forEach((p) => {
       try {
         revalidatePath(p);
@@ -90,10 +123,17 @@ export async function POST(request: Request) {
         console.error("[revalidate] revalidatePath failed", p, err);
       }
     });
+
     return NextResponse.json({
       revalidated: true,
       type: body._type,
       paths,
+      ...(wholeLayout ? { wholeLayout: true } : {}),
+      // Surfaces a document type nothing knows about, rather than returning a
+      // cheerful success for an edit that will not appear for a day.
+      ...(paths.length === 0 && !wholeLayout
+        ? { warning: `No pages are mapped for type "${body._type}"` }
+        : {}),
     });
   }
 

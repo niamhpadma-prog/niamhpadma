@@ -17,7 +17,7 @@ import {
   type WaysToWorkConfig,
 } from "@/components/sections/WaysToWorkSection";
 
-export const revalidate = 60;
+export const revalidate = 86400;
 
 interface Testimonial {
   _id: string;

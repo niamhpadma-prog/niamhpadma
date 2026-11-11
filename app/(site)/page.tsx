@@ -51,7 +51,7 @@ interface UpcomingEvent {
 }
 
 // Pick up Sanity edits within ~60s without redeploying.
-export const revalidate = 60;
+export const revalidate = 86400;
 
 export default async function HomePage() {
   const [testimonials, upcomingRetreats, upcomingEvents] = await Promise.all([

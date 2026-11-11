@@ -22,6 +22,22 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   };
 }
 
+// This route's pattern is /<anything>/<anything>, so it catches every
+// two-segment URL that no more specific route claims — including the random
+// paths vulnerability scanners probe all day (/wp-admin/setup, /.env/backup).
+// With the default (true), each distinct URL was rendered on demand and cached
+// before 404ing, so an unbounded set of junk URLs could each cost a cache
+// write.
+//
+// The full list of real pages comes from locationPages.ts in code, not the
+// CMS, so it is known at build time and nothing legitimate can be missing.
+// Anything not on that list now 404s immediately without rendering.
+//
+// Deliberately NOT applied to /journal/[slug], /events/[slug] or
+// /retreats/[slug]: those lists come from Sanity, and locking them down would
+// make anything Niamh publishes 404 until the next deploy.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return getAllLocationParams();
 }
