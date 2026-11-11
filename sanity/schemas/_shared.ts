@@ -1,5 +1,20 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 
+// Turns a title into a safe web address. Sanity's default "Generate" keeps
+// characters that break URLs — a slug containing spaces produces a link that
+// 404s even though the document is published correctly.
+export function toUrlSafeSlug(input: string): string {
+  return input
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // strip accents: "Niamh's Café" -> "niamhs-cafe"
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 96);
+}
+
+
 // Shared field set added to every image so Niamh can credit the photographer
 // and choose where the caption appears relative to the image.
 export const imageCaptionFields = [
