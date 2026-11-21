@@ -147,7 +147,7 @@ const services: BentoService[] = [
     id: "group-weekly",
     category: "Group Classes",
     title: "Weekly Group Classes",
-    image: { src: "/images/services/group-weekly.jpg", alt: "Group yoga class in Lisbon" },
+    image: { src: "/images/home-hero.jpg", alt: "Group shavasana in a candlelit studio" },
     summary:
       "Join our community for weekly somatic yoga and breathwork classes in beautiful Lisbon studios. All levels welcome — from complete beginners to experienced practitioners.",
     body: (

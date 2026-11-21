@@ -167,9 +167,9 @@ export default async function HomePage() {
         heading="How We Can Work Together"
         subheading="From private sessions to group experiences — find the practice that fits your life."
         items={[
-          { _id: "h1", title: "1-1 Coaching", type: "Private", description: "Personalised yoga, breathwork & somatic sessions tailored to your unique needs.", pricing: "From €80", image: { asset: { url: "/images/shoot-2026/niamh-laughing-pen.jpg" }, alt: "Niamh laughing with a pen in hand", position: "object-top" }, href: "/work-with-me" },
-          { _id: "h2", title: "Group Classes", type: "Weekly", description: "Community yoga and breathwork classes in Lisbon. All levels welcome.", pricing: "€15/class", image: { asset: { url: "/images/group-classes.avif" }, alt: "Group yoga class" }, href: "/work-with-me" },
-          { _id: "h3", title: "Workshops", type: "Deep Dive", description: "Half-day and full-day immersions into breathwork, somatic release, and more.", pricing: "From €45", image: { asset: { url: "/images/workshops.jpg" }, alt: "Workshop session" }, href: "/events" },
+          { _id: "h1", title: "1-1 Coaching", type: "Private", description: "Personalised yoga, breathwork & somatic sessions tailored to your unique needs.", pricing: "From €80", image: { asset: { url: "/images/shoot-2026/niamh-laughing-pen.jpg" }, alt: "Niamh laughing with a pen in hand", position: "object-center" }, href: "/work-with-me" },
+          { _id: "h2", title: "Group Classes", type: "Weekly", description: "Community yoga and breathwork classes in Lisbon. All levels welcome.", pricing: "€15/class", image: { asset: { url: "/images/home-hero.jpg" }, alt: "Group shavasana in a candlelit studio" }, href: "/work-with-me" },
+          { _id: "h3", title: "Workshops", type: "Deep Dive", description: "Half-day and full-day immersions into breathwork, somatic release, and more.", pricing: "From €45", image: { asset: { url: "/images/events-hero.jpg" }, alt: "Group class in downward dog" }, href: "/events" },
           { _id: "h4", title: "Retreats", type: "Multi-day", description: "Transformative retreat experiences across Portugal and Europe.", pricing: "From €350", image: { asset: { url: "/images/retreats.jpg" }, alt: "Retreat in nature" }, href: "/events" },
         ]}
         background="cream"
