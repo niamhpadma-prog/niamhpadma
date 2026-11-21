@@ -79,11 +79,23 @@ function ClassList({
       <p className="font-sans text-sm uppercase tracking-widest text-sage mb-3">{title}</p>
       <ul className="divide-y divide-sand/60 border-y border-sand/60">
         {classes.map((c) => (
-          <li key={c.name + c.when} className="py-3">
-            <p className="font-medium text-espresso">{c.name}</p>
-            <p className="text-sm text-espresso/60">
-              {c.when} · {c.where}
-            </p>
+          <li key={c.name + c.when}>
+            <a
+              href={bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group/class flex items-center justify-between gap-4 py-3"
+            >
+              <span>
+                <span className="block font-medium text-espresso group-hover/class:text-terracotta transition-colors">
+                  {c.name}
+                </span>
+                <span className="block text-sm text-espresso/60">
+                  {c.when} · {c.where}
+                </span>
+              </span>
+              <span aria-hidden className="text-terracotta">→</span>
+            </a>
           </li>
         ))}
       </ul>
@@ -116,13 +128,6 @@ const services: BentoService[] = [
       </>
     ),
     pricing: "€15/class or €50/month",
-    ctas: [
-      {
-        label: "Book Now",
-        href: "/contact?subject=Booking%3A%20Weekly%20Group%20Classes",
-        variant: "primary",
-      },
-    ],
   },
   {
     id: "group-monthly",
