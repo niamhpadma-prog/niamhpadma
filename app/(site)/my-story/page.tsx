@@ -67,9 +67,9 @@ export default async function AboutPage() {
       <HeroSection
         headline="My Story"
         subheadline={"From wandering to rooted.\nA path through ancient wisdom and modern healing."}
-        imageSrc="/images/niamh-my-story.jpg"
-        imageAlt="Niamh Padma"
-        imagePosition="top-20"
+        imageSrc="/images/shoot-2026/niamh-backbend.jpg"
+        imageAlt="Niamh Padma in a backbend"
+        imagePosition="center"
       />
 
       <IntroMediaSection config={introMedia} />
@@ -80,8 +80,8 @@ export default async function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
             <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-sand/30">
               <img
-                src="/images/rest.jpg"
-                alt="Niamh"
+                src="/images/shoot-2026/niamh-stool-prayer.jpg"
+                alt="Niamh seated on a stool, hands together at her chin"
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
@@ -168,8 +168,8 @@ export default async function AboutPage() {
             </div>
             <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-sand/30">
               <img
-                src="/images/my-story.jpg"
-                alt="Niamh in Lisbon"
+                src="/images/shoot-2026/niamh-side-stretch.jpg"
+                alt="Niamh in a seated side stretch"
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>

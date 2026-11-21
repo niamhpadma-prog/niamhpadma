@@ -17,7 +17,8 @@ export interface BentoService {
   id: string;
   category: ServiceCategory;
   title: string;
-  image: { src: string; alt: string };
+  /** `position` is a Tailwind object-position class, e.g. "object-top", for photos whose subject sits off-centre. */
+  image: { src: string; alt: string; position?: string };
   /** Short description shown on the card. When omitted, `body` is rendered inline on the card. */
   summary?: string;
   /** Full description shown in the "Learn more" modal (or inline when summary is absent). */
@@ -43,7 +44,7 @@ function BentoCard({
           alt={service.image.alt}
           fill
           sizes="(max-width: 768px) 100vw, 600px"
-          className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          className={`object-cover ${service.image.position ?? ""} transition-transform duration-700 group-hover:scale-[1.03]`}
         />
       </div>
 
@@ -152,7 +153,7 @@ function ServiceModal({
                 alt={service.image.alt}
                 fill
                 sizes="(max-width: 768px) 100vw, 410px"
-                className="object-cover"
+                className={`object-cover ${service.image.position ?? ""}`}
               />
             </div>
 

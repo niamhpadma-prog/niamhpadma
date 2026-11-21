@@ -108,9 +108,9 @@ function ClassList({
 // The 1-1 coaching cards come from Studio → Ways to Work, so Niamh can rename
 // them and change prices there. Images are matched by position.
 const coachingImages = [
-  { src: "/images/services/coaching-intro.jpg", alt: "Restful somatic coaching session" },
-  { src: "/images/services/coaching-3-month.jpg", alt: "Personalised yoga practice" },
-  { src: "/images/services/coaching-6-month.jpg", alt: "Yoga nidra restoration" },
+  { src: "/images/shoot-2026/niamh-desk-thinking.jpg", alt: "Niamh at her desk with a notebook and laptop", position: "object-top" },
+  { src: "/images/shoot-2026/niamh-hands-on-heart.jpg", alt: "Niamh with her hands on her heart, eyes closed", position: "object-top" },
+  { src: "/images/shoot-2026/niamh-walking-sleeves.jpg", alt: "Niamh moving with arms swept back", position: "object-top" },
 ];
 
 function coachingServices(config: WaysToWorkConfig | null): BentoService[] {
@@ -180,7 +180,7 @@ const services: BentoService[] = [
     id: "corporate-intro",
     category: "Corporate",
     title: "Nervous System–Informed Wellbeing",
-    image: { src: "/images/services/corporate-intro.jpg", alt: "Corporate wellbeing workshop" },
+    image: { src: "/images/shoot-2026/niamh-blazer-laughing.jpg", alt: "Niamh laughing in a pinstripe blazer", position: "object-top" },
     summary:
       "Practical, nervous-system-informed wellbeing programmes for organisations navigating pressure, growth and change — helping teams stay clear, resilient and effective.",
     body: (

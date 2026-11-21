@@ -143,7 +143,7 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
             <div className="flex items-center justify-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden relative flex-shrink-0">
                 <Image
-                  src="/images/niamh-profile-pic.png"
+                  src="/images/shoot-2026/niamh-headshot-small.jpg"
                   alt="Niamh Padma"
                   fill
                   className="object-cover"
