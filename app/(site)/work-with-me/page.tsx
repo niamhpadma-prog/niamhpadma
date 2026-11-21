@@ -127,7 +127,7 @@ const services: BentoService[] = [
         <ClassList title="The Wheelhouse" bookingUrl={WHEELHOUSE_BOOKING} classes={wheelhouseClasses} />
       </>
     ),
-    pricing: "€15/class or €50/month",
+    pricing: "€15–€25/class",
   },
   {
     id: "group-monthly",
