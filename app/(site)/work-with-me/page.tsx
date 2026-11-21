@@ -47,104 +47,73 @@ function BulletList({ items }: { items: string[] }) {
   );
 }
 
+const CALENDLY_URL = "https://calendly.com/hello-somatictherapyinlisbon/30min";
+const KYND_SPACE_SCHEDULE = "https://www.thekyndspace.com/class-schedule";
+const WHEELHOUSE_BOOKING = "https://luma.com/user/usr-N8eo8k1Vi6YPrHt";
+
+type WeeklyClass = { name: string; when: string; where: string };
+
+const kyndSpaceClasses: WeeklyClass[] = [
+  { name: "Dynamic Vinyasa and Breathwork", when: "Tuesday 19:30", where: "The Kynd Space Anjos" },
+  { name: "Power Yoga", when: "Friday 18:00", where: "The Kynd Space Príncipe Real" },
+  { name: "Yin Yoga or Yoganidr\u0101", when: "Friday 19:30", where: "The Kynd Space Príncipe Real" },
+  { name: "Vinyasa Yoga", when: "Saturday 11:15", where: "The Kynd Space Príncipe Real" },
+  { name: "Breathwork and Sound", when: "Saturday 12:30", where: "The Kynd Space Príncipe Real" },
+];
+
+const wheelhouseClasses: WeeklyClass[] = [
+  { name: "Conscious Connected Breathwork", when: "Tuesday 17:30", where: "The Wheelhouse" },
+];
+
+function ClassList({
+  title,
+  bookingUrl,
+  classes,
+}: {
+  title: string;
+  bookingUrl: string;
+  classes: WeeklyClass[];
+}) {
+  return (
+    <div className="pt-2">
+      <p className="font-sans text-sm uppercase tracking-widest text-sage mb-3">{title}</p>
+      <ul className="divide-y divide-sand/60 border-y border-sand/60">
+        {classes.map((c) => (
+          <li key={c.name + c.when} className="py-3">
+            <p className="font-medium text-espresso">{c.name}</p>
+            <p className="text-sm text-espresso/60">
+              {c.when} · {c.where}
+            </p>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-4">
+        <Button href={bookingUrl} variant="outline" size="sm">
+          Book at {title}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 // Replace these image paths in /public/images/services/ to update the bento imagery.
 const services: BentoService[] = [
-  {
-    id: "coaching-intro",
-    category: "1-1 Coaching",
-    title: "1-1 Somatic Coaching",
-    image: { src: "/images/services/coaching-intro.jpg", alt: "Restful somatic coaching session" },
-    summary:
-      "Somatic coaching meets you beneath the noise of the mind, working with the body's intelligence. Nervous-system, emotional and embodied work — tailored to how you want to feel.",
-    body: (
-      <>
-        <p>
-          Through somatic coaching, we begin where real change happens, beneath the noise of the mind,
-          within the intelligence of the body.
-        </p>
-        <p className="font-medium text-espresso/80">You may find yourself:</p>
-        <BulletList
-          items={[
-            "Feeling more at home in your body",
-            "Building emotional resilience",
-            "Regulating your nervous system",
-            "Healing your relationship with food and movement",
-            "Working with your cycle and natural rhythms",
-            "Reducing stress and burnout",
-            "Improving focus and creativity",
-            "Trusting your intuition",
-            "Feeling grounded, confident, and clear",
-          ]}
-        />
-        <div className="space-y-1 text-espresso/80">
-          <p>This is not mindset work alone.</p>
-          <p>It is nervous system work.</p>
-          <p>It is emotional work.</p>
-          <p>It is embodied work.</p>
-        </div>
-      </>
-    ),
-    ctas: [
-      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
-    ],
-  },
-  {
-    id: "coaching-3month",
-    category: "1-1 Coaching",
-    title: "3 Month Programme",
-    image: { src: "/images/services/coaching-3-month.jpg", alt: "Personalised yoga practice" },
-    body: (
-      <>
-        <p className="font-sans text-sm uppercase tracking-widest text-sage">What You Receive</p>
-        <BulletList
-          items={[
-            "1:1 Personalised Programme tailored to your needs and goals",
-            "6 x 75 minute online sessions (fortnightly)",
-            "Weekday email check-ins",
-            "Additional resources, tools and practices",
-          ]}
-        />
-        <p className="text-sm text-espresso/50">Monthly payment plans available</p>
-      </>
-    ),
-    pricing: "611 EUR",
-    ctas: [
-      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
-    ],
-  },
-  {
-    id: "coaching-6month",
-    category: "1-1 Coaching",
-    title: "6 Month Programme",
-    image: { src: "/images/services/coaching-6-month.jpg", alt: "Yoga nidra restoration" },
-    body: (
-      <>
-        <p className="font-sans text-sm uppercase tracking-widest text-sage">What You Receive</p>
-        <BulletList
-          items={[
-            "1:1 Personalised Programme tailored to your needs and goals",
-            "12 x 75 minute online sessions (fortnightly)",
-            "Weekday email check-ins",
-            "Additional resources, tools and practices",
-          ]}
-        />
-      </>
-    ),
-    pricing: "1,111 EUR",
-    ctas: [
-      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
-    ],
-  },
   {
     id: "group-weekly",
     category: "Group Classes",
     title: "Weekly Group Classes",
     image: { src: "/images/services/group-weekly.jpg", alt: "Group yoga class in Lisbon" },
+    summary:
+      "Join our community for weekly somatic yoga and breathwork classes in beautiful Lisbon studios. All levels welcome — from complete beginners to experienced practitioners.",
     body: (
-      <p>
-        Join our community for weekly somatic yoga and breathwork classes in beautiful Lisbon studios.
-        All levels welcome — from complete beginners to experienced practitioners.
-      </p>
+      <>
+        <p>
+          Join our community for weekly somatic yoga and breathwork classes in beautiful Lisbon studios.
+          All levels welcome — from complete beginners to experienced practitioners.
+        </p>
+        <ClassList title="The Kynd Space" bookingUrl={KYND_SPACE_SCHEDULE} classes={kyndSpaceClasses} />
+        <ClassList title="The Wheelhouse" bookingUrl={WHEELHOUSE_BOOKING} classes={wheelhouseClasses} />
+      </>
     ),
     pricing: "€15/class or €50/month",
     ctas: [
@@ -161,30 +130,12 @@ const services: BentoService[] = [
     title: "Monthly Group Practices",
     image: { src: "/images/services/group-monthly.jpg", alt: "Monthly somatic practice gathering" },
     body: (
-      <>
-        <div className="space-y-3">
-          <p className="font-medium text-espresso">
-            The Women{"’"}s Gathering and Somatic Journey
-          </p>
-          <Button
-            href="/contact?subject=Booking%3A%20The%20Women%E2%80%99s%20Gathering%20and%20Somatic%20Journey"
-            variant="outline"
-            size="sm"
-          >
-            Book Now
-          </Button>
-        </div>
-        <div className="space-y-3 pt-2">
-          <p className="font-medium text-espresso">Online Somatic Rest and Reset</p>
-          <Button
-            href="/contact?subject=Booking%3A%20Online%20Somatic%20Rest%20and%20Reset"
-            variant="outline"
-            size="sm"
-          >
-            Book Now
-          </Button>
-        </div>
-      </>
+      <div className="space-y-3">
+        <p>Leave your details for information on upcoming online group programmes.</p>
+        <Button href={CALENDLY_URL} variant="outline" size="sm">
+          Leave your details
+        </Button>
+      </div>
     ),
   },
   {
@@ -235,19 +186,7 @@ const services: BentoService[] = [
           immediately applicable to real working moments such as meetings, presentations, deadlines,
           and challenging conversations. Programmes are available both in person and online.
         </p>
-      </>
-    ),
-    ctas: [
-      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
-    ],
-  },
-  {
-    id: "corporate-foundations",
-    category: "Corporate",
-    title: "Foundations Programme",
-    image: { src: "/images/services/corporate-foundations.jpg", alt: "Workplace wellbeing session" },
-    body: (
-      <>
+        <h4 className="font-serif text-2xl text-espresso pt-4">Foundations Programme</h4>
         <p className="text-sm text-terracotta">Ongoing wellbeing support for modern workplaces.</p>
         <p>
           A structured programme designed to support both new starters and existing employees through
@@ -261,29 +200,6 @@ const services: BentoService[] = [
           Delivered online, with recordings available for a short period and regular feedback loops
           to ensure sessions remain relevant to employee needs.
         </p>
-      </>
-    ),
-    ctas: [
-      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
-    ],
-  },
-  {
-    id: "corporate-6month",
-    category: "Corporate",
-    title: "6 Month Programme",
-    image: { src: "/images/services/corporate-6-month.jpg", alt: "Breathwork for teams" },
-    body: (
-      <>
-        <p className="text-sm text-terracotta">Focused sessions for teams needing greater depth.</p>
-        <p>
-          Extended sessions designed for smaller teams, leadership groups, or high-pressure
-          environments.
-        </p>
-        <p>
-          These sessions offer a deeper exploration of nervous system regulation, with a stronger
-          emphasis on breathwork, reflection, and integration.
-        </p>
-        <p>Available online, in person, or as a blended experience.</p>
       </>
     ),
     ctas: [
@@ -412,10 +328,9 @@ export default async function WorkWithMePage() {
       <WaysToWorkSection config={waysToWork} />
 
       <ServiceTabs
-        tabs={["All", "1-1 Coaching", "Group Classes", "Corporate"]}
+        tabs={["All", "Group Classes", "Corporate"]}
         tabContent={{
           All: <ServicesBento services={services} filter="All" />,
-          "1-1 Coaching": <ServicesBento services={services} filter="1-1 Coaching" />,
           "Group Classes": <ServicesBento services={services} filter="Group Classes" />,
           Corporate: <ServicesBento services={services} filter="Corporate" />,
         }}

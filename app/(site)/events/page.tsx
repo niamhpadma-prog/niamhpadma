@@ -13,6 +13,8 @@ import { hasFinished, FINISHED_RETREAT_MESSAGE } from "@/lib/booking";
 import { urlFor } from "@/lib/sanity/image";
 import { EventsListing } from "./EventsListing";
 
+const CALENDLY_URL = "https://calendly.com/hello-somatictherapyinlisbon/30min";
+
 export const metadata: Metadata = {
   title: "Events & Retreats",
   description:
@@ -260,60 +262,18 @@ export default async function EventsPage() {
         </>
       )}
 
-      {/* In-Person */}
-      <Section background="cream">
-        <Container>
-          <div className="max-w-2xl mx-auto">
-            <h2 className="font-serif text-4xl md:text-5xl font-semibold text-center mb-10">In-Person</h2>
-            <div className="bg-white rounded-3xl p-8 md:p-12">
-              <h3 className="font-serif text-2xl mb-4">The Women{"\u2019"}s Gathering and Somatic Journey</h3>
-              <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6">
-                A monthly in-person gathering in Lisbon for women seeking connection, rest, and embodied practice.
-              </p>
-              <Button
-                href="/contact?subject=Booking%3A%20The%20Women%E2%80%99s%20Gathering%20and%20Somatic%20Journey"
-                variant="primary"
-                size="md"
-              >
-                Book Now
-              </Button>
-            </div>
-          </div>
-        </Container>
-      </Section>
-
       {/* Online */}
       <Section background="white">
         <Container>
           <div className="max-w-2xl mx-auto">
             <h2 className="font-serif text-4xl md:text-5xl font-semibold text-center mb-10">Online</h2>
-            <div className="space-y-6">
-              <div className="bg-cream rounded-3xl p-8 md:p-12">
-                <h3 className="font-serif text-2xl mb-4">Online Rest and Reset</h3>
-                <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6">
-                  A monthly online somatic rest and reset session. Join from anywhere.
-                </p>
-                <Button
-                  href="/contact?subject=Booking%3A%20Online%20Rest%20and%20Reset"
-                  variant="primary"
-                  size="md"
-                >
-                  Book Now
-                </Button>
-              </div>
-              <div className="bg-cream rounded-3xl p-8 md:p-12">
-                <h3 className="font-serif text-2xl mb-4">Weekly Yoganidr{"\u0101"}</h3>
-                <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6">
-                  A weekly online yoga nidra session for deep relaxation and restoration.
-                </p>
-                <Button
-                  href="/contact?subject=Booking%3A%20Weekly%20Yoganidr%C4%81"
-                  variant="primary"
-                  size="md"
-                >
-                  Book Now
-                </Button>
-              </div>
+            <div className="bg-cream rounded-3xl p-8 md:p-12 text-center">
+              <p className="font-sans text-base text-espresso/70 leading-relaxed mb-6">
+                Leave your details for information on upcoming online group programmes.
+              </p>
+              <Button href={CALENDLY_URL} variant="primary" size="md">
+                Leave your details
+              </Button>
             </div>
           </div>
         </Container>

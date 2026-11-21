@@ -20,7 +20,7 @@ export interface BentoService {
   image: { src: string; alt: string };
   /** Short description shown on the card. When omitted, `body` is rendered inline on the card. */
   summary?: string;
-  /** Full description shown in the "Read more" modal (or inline when summary is absent). */
+  /** Full description shown in the "Learn more" modal (or inline when summary is absent). */
   body: ReactNode;
   pricing?: string;
   ctas?: ServiceCTA[];
@@ -75,7 +75,7 @@ function BentoCard({
               variant="outline"
               size="md"
             >
-              Read more
+              Learn more
             </Button>
           )}
           {service.ctas?.map((cta) => (
