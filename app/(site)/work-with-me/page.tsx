@@ -12,10 +12,7 @@ import {
 } from "@/components/services/ServicesBento";
 import { client } from "@/lib/sanity/client";
 import { testimonialsQuery, waysToWorkQuery } from "@/lib/sanity/queries";
-import {
-  WaysToWorkSection,
-  type WaysToWorkConfig,
-} from "@/components/sections/WaysToWorkSection";
+import type { WaysToWorkConfig } from "@/components/sections/WaysToWorkSection";
 
 export const revalidate = 86400;
 
@@ -106,6 +103,42 @@ function ClassList({
       </div>
     </div>
   );
+}
+
+// The 1-1 coaching cards come from Studio → Ways to Work, so Niamh can rename
+// them and change prices there. Images are matched by position.
+const coachingImages = [
+  { src: "/images/services/coaching-intro.jpg", alt: "Restful somatic coaching session" },
+  { src: "/images/services/coaching-3-month.jpg", alt: "Personalised yoga practice" },
+  { src: "/images/services/coaching-6-month.jpg", alt: "Yoga nidra restoration" },
+];
+
+function coachingServices(config: WaysToWorkConfig | null): BentoService[] {
+  if (!config?.enabled) return [];
+  return (config.offerings ?? [])
+    .filter((o) => o?.title)
+    .map((o, i) => {
+      const ctas: BentoService["ctas"] = [];
+      if (o.onlineUrl) ctas.push({ label: "Book online", href: o.onlineUrl, variant: "primary" });
+      if (o.inPersonUrl) ctas.push({ label: "Book in person", href: o.inPersonUrl, variant: "outline" });
+      if (ctas.length === 0) {
+        ctas.push({ label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" });
+      }
+      return {
+        id: `coaching-${o._key}`,
+        category: "1-1 Coaching" as const,
+        title: o.title.trim(),
+        image: coachingImages[i] ?? coachingImages[0],
+        body: (
+          <>
+            {o.duration && <p className="font-serif italic text-lg text-espresso/80">{o.duration}</p>}
+            {o.description && <p className="whitespace-pre-line">{o.description}</p>}
+          </>
+        ),
+        pricing: o.price,
+        ctas,
+      };
+    });
 }
 
 // Replace these image paths in /public/images/services/ to update the bento imagery.
@@ -301,6 +334,7 @@ export default async function WorkWithMePage() {
     client.fetch<Testimonial[]>(testimonialsQuery),
     client.fetch<WaysToWorkConfig | null>(waysToWorkQuery).catch(() => null),
   ]);
+  const allServices = [...coachingServices(waysToWork), ...services];
 
   return (
     <>
@@ -330,14 +364,13 @@ export default async function WorkWithMePage() {
         ]}
       />
 
-      <WaysToWorkSection config={waysToWork} />
-
       <ServiceTabs
-        tabs={["All", "Group Classes", "Corporate"]}
+        tabs={["All", "1-1 Coaching", "Group Classes", "Corporate"]}
         tabContent={{
-          All: <ServicesBento services={services} filter="All" />,
-          "Group Classes": <ServicesBento services={services} filter="Group Classes" />,
-          Corporate: <ServicesBento services={services} filter="Corporate" />,
+          All: <ServicesBento services={allServices} filter="All" />,
+          "1-1 Coaching": <ServicesBento services={allServices} filter="1-1 Coaching" />,
+          "Group Classes": <ServicesBento services={allServices} filter="Group Classes" />,
+          Corporate: <ServicesBento services={allServices} filter="Corporate" />,
         }}
       />
 
