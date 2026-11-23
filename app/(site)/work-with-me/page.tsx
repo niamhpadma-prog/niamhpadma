@@ -177,6 +177,22 @@ const services: BentoService[] = [
     ),
   },
   {
+    id: "corporate-managing-stress",
+    category: "Corporate",
+    title: "Managing Stress Before It Arrives",
+    image: { src: "/images/previous-experiences/experience-27.jpg", alt: "Niamh teaching a seated studio class", position: "object-[center_25%]" },
+    body: (
+      <p>
+        A 90-minute, movement-based stress management workshop for teams. Your people learn how stress lives in the
+        body and leave with simple breath, movement and desk practices they can use in under two minutes.
+      </p>
+    ),
+    ctas: [
+      { label: "Learn more", href: "/work-with-me/managing-stress", variant: "outline" },
+      { label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" },
+    ],
+  },
+  {
     id: "corporate-intro",
     category: "Corporate",
     title: "Nervous System–Informed Wellbeing",

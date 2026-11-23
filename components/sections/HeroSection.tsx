@@ -12,6 +12,8 @@ interface HeroCTA {
 }
 
 interface HeroSectionProps {
+  /** Small line above the headline. */
+  eyebrow?: string;
   headline: string;
   subheadline?: string;
   ctas?: HeroCTA[];
@@ -19,9 +21,13 @@ interface HeroSectionProps {
   imageAlt?: string;
   imagePosition?: "center" | "top" | "top-20";
   sticky?: boolean;
+  /** Darker photo overlay, for busy photos where the text needs more contrast. */
+  darker?: boolean;
+  /** "left" puts the text on the left half, for photos whose subject sits on the right. */
+  align?: "center" | "left";
 }
 
-export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, imagePosition = "center", sticky = false }: HeroSectionProps) {
+export function HeroSection({ eyebrow, headline, subheadline, ctas, imageSrc, imageAlt, imagePosition = "center", sticky = false, darker = false, align = "center" }: HeroSectionProps) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -53,7 +59,7 @@ export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, i
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 bg-espresso/30" />
+          <div className={`absolute inset-0 ${darker ? "bg-espresso/55" : "bg-espresso/30"}`} />
         </motion.div>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-b from-sand/20 via-cream-dark to-cream" />
@@ -61,8 +67,22 @@ export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, i
 
       <motion.div
         style={{ opacity }}
-        className="relative z-10 text-center px-6 max-w-4xl mx-auto"
+        className={`relative z-10 px-6 mx-auto ${
+          align === "left" ? "w-full max-w-7xl text-left md:pr-[45%]" : "text-center max-w-4xl"
+        }`}
       >
+        {eyebrow && (
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
+            className={`font-sans text-xs md:text-sm uppercase tracking-widest mb-5 ${
+              imageSrc ? "text-cream/80" : "text-sage"
+            }`}
+          >
+            {eyebrow}
+          </motion.p>
+        )}
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,7 +99,7 @@ export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, i
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-            className={`font-sans text-lg md:text-xl max-w-2xl mx-auto mb-10 whitespace-pre-line ${
+            className={`font-sans text-lg md:text-xl max-w-2xl ${align === "left" ? "" : "mx-auto"} mb-10 whitespace-pre-line ${
               imageSrc ? "text-cream/80" : "text-espresso/60"
             }`}
           >
@@ -92,7 +112,7 @@ export function HeroSection({ headline, subheadline, ctas, imageSrc, imageAlt, i
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-            className="flex flex-wrap justify-center gap-4"
+            className={`flex flex-wrap gap-4 ${align === "left" ? "justify-start" : "justify-center"}`}
           >
             {ctas.map((cta) => (
               <Button key={cta.href} href={cta.href} variant={cta.style} size="lg">
