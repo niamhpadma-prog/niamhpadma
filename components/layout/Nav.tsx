@@ -8,10 +8,16 @@ import { Logo } from "@/components/ui/Logo";
 import { InstagramIcon } from "@/components/ui/icons/InstagramIcon";
 import { SubstackIcon } from "@/components/ui/icons/SubstackIcon";
 
-const leftLinks = [
+type NavLink = { label: string; href: string; children?: { label: string; href: string }[] };
+
+const leftLinks: NavLink[] = [
   { label: "My Story", href: "/my-story" },
   { label: "Work With Me", href: "/work-with-me" },
-  { label: "Events & Retreats", href: "/events" },
+  {
+    label: "Events & Retreats",
+    href: "/events",
+    children: [{ label: "Previous Experiences", href: "/previous-experiences" }],
+  },
 ];
 
 const rightLinks = [
@@ -20,10 +26,14 @@ const rightLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
-const mobileMenuLinks = [
+const mobileMenuLinks: NavLink[] = [
   { label: "My Story", href: "/my-story" },
   { label: "Work With Me", href: "/work-with-me" },
-  { label: "Events & Retreats", href: "/events" },
+  {
+    label: "Events & Retreats",
+    href: "/events",
+    children: [{ label: "Previous Experiences", href: "/previous-experiences" }],
+  },
   { label: "Shop", href: "/shop" },
   { label: "Journal", href: "/journal" },
   { label: "Contact", href: "/contact" },
@@ -67,13 +77,30 @@ export function Nav() {
           {/* Left links */}
           <ul className="flex items-center gap-6 xl:gap-8 flex-1">
             {leftLinks.map((link) => (
-              <li key={link.href}>
+              <li key={link.href} className="relative group/nav">
                 <Link
                   href={link.href}
                   className="font-sans text-sm font-medium text-espresso/70 hover:text-espresso transition-colors duration-300 whitespace-nowrap"
                 >
                   {link.label}
                 </Link>
+                {link.children && (
+                  // pt-3 bridges the gap so the menu stays open while the pointer moves down to it.
+                  <div className="absolute left-0 top-full pt-3 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible group-focus-within/nav:opacity-100 group-focus-within/nav:visible transition-opacity duration-200">
+                    <ul className="min-w-[13rem] rounded-2xl bg-cream shadow-lg border border-sand/40 py-2">
+                      {link.children.map((child) => (
+                        <li key={child.href}>
+                          <Link
+                            href={child.href}
+                            className="block px-5 py-2.5 font-sans text-sm text-espresso/70 hover:text-espresso hover:bg-sand/20 transition-colors whitespace-nowrap"
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -232,6 +259,16 @@ export function Nav() {
                     >
                       {link.label}
                     </Link>
+                    {link.children?.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={() => setIsOpen(false)}
+                        className="block font-serif text-2xl text-espresso/70 pl-6 pb-2 hover:text-terracotta transition-colors"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
                   </motion.li>
                 ))}
               </ul>

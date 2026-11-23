@@ -119,7 +119,7 @@ function coachingServices(config: WaysToWorkConfig | null): BentoService[] {
     .filter((o) => o?.title)
     .map((o, i) => {
       const ctas: BentoService["ctas"] = [];
-      if (o.onlineUrl) ctas.push({ label: "Book online", href: o.onlineUrl, variant: "primary" });
+      if (o.onlineUrl) ctas.push({ label: "Enquire", href: o.onlineUrl, variant: "primary" });
       if (o.inPersonUrl) ctas.push({ label: "Book in person", href: o.inPersonUrl, variant: "outline" });
       if (ctas.length === 0) {
         ctas.push({ label: "Book a Free Discovery Call", href: "/discovery-call", variant: "primary" });
@@ -180,7 +180,7 @@ const services: BentoService[] = [
     id: "corporate-intro",
     category: "Corporate",
     title: "Nervous System–Informed Wellbeing",
-    image: { src: "/images/shoot-2026/niamh-blazer-laughing.jpg", alt: "Niamh laughing in a pinstripe blazer", position: "object-top" },
+    image: { src: "/images/shoot-2026/niamh-headshot.jpg", alt: "Niamh smiling, hand at her chin", position: "object-[center_35%]" },
     summary:
       "Practical, nervous-system-informed wellbeing programmes for organisations navigating pressure, growth and change — helping teams stay clear, resilient and effective.",
     body: (
@@ -248,7 +248,7 @@ const services: BentoService[] = [
     id: "corporate-onsite",
     category: "Corporate",
     title: "On-Site Wellbeing Day",
-    image: { src: "/images/services/corporate-onsite.jpg", alt: "On-site team wellbeing day" },
+    image: { src: "/images/shoot-2026/niamh-seated-white-top.jpg", alt: "Niamh smiling, seated in a white top", position: "object-top" },
     body: (
       <>
         <p className="text-sm text-terracotta">Immersive experiences to support teams through change.</p>
