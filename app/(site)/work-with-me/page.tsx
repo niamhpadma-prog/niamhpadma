@@ -116,6 +116,8 @@ const coachingImages = [
 // If an offering is renamed in the Studio, update its title here too.
 const programmePages: Record<string, string> = {
   "listen in": "/work-with-me/listen-in",
+  "1-1 one off somatic coaching": "/work-with-me/one-off-session",
+  "one-off somatic coaching session": "/work-with-me/one-off-session",
 };
 
 function coachingServices(config: WaysToWorkConfig | null): BentoService[] {
