@@ -113,12 +113,20 @@ const coachingImages = [
   { src: "/images/shoot-2026/niamh-walking-sleeves.jpg", alt: "Niamh moving with arms swept back", position: "object-top" },
 ];
 
+// If an offering is renamed in the Studio, update its title here too.
+const programmePages: Record<string, string> = {
+  "listen in": "/work-with-me/listen-in",
+};
+
 function coachingServices(config: WaysToWorkConfig | null): BentoService[] {
   if (!config?.enabled) return [];
   return (config.offerings ?? [])
     .filter((o) => o?.title)
     .map((o, i) => {
       const ctas: BentoService["ctas"] = [];
+      // Offerings with their own programme page, matched by the title set in the Studio.
+      const page = programmePages[o.title.trim().toLowerCase()];
+      if (page) ctas.push({ label: "More information", href: page, variant: "outline" });
       if (o.onlineUrl) ctas.push({ label: "Enquire", href: o.onlineUrl, variant: "primary" });
       if (o.inPersonUrl) ctas.push({ label: "Book in person", href: o.inPersonUrl, variant: "outline" });
       if (ctas.length === 0) {
