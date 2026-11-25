@@ -25,6 +25,12 @@ export interface BentoService {
   body: ReactNode;
   pricing?: string;
   ctas?: ServiceCTA[];
+  /** Extra buttons on the card, each opening its own pop-out. */
+  popups?: { label: string; service: BentoService }[];
+  /** Hide the small category label (e.g. for offerings that are both 1-1 and group). */
+  hideCategory?: boolean;
+  /** Other tabs this card also appears under. */
+  alsoIn?: ServiceCategory[];
 }
 
 function BentoCard({
@@ -49,9 +55,11 @@ function BentoCard({
       </div>
 
       <div className="flex flex-1 flex-col p-8 md:p-10">
-        <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
-          {service.category}
-        </p>
+        {!service.hideCategory && (
+          <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
+            {service.category}
+          </p>
+        )}
         <h3 className="font-serif text-3xl mb-4">{service.title}</h3>
 
         {hasSummary ? (
@@ -79,6 +87,16 @@ function BentoCard({
               Learn more
             </Button>
           )}
+          {service.popups?.map((p) => (
+            <Button
+              key={p.label}
+              onClick={() => onExpand(p.service)}
+              variant="outline"
+              size="md"
+            >
+              {p.label}
+            </Button>
+          ))}
           {service.ctas?.map((cta) => (
             <Button
               key={cta.href + cta.label}
@@ -144,7 +162,9 @@ function ServiceModal({
               aria-label="Close"
               className="absolute top-4 right-4 z-10 rounded-full bg-cream/90 backdrop-blur w-10 h-10 flex items-center justify-center text-espresso hover:bg-cream transition-colors"
             >
-              <span aria-hidden className="text-lg leading-none">×</span>
+              <span aria-hidden className="text-lg leading-none">
+                ×
+              </span>
             </button>
 
             <div className="relative aspect-[16/9] md:aspect-auto w-full md:w-2/5 md:self-stretch shrink-0 bg-sand/30">
@@ -158,9 +178,11 @@ function ServiceModal({
             </div>
 
             <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 md:px-10 py-8 md:py-12">
-              <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
-                {service.category}
-              </p>
+              {!service.hideCategory && (
+                <p className="font-sans text-xs uppercase tracking-widest text-sage mb-3">
+                  {service.category}
+                </p>
+              )}
               <h3
                 id={`service-modal-title-${service.id}`}
                 className="font-serif text-3xl md:text-4xl mb-6"
@@ -208,7 +230,11 @@ export function ServicesBento({
 }) {
   const [expanded, setExpanded] = useState<BentoService | null>(null);
   const visible =
-    filter === "All" ? services : services.filter((s) => s.category === filter);
+    filter === "All"
+      ? services
+      : services.filter(
+          (s) => s.category === filter || s.alsoIn?.includes(filter),
+        );
 
   return (
     <>

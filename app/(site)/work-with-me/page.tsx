@@ -13,6 +13,7 @@ import {
 import { client } from "@/lib/sanity/client";
 import { testimonialsQuery, waysToWorkQuery } from "@/lib/sanity/queries";
 import type { WaysToWorkConfig } from "@/components/sections/WaysToWorkSection";
+import { modalitiesService } from "./modalities";
 
 export const revalidate = 86400;
 
@@ -362,7 +363,7 @@ export default async function WorkWithMePage() {
   ]);
   // Cards hidden for now (Niamh is reworking them). Remove an id here to show it again.
   const hiddenServices = new Set(["corporate-intro"]);
-  const allServices = [...coachingServices(waysToWork), ...services].filter((s) => !hiddenServices.has(s.id));
+  const allServices = [...coachingServices(waysToWork), modalitiesService, ...services].filter((s) => !hiddenServices.has(s.id));
 
   return (
     <>
