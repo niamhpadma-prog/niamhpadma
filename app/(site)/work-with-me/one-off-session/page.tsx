@@ -54,7 +54,11 @@ const details = [
     value: "Online, with in-person sessions in Lisbon or travel to you available (travel costs quoted separately)",
   },
   { label: "Before we meet", value: "A free 20-minute consultation and an intake form" },
-  { label: "Investment", value: "€150" },
+  {
+    label: "Investment",
+    value:
+      "€130\nPayment plans and other pricing options available. Please get in touch if this work calls you but the price does not work right now and we can talk.",
+  },
   { label: "Booking", value: "Whenever suits you" },
 ];
 
@@ -263,7 +267,7 @@ export default function OneOffSessionPage() {
               {details.map((d) => (
                 <div key={d.label} className="py-4 grid grid-cols-[8.5rem_1fr] gap-4">
                   <dt className="font-sans text-xs uppercase tracking-widest text-sage pt-1">{d.label}</dt>
-                  <dd className="font-sans text-base text-espresso/80 leading-relaxed">{d.value}</dd>
+                  <dd className="font-sans text-base text-espresso/80 leading-relaxed whitespace-pre-line">{d.value}</dd>
                 </div>
               ))}
             </dl>

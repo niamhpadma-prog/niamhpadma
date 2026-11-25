@@ -190,7 +190,7 @@ const services: BentoService[] = [
     id: "corporate-managing-stress",
     category: "Corporate",
     title: "Managing Stress Before It Arrives",
-    image: { src: "/images/previous-experiences/experience-27.jpg", alt: "Niamh teaching a seated studio class", position: "object-[center_25%]" },
+    image: { src: "/images/shoot-2026/niamh-speaking-mic.jpg", alt: "Niamh seated, speaking into a microphone", position: "object-[center_30%]" },
     body: (
       <p>
         A 90-minute, movement-based stress management workshop for teams. Your people learn how stress lives in the
@@ -360,7 +360,9 @@ export default async function WorkWithMePage() {
     client.fetch<Testimonial[]>(testimonialsQuery),
     client.fetch<WaysToWorkConfig | null>(waysToWorkQuery).catch(() => null),
   ]);
-  const allServices = [...coachingServices(waysToWork), ...services];
+  // Cards hidden for now (Niamh is reworking them). Remove an id here to show it again.
+  const hiddenServices = new Set(["corporate-intro"]);
+  const allServices = [...coachingServices(waysToWork), ...services].filter((s) => !hiddenServices.has(s.id));
 
   return (
     <>
