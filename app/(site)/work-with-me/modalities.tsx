@@ -97,7 +97,7 @@ const breathwork: BentoService = {
       <List
         items={[
           "You have a history of trauma or PTSD.",
-          "You have any other serious mental health difficulty that may be relevant to my participation.",
+          "You have any other serious mental health difficulty that may be relevant to your participation.",
         ]}
       />
       <p>After booking, you will receive a short intake form. Please answer as honestly as you can.</p>
