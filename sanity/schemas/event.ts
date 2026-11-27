@@ -1,6 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { seoFields } from "./seoFields";
-import { bulletBlock, imageCaptionFields, richBlock } from "./_shared";
+import { bulletBlock, imageCaptionFields, richBlock, toUrlSafeSlug } from "./_shared";
 
 export const event = defineType({
   name: "event",
@@ -35,10 +35,19 @@ export const event = defineType({
       title: "Slug",
       type: "slug",
       group: "basics",
-      options: { source: "title" },
+      options: { source: "title", slugify: toUrlSafeSlug, maxLength: 96 },
       description:
-        "The web address for this event. Click “Generate” to fill it from the title. Avoid changing it after publishing — old links will stop working.",
-      validation: (r) => r.required(),
+        "The web address for this event. Click “Generate” to fill it from the title. Only lowercase letters, numbers and hyphens — no spaces, or the link will break. Avoid changing it after publishing: old links will stop working.",
+      validation: (r) =>
+        r.required().custom((value) => {
+          const current = (value as { current?: string } | undefined)?.current;
+          if (!current) return "Click “Generate” to create the web address.";
+          if (/\s/.test(current))
+            return "Web addresses can't contain spaces — clear this field and click “Generate”.";
+          if (!/^[a-z0-9-]+$/.test(current))
+            return "Use only lowercase letters, numbers and hyphens — clear this field and click “Generate”.";
+          return true;
+        }),
     }),
     defineField({
       name: "type",
