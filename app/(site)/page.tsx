@@ -7,11 +7,14 @@ import { OfferingsGrid } from "@/components/sections/OfferingsGrid";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { NewsletterSection } from "@/components/sections/NewsletterSection";
 import { SubstackSection } from "@/components/sections/SubstackSection";
+import { FreeResources } from "@/components/sections/FreeResources";
+import type { LeadMagnet } from "@/components/sections/EbookPopup";
+import { nourishingYourCycle, type FreeResource } from "@/lib/freeResources";
 import { UpcomingRetreats } from "@/components/sections/UpcomingRetreats";
 import { UpcomingEvents } from "@/components/sections/UpcomingEvents";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { client } from "@/lib/sanity/client";
-import { testimonialsQuery, upcomingRetreatsQuery, upcomingEventsQuery } from "@/lib/sanity/queries";
+import { testimonialsQuery, upcomingRetreatsQuery, upcomingEventsQuery, leadMagnetQuery } from "@/lib/sanity/queries";
 
 interface HomeTestimonial {
   _id: string;
@@ -54,11 +57,26 @@ interface UpcomingEvent {
 export const revalidate = 86400;
 
 export default async function HomePage() {
-  const [testimonials, upcomingRetreats, upcomingEvents] = await Promise.all([
+  const [testimonials, upcomingRetreats, upcomingEvents, leadMagnet] = await Promise.all([
     client.fetch<HomeTestimonial[]>(testimonialsQuery),
     client.fetch<UpcomingRetreat[]>(upcomingRetreatsQuery),
     client.fetch<UpcomingEvent[]>(upcomingEventsQuery).catch(() => [] as UpcomingEvent[]),
+    client.fetch<LeadMagnet | null>(leadMagnetQuery).catch(() => null),
   ]);
+  // Free downloads. The mindful nutrition ebook reuses the pop-up's title,
+  // description, cover and PDF from Sanity ("Free Download Pop-Up"), so it
+  // only shows once a PDF is uploaded there.
+  const freeResources: FreeResource[] = [nourishingYourCycle];
+  if (leadMagnet?.fileUrl) {
+    freeResources.push({
+      slug: "mindful-nutrition",
+      title: leadMagnet.heading || "Mindful Nutrition",
+      description: leadMagnet.body || "",
+      fileUrl: leadMagnet.fileUrl,
+      coverUrl: leadMagnet.image?.asset?.url,
+      coverAlt: leadMagnet.image?.alt,
+    });
+  }
   return (
     <>
       <JsonLd
@@ -161,6 +179,9 @@ export default async function HomePage() {
           </div>
         </Container>
       </Section>
+
+      {/* Free downloads — white, so it doesn't merge into the sage quote above */}
+      <FreeResources heading="Download free resources" resources={freeResources} background="white" />
 
       {/* Offerings */}
       <OfferingsGrid
