@@ -29,7 +29,7 @@ interface Testimonial {
 export const metadata: Metadata = {
   title: "Work With Me",
   description:
-    "1-1 somatic coaching, group yoga & breathwork classes, workshops, and corporate wellness in Lisbon. Find the right offering for your journey.",
+    "1-1 somatic coaching, group yoga & breathwork classes, workshops, and corporate wellness in Lisbon and London. Find the right offering for your journey.",
 };
 
 function BulletList({ items }: { items: string[] }) {
@@ -209,7 +209,7 @@ const services: BentoService[] = [
     title: "Nervous System–Informed Wellbeing",
     image: { src: "/images/shoot-2026/niamh-headshot.jpg", alt: "Niamh smiling, hand at her chin", position: "object-[center_35%]" },
     summary:
-      "Practical, nervous-system-informed wellbeing programmes for organisations navigating pressure, growth and change — helping teams stay clear, resilient and effective.",
+      "Practical, nervous-system-informed wellbeing programmes for organisations navigating pressure, growth and change — helping teams stay clear, resilient and effective. Delivered on-site in London and Lisbon, and online worldwide.",
     body: (
       <>
         <p>
@@ -249,7 +249,8 @@ const services: BentoService[] = [
         <p>
           No prior experience is required, and all practices are practical, accessible, and
           immediately applicable to real working moments such as meetings, presentations, deadlines,
-          and challenging conversations. Programmes are available both in person and online.
+          and challenging conversations. In-person programmes are delivered on-site in London and
+          Lisbon, and online for distributed teams anywhere.
         </p>
         <h4 className="font-serif text-2xl text-espresso pt-4">Foundations Programme</h4>
         <p className="text-sm text-terracotta">Ongoing wellbeing support for modern workplaces.</p>
@@ -287,6 +288,10 @@ const services: BentoService[] = [
         <p>
           Often used as onboarding intensives, quarterly resets, or preparation for demanding project
           phases.
+        </p>
+        <p>
+          On-site days run at your offices in London or Lisbon. Teams elsewhere are welcome to get in
+          touch — travel can usually be arranged.
         </p>
       </>
     ),
